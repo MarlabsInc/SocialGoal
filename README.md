@@ -4,7 +4,7 @@ Reference web app for ASP.NET MVC 5, EF 6 Code First, TDD and DDD.
 
 Technologies
 ============
-* ASP.NET Web AMVC 5
+* ASP.NET MVC 5
 * EF 6 Code First 
 * AutoMapper
 * Autofac
