@@ -1,6 +1,7 @@
 SocialGoal
 ==========
-[logo]: http://www.marlabs.com/sites/default/files/logo.png "Marlabs"
+[![alt text](http://www.marlabs.com/sites/default/files/logo.png "Marlabs")](https://www.marlabs.com)
+
 Reference web app for ASP.NET MVC 5, EF 6 Code First, TDD and DDD, developed by [Marlabs](https://www.marlabs.com)
 
 
