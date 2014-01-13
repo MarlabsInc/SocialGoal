@@ -1,0 +1,76 @@
+﻿@model SocialGoal.Model.Models.Goal
+@{
+    ViewBag.Title = "Invite Users";
+}
+@*<script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>*@
+<div id="supportInvite" class="well span6">
+    <div id="divSupport">
+        @if (@Model.Supports.Count() > 1)
+        {
+             @Html.ActionLink(@Model.Supports.Count().ToString() + " Followers", "Supporters", new { id = @Model.GoalId })
+        }
+        else if (@Model.Supports.Count() == 1)
+        { 
+            @Html.ActionLink(@Model.Supports.Count().ToString() + " Follower", "Supporters", new { id = @Model.GoalId })
+        }
+        else
+        {
+            <text> 0 Followers</text> 
+        }
+    </div>
+    <hr />
+    <h5>
+        Invite users to follow this goal</h5>
+    <p>Name</p>
+    
+        <input type="text" id="searchUserSupport" size="30" placeholder="Type user name and select user"  onkeypress="SearchUserToSupport(event,@Model.GoalId);" class="span11" />
+        <a href="JavaScript:void(0);" id="supportinfo"  rel="popover" data-content="You can invite the people those who already registered to support your goal "
+            data-placement="left" data-originals-title="Support" data-trigger ="hover"><i class="icon-info-sign">
+            </i></a>
+
+    <div id="inviteResult">
+    </div>
+    @if (User.IsInRole("Admin"))
+    {
+        <center>
+            <b>or</b></center>
+        <lable>Email</lable>
+        <input type="email" id="SupportEmail" placeholder="Add people via Email" size="30"
+            class="span12" onfocus="EnableBtn()" onblur="DisableBtn()" />
+        <button id="btnSupportInvite" class="btn btn-primary" onclick="SupportInvite(@Model.GoalId)" disabled="disabled">
+            Invite
+        </button>
+    
+        <label id="msgSupport" class="alert alert-info" style="display: none;">
+        </label>
+    }
+    <br />
+</div>
+<script type="text/javascript">
+    $(function () {
+        $("#supportinfo").popover();
+    });
+
+    function SearchUserToSupport(e, goalid) {
+
+        evt = e || window.event;
+        var userName = $("#searchUserSupport").val();
+        var url = '/Goal/SearchUser';
+        if ((evt.keyCode != 13) && ($("#searchUserSupport").val() != "" && $("#searchUserSupport").val().length >= 1)) {
+            var getData = { 'username': userName, 'goalId': goalid };
+            $.get(url, getData, function (result) {
+                $("#searchUserSupport").autocomplete({
+                    source: result,
+                    select: function (event, ui) {
+                        $.post("/Goal/InviteUser", { id: goalid, UserId: ui.item.id }, function (e, res) {
+                            $("#inviteResult").html(e);
+                            $("#searchUserSupport").val("");
+                            $("#searchUserSupport").autocomplete("disable");
+                        });
+                    }
+                });
+            });
+        }
+    }
+    </script>

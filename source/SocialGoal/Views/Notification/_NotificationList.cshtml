@@ -1,0 +1,25 @@
+﻿@model IEnumerable<SocialGoal.Web.ViewModels.NotificationViewModel>
+
+@foreach (var item in Model)
+{ 
+    <div class="alert alert-info">
+        @if (item.GroupId.ToString() != "0")
+        {             
+            @Html.ActionLink(item.FromUser.UserName, "UserProfile", "Account", new { id = item.FromUserId }, null)<text> Invited you to join</text> @Html.ActionLink(@item.Group.GroupName, "Index", "Group", new { id = @item.GroupId }, null)
+            @Html.ActionLink("Join Now", "JoinGroup", "Group", new { id = item.GroupId }, new { @class = "btn btn-primary btn-small", @style = "float:right" })
+        }
+        else if (item.GoalId.ToString() != "0")
+        {
+            @Html.ActionLink(item.FromUser.UserName, "UserProfile", "Account", new { id = item.FromUserId }, null)<text> invited you to follow the goal </text> @Html.ActionLink(@item.Goal.GoalName, "Index", "Goal", new { id = @item.GoalId }, null)
+            @Html.ActionLink("Follow", "SupportGoalNow", "Goal", new { id = item.GoalId }, new { @class = "btn btn-primary btn-small", @style = "float:right" })
+        }
+        else if (item.ToUserId.ToString() !="0")
+        {           
+            @Html.ActionLink(item.FromUser.UserName, "UserProfile", "Account", new { id = item.FromUserId }, null)<text> wants to Follow you.</text> 
+            <span style = "float:right">
+                @Html.ActionLink("Accept", "AcceptRequest", "Account", new { touserId = item.ToUserId, item.FromUserId }, new { @class = "btn btn-primary btn-small" })
+                @Html.ActionLink("Reject", "RejectRequest", "Account", new { touserId = item.ToUserId, item.FromUserId }, new { @class = "btn btn-primary btn-small" })
+            </span>
+        }
+    </div>
+}

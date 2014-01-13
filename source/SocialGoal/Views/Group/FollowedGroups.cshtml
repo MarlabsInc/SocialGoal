@@ -1,0 +1,32 @@
+﻿@using Microsoft.AspNet.Identity
+@model IEnumerable<SocialGoal.Model.Models.Group>
+
+@{
+    ViewBag.Title = "FollowedGroups";
+}
+<div id="divFollowedGroup" style="height: 150px;">
+@if (Model.Count() == 0)
+{
+    <div class ="alert alert-info">No groups to display</div> 
+}
+
+@foreach (var item in Model.Take(10))
+{ 
+     <table class="table">
+     <tbody>
+            <tr>
+                <td class="span1"><i class="icon-th"/></td>
+                <td class="span9"> @Html.ActionLink(item.GroupName/*.LimitLength(30)*/, "Index", new { id = item.GroupId }, new { @title = item.GroupName  })
+                </td>
+                <td class="span2"><a id="UnSupport" href="#" onclick="DeleteUser(@(User.Identity.GetUserId()),@item.GroupId);" style="float:right"><small>Unfollow</small>
+            </a>
+                </td>
+            </tr></tbody>
+        </table>
+}
+
+</div>
+@if (Model.Count() > 10)
+{ 
+    @Html.ActionLink("See All", "GroupList", "Group", new { filterBy = "My Followed Groups" }, new { @style = "float:right;" })
+}

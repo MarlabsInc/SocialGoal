@@ -1,0 +1,25 @@
+﻿@model IEnumerable<SocialGoal.Web.ViewModels.CommentsViewModel>
+
+    @foreach (var item in Model)
+    {
+        <div class="span12" style="margin-left:1px;font-size:12px;">
+            <div class ="span2">
+                <a href="@Url.Action("UserProfile", "Account", new { id = item.UserId }, null)" >
+                @if (String.IsNullOrEmpty(@item.User.ProfilePicUrl))
+                {
+                    <img src="/Content/templatemo_329_blue_urban/images/facebook-avatar.png" class="span10 thumbnail" />
+                }
+                else
+                {
+                    <img src="@Url.Content(@item.User.ProfilePicUrl)" class="span10 thumbnail" />
+                }
+                </a>
+            </div>
+            <div class="span10" >              
+                    <font color="green"> @Html.ActionLink(item.User.UserName, "UserProfile", "Account", new { id = item.UserId }, null) </font> commented "@item.CommentText"                    
+                    <div>on @item.CommentDate</div>             
+            </div>
+        </div> 
+        <hr />
+    }
+

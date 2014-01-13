@@ -1,0 +1,34 @@
+﻿@model SocialGoal.Web.ViewModels.UpdateSupportersViewModel
+
+<div class="well">
+@if (Model.Users.Count() == 0)
+{
+    <p class="span5 alert alert-info supporters-message">No Supporters</p>  
+}
+    @foreach (var item in Model.Users)
+    {    
+        <div style="margin:0px;padding:10px;">
+         <div style="margin-left:1px;">
+          
+                <a href="@Url.Action("UserProfile", "Account", new { id = item.UserId }, null)" >
+                @if (String.IsNullOrEmpty(@item.ProfilePicUrl))
+                {
+                    <img src="/Content/templatemo_329_blue_urban/images/facebook-avatar.png"  class="thumbnail span3" style="margin-right:10px;" />
+                }
+                else
+                {
+                    <img src="@Url.Content(@item.ProfilePicUrl)" alt ="" class="thumbnail span3" style="margin-right:10px;" />
+                }
+                </a>    
+         </div>
+         <div style="margin:0px;">  
+            @Html.ActionLink(@item.UserName, "UserProfile", "Account", new { id = item.UserId }, null)
+            <div>@item.Email</div>         
+         </div>        
+         </div>
+               <hr />
+              
+            }
+</div>
+
+

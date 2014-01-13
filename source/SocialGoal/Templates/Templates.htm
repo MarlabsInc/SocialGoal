@@ -1,0 +1,55 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+    <script id="goalList-template" type="text/x-handlebars-template">
+
+    <table class="table" >
+           {{#each objects}}
+             <tr>
+                <td class="span1">
+                    <i class="icon-star"></i>
+                </td>
+                <td class="span9">
+                    <div style="position: relative">
+                        <a href="/Goal/Index/{{GoalId}}">{{GoalName}}</a>                
+                    </div>
+                    <div><small>{{StartDate}} -  {{EndDate}}</small></div>
+                    <div><small>Created By <a href="/Account/UserProfile/{{UserId}}">{{UserName}}</a>               
+                        on {{CreatedDate}}</small></div>
+                </td>
+                <td class="span2"><strong>{{SupportsCount}}</strong> Supporters
+                </td>
+            </tr>             
+   
+           {{/each}}
+           
+        </table>     
+    </script>
+    <script id="groupList-template" type="text/x-handlebars-template">
+
+    <table class="table" >
+           {{#each groups}}
+            <tr>
+                <td class="span1">
+                <i class="icon-th"/>
+                </td>
+                <td class="span6">
+                    <div style="position: relative">
+                    <a href="/Group/Index/{{GroupId}}">{{GroupName}}</a>
+                    </div>
+                    
+                    <div><small>
+                    Created By <a href="/Account/UserProfile/{{UserId}}">{{UserName}}</a>
+                  
+                        on {{CreatedDate}}</small></div>                        
+                      </td>
+                </tr>
+           {{/each}}
+           
+        </table>     
+    </script>
+</head>
+<body>
+</body>
+</html>

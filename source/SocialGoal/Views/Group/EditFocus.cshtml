@@ -1,0 +1,46 @@
+﻿@model SocialGoal.Web.ViewModels.FocusFormModel
+@{
+    ViewBag.Title = "EditFocus";
+}
+<div class ="span8 well">
+<h4>
+    Edit  @Html.DisplayFor(model => model.FocusName)</h4>
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+    @Html.HiddenFor(m => m.GroupId)
+    <table class ="table">
+        <tr>
+            <td>
+                @Html.LabelFor(model => model.FocusName, "Group Name")
+            </td>
+            <td >
+                @Html.TextBoxFor(model => model.FocusName, new {@class ="span12" })
+                @Html.ValidationMessageFor(model => model.FocusName)
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @Html.LabelFor(model => model.Description, "Description")
+            </td>
+            <td >
+                @Html.TextBoxFor(model => model.Description, new { @class = "span12" })
+                @Html.ValidationMessageFor(model => model.Description)
+            </td>
+          @*  @Html.HiddenFor(m => m.Group.UserId)*@
+            @Html.HiddenFor(m => m.CreatedDate)
+             @Html.HiddenFor(m => m.FocusId)
+        </tr>
+    </table>
+    <p>
+        <button class="btn btn-primary" type="submit" value="Save">
+            Save</button>
+             <button class="btn" type ="reset" value="Cancel" onclick="window.location.href='@Url.Action("Index", "Group", new {id = Model.GroupId })'">
+        Cancel</button>
+    </p>
+}
+
+<div id="divEditGroup@(Model.GroupId)">
+</div>
+</div>

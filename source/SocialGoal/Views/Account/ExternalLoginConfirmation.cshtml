@@ -1,0 +1,72 @@
+﻿@model SocialGoal.Models.ExternalLoginConfirmationViewModel
+@{
+    ViewBag.Title = "Register";
+    Layout = "../Shared/_Layout.cshtml";
+}
+<h2>@ViewBag.Title.</h2>
+<link href="/Content/CustomStyles.css" rel="stylesheet" type="text/css" />
+
+<div class="navbar navbar navbar-fixed-top">
+    <div class="navbar-inner">
+        <div class="container-fluid">
+            <a class="brand" href='@Url.Action("Index", "Home")'>Social Goal</a>
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid margin-top">
+    <div class="row-fluid">
+        <div class="span7" id="content">
+            <div style="padding:80px;">
+                <img src="/Images/replacement%20people.jpg" />
+            </div>
+
+        </div>
+
+
+        <div class="span4 row-fluid">
+            <div class="row">
+                <div class="col-md-8">
+                    <section id="loginForm">
+                        <h3>Associate your @ViewBag.LoginProvider account.</h3>
+
+                        @using (Html.BeginForm("ExternalLoginConfirmation", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+                        {
+                            @Html.AntiForgeryToken()
+
+                            <h4>Association Form</h4>
+                            <hr />
+                            @Html.ValidationSummary(true)
+                            <p class="text-info">
+                                You've successfully authenticated with <strong>@ViewBag.LoginProvider</strong>.
+                                Please enter a user name for this site below and click the Register button to finish
+                                logging in.
+                            </p>
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.UserName, new { @class = "col-md-2 control-label", style = "text-align: left;width:80px" })
+                                <div class="col-md-10">
+                                    @Html.TextBoxFor(m => m.UserName, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(m => m.UserName)
+                                </div>
+                            </div>
+                            <br/>
+                            <div class="form-group">
+                                <div class="col-md-offset-2 col-md-10">
+                                    <input type="submit" class="btn btn-primary" value="Register" />
+                                </div>
+                            </div>
+                        }
+                    </section>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@*@section Scripts {
+        @Scripts.Render("~/bundles/jqueryval")
+    }*@
+<script src="~/Scripts/jquery.validate-vsdoc.js"></script>
+<script src="~/Scripts/jquery.validate.js"></script>
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>

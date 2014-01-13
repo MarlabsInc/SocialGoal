@@ -1,0 +1,96 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{4D4923F5-548C-4D13-859D-7F5E9699FACD}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>SocialGoal.Model</RootNamespace>
+    <AssemblyName>SocialGoal.Model</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.AspNet.Identity.Core">
+      <HintPath>..\packages\Microsoft.AspNet.Identity.Core.1.0.0\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.EntityFramework">
+      <HintPath>..\packages\Microsoft.AspNet.Identity.EntityFramework.1.0.0\lib\net45\Microsoft.AspNet.Identity.EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Models\ApplicationUser.cs" />
+    <Compile Include="Models\Comment.cs" />
+    <Compile Include="Models\CommentUser.cs" />
+    <Compile Include="Models\Focus.cs" />
+    <Compile Include="Models\FollowRequest.cs" />
+    <Compile Include="Models\FollowUser.cs" />
+    <Compile Include="Models\Goal.cs" />
+    <Compile Include="Models\GoalStatus.cs" />
+    <Compile Include="Models\GoalUpdate.cs" />
+    <Compile Include="Models\Group.cs" />
+    <Compile Include="Models\GroupComment.cs" />
+    <Compile Include="Models\GroupCommentUser.cs" />
+    <Compile Include="Models\GroupGoal.cs" />
+    <Compile Include="Models\GroupInvitation.cs" />
+    <Compile Include="Models\GroupRequest.cs" />
+    <Compile Include="Models\GroupUpdate.cs" />
+    <Compile Include="Models\GroupUpdateSupport.cs" />
+    <Compile Include="Models\GroupUpdateUser.cs" />
+    <Compile Include="Models\GroupUser.cs" />
+    <Compile Include="Models\Metric.cs" />
+    <Compile Include="Models\NotificationType.cs" />
+    <Compile Include="Models\ProfilePic.cs" />
+    <Compile Include="Models\RegistrationToken.cs" />
+    <Compile Include="Models\SecurityToken.cs" />
+    <Compile Include="Models\Support.cs" />
+    <Compile Include="Models\SupportInvitation.cs" />
+    <Compile Include="Models\Update.cs" />
+    <Compile Include="Models\UpdateSupport.cs" />
+    <Compile Include="Models\User.cs" />
+    <Compile Include="Models\UserProfile.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SocialGoal.Core\SocialGoal.Core.csproj">
+      <Project>{b1053a2d-a1ea-412f-ba95-19ce794f8891}</Project>
+      <Name>SocialGoal.Core</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

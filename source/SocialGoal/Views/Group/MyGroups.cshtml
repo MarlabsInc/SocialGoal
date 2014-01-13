@@ -1,0 +1,19 @@
+﻿@model IEnumerable<SocialGoal.Model.Models.Group>
+@{
+    ViewBag.Title = "MyGroups";
+    Layout = "~/Views/Shared/_PageLayout.cshtml";
+}
+@if (Model.Count() == 0)
+{
+    <div class="alert alert-info">
+        No results To Display
+    </div>
+}
+@foreach (var item in Model)
+{ 
+    <div class="alert users span2">
+        <h4>
+           @Html.ActionLink(item.GroupName, "Index", "Group", new { id = item.GroupId },null)</h4>
+        @Html.ActionLink(@Html.Action("NoOfUsers", new { id = @item.GroupId }) + " Members", "JoinedUsers", new { id = @item.GroupId }, null)
+    </div>
+}

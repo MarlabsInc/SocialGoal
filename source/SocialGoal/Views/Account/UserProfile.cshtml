@@ -1,0 +1,301 @@
+﻿@using Microsoft.AspNet.Identity
+@model SocialGoal.Web.ViewModels.UserProfileViewModel
+@{
+    ViewBag.Title = "UserProfileView";
+    Layout = "~/Views/Shared/_PageLayout.cshtml";
+    }
+
+
+
+
+    <div id="profile" class="span12" style="height:auto;">
+    <div class="well span6" style="float:left;height:auto;">   
+            
+                <legend>@Html.DisplayFor(m => m.UserName)</legend>@*  <div class="pull-right">
+						<input type="button"  class="btn btn-primary" value="Edit" id="editBtn" onclick ="location.href='@Url.Action("EditProfile", "Account")'"  />
+					</div>*@
+                <div id="profilepic">
+                    <table>
+                        <tr>
+                            <td >
+                            @if (String.IsNullOrEmpty(Model.ProfilePicUrl))
+                            { 
+                                <img src="../../Content/templatemo_329_blue_urban/images/facebook-avatar.png" class="thumbnail" />
+                            }
+                            else
+                            {
+                                <a href="#myModal" id="imge"><img src="@Url.Content(Model.ProfilePicUrl)" class="thumbnail" /></a>
+                            }
+                            </td>
+                            <td>
+                                @if (User.Identity.GetUserId() == Model.UserId)
+                                {
+
+                                <div class="span1">
+                                    <a data-toggle="modal" href="#" id="editpicture" onclick="EditProfile();"><span rel="tooltip"
+                                        title="Edit Profile Picture"><i class=" icon-edit"></i></span></a>
+                                </div>  }
+                            </td>
+                        </tr>
+                    </table>
+                    @if (Model.RequestSent == false && Model.UserId != User.Identity.GetUserId() && Model.Following == false)
+                    { 
+                        @Html.ActionLink("Follow", "FollowRequest", "Account", new { id = Model.UserId }, new { @class = "btn btn-primary btn-small", @style = "float:right" })
+                    }
+                    else if (Model.RequestSent == false && Model.UserId == User.Identity.GetUserId() && Model.Following == false)
+                    { }
+                    else if (Model.RequestSent == true && Model.Following == false && Model.UserId != User.Identity.GetUserId())
+                    {
+                        <h6>
+                            Your Following request is waiting for approval.</h6>
+                    }
+                    else if (Model.Following == true && Model.RequestSent == false && Model.UserId != User.Identity.GetUserId())
+                    { 
+                        @Html.ActionLink("Unfollow", "Unfollow", "Account", new { id = Model.UserId }, new { @class = "btn btn-primary", @style = "float:right;" }) 
+                    }
+                   
+                    
+                </div>
+            
+
+               @* <div class ="span6" style ="float:right" id ="divChangePassword">
+			@Ajax.ActionLink("ChangePassword", "ChangePassword", "Account", new AjaxOptions { UpdateTargetId = "divChangePassword"})
+			</div>*@
+       
+        
+        
+            <div id="divBasicInfo" style="float:left;" class="span12">
+                <table class="table">
+                    <tr>
+                        <td style="width:150px;">
+                            <strong>Basic Info</strong>
+                        </td>
+                        <td>
+                            @if (User.Identity.GetUserId() == Model.UserId)
+                            {
+                                <div style="float: right">
+                                    <a data-toggle="modal" href="#" id="editprofile" onclick="EditBasicInfo();"><span
+                                        rel="tooltip" title="Edit Basic Info"><i class=" icon-edit"></i></span></a>
+                                </div>
+                            }
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            User Name:
+                        </td>
+                        <td>
+                            @Html.DisplayFor(m=>m.UserName)
+                        </td>
+                    </tr>
+                    @if(Model.FirstName!=null)
+                    { 
+                    <tr>
+                        <td>
+                            First Name:
+                        </td>
+                        <td>@Html.DisplayFor(m => m.FirstName)
+                        </td>
+                    </tr>
+                    }
+                    @if (Model.LastName!=null)
+                    {
+                    <tr>
+                        <td>
+                            Last Name:
+                        </td>
+                        <td>@Html.DisplayFor(m => m.LastName)
+                        </td>
+                    </tr>
+                    }
+                    @if(Model.Email!=null)
+                    { 
+                    <tr>
+                        <td>
+                            Email:
+                        </td>
+                        <td>
+                            @Html.DisplayFor(m => m.Email)
+                        </td>
+                    </tr>
+                    }
+                    @if (Model.DateOfBirth != null)
+                    { 
+                        <tr>
+                            <td>
+                                <label>
+                                    Date Of Birth:
+                                </label>
+                            </td>
+                            <td>
+                                @Html.DisplayFor(m => m.DateOfBirth)
+                            </td>
+                        </tr>
+                    }
+                    @if (Model.Gender != null)
+                    { 
+                        <tr>
+                            <td>
+                                Gender:
+                            </td>
+                            <td>
+                                @if (Model.Gender == true)
+                                {
+                                    <text>Female</text>
+                                }
+                                else if (Model.Gender == false)
+                                {
+                                    <text>Male</text>
+                                }
+                                else
+                                {
+
+                                }
+                                @*  @if (Model.Gender == false)
+							{
+								<text>Male</text>
+							}
+							else if (Model.Gender == true)
+							{
+								<text>Female</text>
+							}*@
+                            </td>
+                        </tr>
+                    }
+                </table>
+            </div>
+            @if (User.Identity.GetUserId() == Model.UserId || Model.Address != null || Model.City != null || Model.Country != null || Model.State != null || Model.ZipCode != null || Model.ContactNo != null)
+            {
+                
+                <div id="divPersonalInfo" style="float:left;" class="span12">
+                    <table class="table">
+                        <tr>
+                            <td style="width:150px;">
+                                <strong>Personal Info </strong>
+                            </td>
+                            <td>
+                                @if (User.Identity.GetUserId() == Model.UserId)
+                                {
+
+                                    <div style="float: right">
+                                        <a data-toggle="modal" href="#" id="edit" onclick="EditPersonalInfo();"><span rel="tooltip"
+                                            title="Edit Personal Info"><i class=" icon-edit"></i></span></a>
+                                    </div>
+                                }
+                            </td>
+                        </tr>
+                        @if (Model.Address != null)
+                        { 
+                            <tr>
+                                <td>
+                                    Address
+                                </td>
+                                <td>@Html.DisplayFor(m => m.Address)
+                                </td>
+                            </tr>
+                        }
+                        @if (Model.City != null)
+                        { 
+                            <tr>
+                                <td>
+                                    City
+                                </td>
+                                <td>@Html.DisplayFor(m => m.City)
+                                </td>
+                            </tr>
+                        }
+                        @if (Model.State != null)
+                        { 
+                            <tr>
+                                <td>
+                                    State
+                                </td>
+                                <td>@Html.DisplayFor(m => m.State)
+                                </td>
+                            </tr>
+                        }
+                        @if (Model.Country != null)
+                        { 
+                            <tr>
+                                <td>
+                                    Country
+                                </td>
+                                <td>@Html.DisplayFor(m => m.Country)
+                                </td>
+                            </tr>
+                        }
+                        @if (Model.ZipCode != null)
+                        { 
+                            <tr>
+                                <td>
+                                    ZipCode
+                                </td>
+                                <td>@Html.DisplayFor(m => m.ZipCode)
+                                </td>
+                            </tr>
+                        }
+                        @if (Model.ContactNo != null)
+                        { 
+                            <tr>
+                                <td>
+                                    Contact No
+                                </td>
+                                <td>@Html.DisplayFor(m => m.ContactNo)
+                                </td>
+                            </tr>
+                        }
+                    </table>
+                </div>
+            }
+@*   @Html.Action("UserDetail", "Account", new { id = Model.UserId })*@
+        
+    </div >
+    <div class="well span6" style="float:right;">
+        <span style="float:left;margin-left:15px;margin-bottom:10px;"><strong>Recent Activities </strong></span>    
+       
+        @if (Model.Following == true || Model.UserId == User.Identity.GetUserId())
+        { 
+            <div id="divusernotification" class="span12" style="height: 550px; overflow-y: hidden; outline: none;" tabindex="5002">
+            
+                @Html.Action("UserNotification", "Home", new { id = Model.UserId })
+            </div>
+        }
+     
+         else if (Model.RequestSent == true && Model.Following == false && Model.UserId != User.Identity.GetUserId())
+                    {
+                        @*<h6>
+                            Your Following request is waiting for approval.</h6>*@
+                    }
+                       else 
+        {
+            
+            <h6 style="float: right">Follow @Model.UserName to see the updates</h6>
+        }
+
+    </div>
+    </div>
+
+
+
+<script type="text/javascript">
+    $(function () {
+        $('#divusernotification').niceScroll();        
+    });
+    $('#imge').click(function () {
+        $('#myModal').modal('toggle');
+    });
+</script>
+
+
+
+<div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">  
+  <div class="modal-body">
+   @if (!String.IsNullOrEmpty(Model.ProfilePicUrl))
+   { 
+     <img src="@Url.Content(Model.ProfilePicUrl)" />
+   }
+  </div>
+  <div class="modal-footer">
+    <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>    
+  </div>
+</div>

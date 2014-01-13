@@ -1,0 +1,148 @@
+﻿@using Microsoft.AspNet.Identity
+@model SocialGoal.Web.ViewModels.UploadImageViewModel
+@{
+    ViewBag.Title = "Image uploader";
+}
+<script type="text/javascript">
+    $(document).ready(function () {
+        
+        //Get the preview image and set the onload event handler
+        var preview = $('#preview').load(function () {
+            setPreview();
+            //            ias.setOptions({
+            //                x1: 0,
+            //                y1: 0,
+            //                x2: $(this).width(),
+            //                y2: $(this).height(),
+            //                show: true
+            //            });
+        });
+
+        //Set the 4 coordinates for the cropping
+        var setPreview = function (x, y, w, h) {
+            $('#X').val(x || 0);
+            $('#Y').val(y || 0);
+            $('#Width').val(w || preview[0].naturalWidth);
+            $('#Height').val(h || preview[0].naturalHeight);
+        };
+
+        //Initialize the image area select plugin
+        //        var ias = preview.imgAreaSelect({
+        //            handles: true,
+        //            instance: true,
+        //            parent: 'body',
+        //            onSelectEnd: function (s, e) {
+        //                var scale = preview[0].naturalWidth / preview.width();
+        //                var _f = Math.floor;
+        //                setPreview(_f(scale * e.x1), _f(scale * e.y1), _f(scale * e.width), _f(scale * e.height));
+        //            }
+        //        });
+
+        //Check one of the checkboxes
+        var setBox = function (filter) {
+            $('#upload').attr('disabled', false);
+            //            boxes.attr('checked', false)
+            //            .filter(filter).attr({ 'checked': true, 'disabled': false });
+        };
+
+        //Initial state of X, Y, Width and Height is 0 0 1 1
+        setPreview(0, 0, 1, 1);
+
+        //        //Fetch Flickr images
+        //        var fetchImages = function (query) {
+        //            $.getJSON('http://www.flickr.com/services/feeds/photos_public.gne?jsoncallback=?', {
+        //                tags: query,
+        //                tagmode: "any",
+        //                format: "json"
+        //            }, function (data) {
+        //                var screen = $('<div />').addClass('waitScreen').click(function () {
+        //                    $(this).remove();
+        //                }).appendTo('body');
+        //                var box = $('<div />').addClass('flickrImages').appendTo(screen);
+        //                $.each(data.items, function (i, v) {
+        //                    console.log(data.items[i]);
+        //                    $('<img />').addClass('flickrImage').attr('src', data.items[i].media.m).click(function () {
+        //                        $('#Flickr').val(this.src).change();
+        //                        screen.remove();
+        //                    }).appendTo(box);
+        //                });
+        //            });
+        //        };
+
+        //        //Flickr
+        //        $('#FlickrQuery').change(function () {
+        //            fetchImages(this.value);
+        //        });
+
+        //        $('#Flickr').change(function () {
+        //            setBox('#IsFlickr');
+        //            preview.attr('src', this.value);
+        //        });
+
+        //What happens if the URL changes?
+        $('#Url').change(function () {
+            setBox('#IsUrl');
+            preview.attr('src', this.value);
+        });
+
+        //What happens if the File changes?
+        $('#File').change(function (evt) {
+            var f = evt.target.files[0];
+            var reader = new FileReader();
+
+            if (!f.type.match('image.*')) {
+                alert("The selected file does not appear to be an image.");
+                return;
+            }
+
+            setBox('#IsFile');
+            reader.onload = function (e) { preview.attr('src', e.target.result); };
+            reader.readAsDataURL(f);
+        });
+
+        //What happens if any checkbox is checked ?!
+        //        boxes.change(function () {
+        //            setBox(this);
+        //            $('#' + this.id.substr(2)).change();
+        //        });
+
+        $('#upload').attr('disabled', true);
+        $('form').submit(function () {
+            $('#upload').attr('disabled', true).text('Please wait ...');
+        });
+    });
+</script>
+
+<div id="upload-choices" >
+ @using (Html.BeginForm("UploadImage", "Account", FormMethod.Post, new { enctype = "multipart/form-data" }))
+ {
+     @Html.HiddenFor(model => model.X)
+     @Html.HiddenFor(model => model.Y)
+     @Html.HiddenFor(model => model.Width)
+     @Html.HiddenFor(model => model.Height)
+     @Html.ValidationSummary(true)  
+    <table style="padding-right:20px;">
+        <tr>
+            <td rowspan="3">
+                @if (String.IsNullOrEmpty(Model.LocalPath))
+                {
+                    <img alt="Field for image cutting" id ="preview" src="@Url.Content("~/Content/ProfilePics/facebook-avatar.png")" class="thumbnail"/>
+                }
+                else
+                {
+                    <img alt="Field for image cutting" id ="preview" src="@Url.Content(Model.LocalPath)" class="thumbnail"/>
+                }
+            </td>
+            <td >@Html.TextBoxFor(model => model.File, new { @type = "file" })</td>
+        </tr>
+        <tr>
+            <td align="right">
+                <input type ="submit" class ="btn btn-primary" value ="Upload" />
+                <button class="btn" type="reset" value="Cancel" onclick="window.location.href='@Url.Action("UserProfile", "Account", new { id = User.Identity.GetUserId() })'">Cancel</button>
+            </td>
+        </tr>
+        <tr><td colspan="2">@Html.ValidationMessageFor(model => model.File)</td></tr>
+    </table>
+ }
+       
+</div>

@@ -1,0 +1,31 @@
+﻿@{
+    ViewBag.Title = "Reportpage";
+}
+<div id="goalReport" class="well" style="padding-bottom:40px;">
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        LoadReport();
+    });
+
+
+    function LoadReport() {
+        var goalId = $('#GoalId').val();
+        var updates = $('#Updates').val();
+
+        $.get("/Group/GetGoalReport", { id: goalId }, function (result) {
+
+            var data = [], target = [];
+            $(result.Data).each(function (i, v) {
+                data.push([v.Date, v.Value]);
+            });
+            $(result.Target).each(function (i, v) {
+                target.push([v.EndDate, v.Target]);
+            });
+            if (data.length > 0) {
+                setTimeout(drawChart(data, target), 10000);
+            }
+        });
+    }
+</script>

@@ -1,0 +1,55 @@
+﻿@model SocialGoal.Model.Models.Group
+
+@{
+    ViewBag.Title = "DeleteGroup";
+}
+
+<div class ="alert alert-block alert-error fade in">
+<strong>Delete Group</strong>
+<br />
+     Are you sure you want to delete this?
+     <br />
+     <br />
+   
+<table>
+            <tr>
+                <td >
+                    @Html.DisplayNameFor(model => model.GroupName)
+                </td>
+                <td >
+                    @Html.DisplayFor(model => model.GroupName)
+                   
+                </td>
+            </tr>
+            <tr>
+                <td >
+                    @Html.DisplayNameFor(model => model.Description)
+                </td>
+                <td >
+                    @Html.DisplayFor(model => model.Description)
+                </td>
+            </tr>
+            </table>
+            <br />
+              <p>
+            
+
+        @using (Html.BeginForm())
+{
+            @Html.AntiForgeryToken()
+    <p>
+      
+
+             <button class="btn btn-danger" type="submit"  value="Submit"  onclick ="Delete(@Model.GroupId)"> Delete</button>
+             <button class="btn" value="Cancel"  type ="reset" onclick="window.location.href='@Url.Action("Index", "Group", new {id =Model.GroupId })'">
+        Cancel</button>
+        
+    </p>
+      
+     
+ 
+ 
+
+}
+ 
+</div>

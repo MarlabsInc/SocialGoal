@@ -1,0 +1,71 @@
+﻿@{
+    ViewBag.Title = "Header";
+
+    var not = Html.Action("GetNumberOfRequests", "Group", new { id = Model.GroupId });
+}
+
+    <div class="btn-group" style="float: right">
+        <button class="btn btn-primary" value="Submit" onclick="window.location.href='@Url.Action("ShowAllRequests", new { id = Model.GroupId })'"> 
+            Requests
+            @if (not.ToString() != "0")
+            {
+                <sub style='color: Red'><span class="badge badge-important">@not</span></sub>
+            }        
+        </button>
+        <button class="btn btn-info  dropdown-toggle" data-toggle="dropdown" style="margin-left:5px;">
+            Actions  
+                @*@if (not.ToString() != "0")
+                {
+                    <sub style='color: Red'><span class="badge badge-important">@not</span></sub>
+                }             
+            <span class="caret"></span>*@
+        </button>
+        <ul class="dropdown-menu">
+            <li class="">
+                @Html.ActionLink("Create Goal", "CreateGoal", new { id = Model.GroupId}, null)
+               @* <a data-toggle="modal" href="#creategoal" onclick="CreateGroupGoal(@Model.GroupUserId);">Create
+                        Goal</a>*@
+            </li>
+             <li>
+                @Html.ActionLink("Create Focus", "CreateFocus", new { id = Model.GroupId }, null)
+            </li>
+            <li class="">
+                @Html.ActionLink("Invite People", "InviteUsers", new { id = Model.GroupId }, null)
+            </li>
+           
+            @*<li>
+                @Html.ActionLink("Requests", "ShowAllRequests", new { id = Model.GroupId }, new { style = "float:left" })
+                @{
+                   
+                    if (not.ToString() != "0")
+                    {
+                    <sub><span class="badge badge-important">@not</span></sub>
+                    } 
+                }
+                </li>*@
+            </ul>
+            
+        @*    <ul class="dropdown-menu">
+                <li class="">
+                    @Html.ActionLink("Create Goal", "CreateGoal", new { id = Model.GroupId }, null)
+                </li>
+                 <li>
+                    @Html.ActionLink("Create Focus", "CreateFocus", new { id = Model.GroupId }, null)
+                </li>
+                <li class="">
+                    @Html.ActionLink("Invite Users", "InviteUsers", new { id = Model.GroupId }, null)
+                </li>
+               
+                <li>
+                    @Html.ActionLink("Requests", "ShowAllRequests", new { id = Model.GroupId }, new { style= "float:left"})
+                    @{
+                   
+                     if (not.ToString() != "0")
+                         {
+                        <sub style='color: Red'><span class="badge badge-important">@not</span></sub>
+                        } 
+                    }
+                </li>
+            </ul>*@
+        </div>
+    

@@ -1,0 +1,55 @@
+﻿@model SocialGoal.Model.Models.Focus
+
+@{
+    ViewBag.Title = "DeleteFocus";
+}
+
+<div class ="alert alert-block alert-error fade in">
+<strong>Delete Focus</strong>
+<br />
+     Are you sure you want to delete this?
+     <br />
+     <br />
+   
+<table>
+            <tr>
+                <td >
+                    @Html.DisplayNameFor(model => model.FocusName)
+                </td>
+                <td >
+                    @Html.DisplayFor(model => model.FocusName)
+                   
+                </td>
+            </tr>
+            <tr>
+                <td >
+                    @Html.DisplayNameFor(model => model.Description)
+                </td>
+                <td >
+                    @Html.DisplayFor(model => model.Description)
+                </td>
+            </tr>
+            </table>
+            <br />
+              <p>
+            
+
+        @using (Html.BeginForm())
+{
+            @Html.AntiForgeryToken()
+    <p>
+      
+
+             <button class="btn btn-danger" type="submit"  value="Submit"> Delete</button>
+             <button class="btn" value="Cancel"  type ="reset" onclick="window.location.href='@Url.Action("Index", "Group", new { id = Model.GroupId})'">
+        Cancel</button>
+        
+    </p>
+      
+     
+ 
+ 
+
+}
+ 
+</div>

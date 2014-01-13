@@ -1,0 +1,220 @@
+﻿body {
+	/*font: 100%/1.4 Verdana, Arial, Helvetica, sans-serif;*/
+	/*background: #4E5869;*/
+	margin: 0;
+	padding: 0;
+	color: #000;
+	/*background-color:#27434E;*/
+}
+.field-validation-error {
+    color: #E80C0C;
+    font-size: 12px;
+}
+
+.field-validation-valid {
+    display: none;
+}
+.well {
+min-height: 20px;
+padding: 19px;
+margin-bottom: 20px;
+background-color: whiteSmoke;
+border: 1px solid #EEE;
+border: 1px solid rgba(0, 0, 0, 0.05);
+-webkit-border-radius: 4px;
+-moz-border-radius: 4px;
+border-radius: 4px;
+-webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
+-moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
+box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
+}
+input[type="text"].input-validation-error,
+input[type="password"].input-validation-error {
+    border: 1px solid #e80c4d;
+}
+.validation-summary-valid {
+    display: none;
+}
+.validation-summary-errors {
+color: #E80C0C;
+font-weight: bold;
+font-size: 0.9em;
+}
+.subnav{
+width: 100%;
+height: 36px;
+background-color: #EEE;
+background-repeat: repeat-x;
+background-image: -moz-linear-gradient(top, whiteSmoke 0%, #EEE 100%);
+background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%,whiteSmoke), color-stop(100%,#EEE));
+background-image: -webkit-linear-gradient(top, whiteSmoke 0%,#EEE 100%);
+background-image: -ms-linear-gradient(top, whiteSmoke 0%,#EEE 100%);
+background-image: -o-linear-gradient(top, whiteSmoke 0%,#EEE 100%);
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f5f5f5', endColorstr='#eeeeee',GradientType=0 );
+background-image: linear-gradient(top, whiteSmoke 0%,#EEE 100%);
+border: 1px solid #E5E5E5;
+-webkit-border-radius: 4px;
+-moz-border-radius: 4px;
+border-radius: 4px;
+}
+
+.main-content
+{
+    font-family: 'Trebuchet MS';
+/*background-color: #fff;*/
+color: #444;
+text-decoration: none;
+word-spacing: normal;
+text-align: left;
+letter-spacing: 0;
+line-height: 1.5em;
+/*font-size: 1.5em;*/
+font-variant:small-caps;
+font-style:italic;
+font-weight:bold;
+}
+
+
+#loginbtn
+{
+    font-size:12px;
+}
+
+
+/* ~~ These are the columns for the layout. ~~ 
+
+1) Padding is only placed on the top and/or bottom of the divs. The elements within these divs have padding on their sides. This saves you from any "box model math". Keep in mind, if you add any side padding or border to the div itself, it will be added to the width you define to create the *total* width. You may also choose to remove the padding on the element in the div and place a second div within it with no width and the padding necessary for your design.
+
+2) No margin has been given to the columns since they are all floated. If you must add margin, avoid placing it on the side you're floating toward (for example: a right margin on a div set to float right). Many times, padding can be used instead. For divs where this rule must be broken, you should add a "display:inline" declaration to the div's rule to tame a bug where some versions of Internet Explorer double the margin.
+
+3) Since classes can be used multiple times in a document (and an element can also have multiple classes applied), the columns have been assigned class names instead of IDs. For example, two sidebar divs could be stacked if necessary. These can very easily be changed to IDs if that's your preference, as long as you'll only be using them once per document.
+
+4) If you prefer your nav on the left instead of the right, simply float these columns the opposite direction (all left instead of all right) and they'll render in reverse order. There's no need to move the divs around in the HTML source.
+
+*/
+.gradientBox {
+background: #1e9cd6; /* Older browsers */
+background: -moz-linear-gradient(top,  #1e9cd6 0%, #FFFFFF 100%); /* FF3.6+ */
+background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#1e9cd6), color-stop(100%,#FFFFFF)); /* Chrome,Safari4+ */
+background: -webkit-linear-gradient(top,  #1e9cd6 0%,#FFFFFF 100%); /* Chrome10+,Safari5.1+ */
+background: -o-linear-gradient(top,  #1e9cd6 0%,#FFFFFF 100%); /* Opera 11.10+ */
+background: -ms-linear-gradient(top,  #1e9cd6 0%,#FFFFFF 100%); /* IE10+ */
+background: linear-gradient(top,  #1e9cd6 0%,#FFFFFF 100%); /* W3C */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#1e9cd6', endColorstr='#FFFFFF',GradientType=0 ); /* IE6-9 */
+}
+
+.content 
+{
+    border:1px;
+	padding: 10px 0;
+	/*width: 1102px;*/
+	height:500px;
+	/*background-color:#FAFAFA;*/
+	/*float: right;*/
+}
+
+/* ~~ This grouped selector gives the lists in the .content area space ~~ */
+/*.content ul, .content ol { 
+	padding: 0 15px 15px 40px;*/ /* this padding mirrors the right padding in the headings and paragraph rule above. Padding was placed on the bottom for space between other elements on the lists and on the left to create the indention. These may be adjusted as you wish. */
+}
+
+/* ~~ The navigation list styles (can be removed if you choose to use a premade flyout menu like Spry) ~~ */
+/*ul.nav {*/
+	/*list-style: none; /* this removes the list marker */
+	/*border-top: 1px solid #666;*/ /* this creates the top border for the links - all others are placed using a bottom border on the LI */
+	/*margin-bottom: 15px; *//* this creates the space between the navigation on the content below */
+}
+/*ul.nav li {
+	/*border-bottom: 1px solid #666;*/ /* this creates the button separation */
+}
+/*ul.nav a, ul.nav a:visited { /* grouping these selectors makes sure that your links retain their button look even after being visited */
+	/*padding: 5px 5px 5px 15px;
+	display: block; /* this gives the link block properties causing it to fill the whole LI containing it. This causes the entire area to react to a mouse click. */
+	/*text-decoration: none;*/
+	/*background: #8090AB;*/
+	/*color: #000;
+}*/
+/*ul.nav a:hover, ul.nav a:active, ul.nav a:focus { /* this changes the background and text color for both mouse and keyboard navigators */
+	/*background: #6F7D94;*/
+	/*color: #FFF;
+}*/
+
+.borderBottom
+{
+    border-bottom: 1px solid #9AAFCA;
+}
+
+/* ~~ The footer ~~ */
+.footer 
+{
+   
+	position:absolute;
+	/*left:-63px;*/
+	/*top:200px;*/
+	/*width:1642px;*/
+	height:22px;
+	z-index:14;
+	background-color:#CCC;
+
+	padding: 10px 0;
+	/*background: #6F7D94;*/
+	position: relative;/* this gives IE6 hasLayout to properly clear */
+	clear: both; /* this clear property forces the .container to understand where the columns end and contain them */
+}
+
+.loign-form {
+	border-top-width: 0px;
+	border-right-width: 0px;
+	border-bottom-width: 0px;
+	border-left-width: 0px;
+	border-top-style: none;
+	border-right-style: none;
+	border-bottom-style: none;
+	border-left-style: none;
+	cellspacing:0px;
+	cellpadding:0px;
+}
+.form-input {
+	height: 10px;
+	/*width: 200px;*/
+	padding: 0px;
+	padding: 6px;
+	font-size: 14px;
+	border-color: #96A6C5;
+	margin-top: 2px;
+	margin-right: 0px;
+	margin-bottom: 0px;
+	margin-left: 0px;
+}
+.loign-form tr td{
+	height:30px;
+}
+.classname {
+	-moz-box-shadow:inset 0px 1px 0px 0px #bbdaf7;
+	-webkit-box-shadow:inset 0px 1px 0px 0px #bbdaf7;
+	box-shadow:inset 0px 1px 0px 0px #bbdaf7;
+	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #79bbff), color-stop(1, #378de5) );
+	background:-moz-linear-gradient( center top, #79bbff 5%, #378de5 100% );
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#79bbff', endColorstr='#378de5');
+	background-color:#79bbff;
+	-moz-border-radius:6px;
+	-webkit-border-radius:6px;
+	border-radius:6px;
+	border:1px solid #84bbf3;
+	display:inline-block;
+	color:#ffffff;
+	font-family:arial;
+	font-size:15px;
+	font-weight:bold;
+	padding:6px 24px;
+	text-decoration:none;
+	text-shadow:1px 1px 0px #528ecc;
+}.classname:hover {
+	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #378de5), color-stop(1, #79bbff) );
+	background:-moz-linear-gradient( center top, #378de5 5%, #79bbff 100% );
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#378de5', endColorstr='#79bbff');
+	background-color:#378de5;
+}.classname:active {
+	position:relative;
+	top:1px;
+}

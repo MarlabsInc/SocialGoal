@@ -1,0 +1,34 @@
+﻿@model IEnumerable<SocialGoal.Model.Models.Goal>
+<div id="divGoals" style="height: 150px;">
+    <div id="goals">
+        @if (Model.Count() == 0)
+        {
+            <div class ="alert alert-info">No goals to display</div>
+        }
+        @foreach (var item in Model.Take(10))
+        {
+            <table class="table" >
+                <tr>
+                    <td class="span1">
+                        <i class="icon-star"></i>
+                    </td>
+                    <td class="span8">
+                        @Html.ActionLink(item.GoalName/*.LimitLength(30)*/, "Index", new { id = item.GoalId }, new { @title = item.GoalName })
+                        
+                    </td>
+                    <td class="span2" align="right">
+                        <a data-toggle="modal" href="#" id ="edit" onclick ="window.location.href='@Url.Action("Edit", "Goal", new { id = item.GoalId })'"@*editGet('@item.GoalId')*@>
+                            <span rel="tooltip" title="Edit goals"><i class=" icon-edit"></i></span></a>
+                        <a href="#" id="delete" onclick ="window.location.href='@Url.Action("Delete", "Goal", new { id = item.GoalId })'"@*"DeleteGet('@item.GoalId')"*@>
+                            <span rel="tooltip" title="Delete goals"><i class="icon-trash"></i></span>
+                    </td>
+                </tr>
+            </table>
+			 
+        }
+    </div>
+</div>
+@if (Model.Count() > 10)
+{ 
+    @Html.ActionLink("See All", "GoalList", "Goal", new { filterBy = "My Goals" }, new { @style = "float:right;" })
+}

@@ -1,0 +1,113 @@
+﻿@model SocialGoal.Web.ViewModels.SearchViewModel
+@{
+    ViewBag.Title = "SearchResult";
+    Layout = "~/Views/Shared/_PageLayout.cshtml";
+}
+
+<div class="well"><h4>Search results for "@Model.SearchText" are..</h4></div>
+
+
+<div class="span4 well" style="margin-left:0px;height:380px;">
+     <strong>Goals</strong><hr />
+     @if (Model.Goals.Count() == 0)
+     {
+        <div class="alert alert-info">No goals to display</div>
+     }
+     <div style="max-height:300px;overflow-y:auto;" id="goallistcontainer">
+     @foreach (var item in Model.Goals)
+     { 
+         <div>
+            <div style="position: relative">
+                <strong>@Html.ActionLink(item.GoalName, "Index", "Goal", new { id = item.GoalId }, null)</strong>
+                <div class="support" id="support@(item.GoalId)">
+                    @if (item.Supported == true)
+                    {
+                        <a id="UnSupport" onclick="UnSupportGoal(@item.GoalId)"><i class='icon-minus'></i>Un-Support</a>
+                    }
+                    else if (item.Supported == false)
+                    {
+                        <a id="Support" onclick="SupportGoal(@item.GoalId)"><i class='icon-plus'></i>Support</a>
+                    }
+                </div>
+             </div>
+             <div><small>@item.StartDate.ToString("dd MMM yyyy") - @item.EndDate.ToString("dd MMM yyyy")</small></div>
+             <div><small>Created by @Html.ActionLink(item.User.UserName, "UserProfile", "Account", new { id = item.UserId }, null) on @item.CreatedDate.ToString("dd MMM yyyy -   hh:mm tt ")</small></div>
+         </div>
+         <hr />
+     }
+    </div>
+</div>
+
+
+
+<div class="span4 well" style="margin-left:25px;height:380px;">
+     <strong>People</strong><hr />
+     @if (Model.Users.Count() == 0)
+     {
+        <div class="alert alert-info">No people to display</div>
+     }
+     <div style="max-height:300px;overflow-y:auto;" id="peoplelistcontainer">
+     @foreach (var item in Model.Users)
+     { 
+         <div>
+            <div>
+                <a href="@Url.Action("UserProfile", "Account", new { id = item.Id }, null)" >
+                @if (String.IsNullOrEmpty(item.ProfilePicUrl))
+                {
+                    <img src="/Content/templatemo_329_blue_urban/images/facebook-avatar.png"  alt ="" class="span2 thumbnail" />
+                }
+                else
+                {
+                    <img src="@Url.Content(item.ProfilePicUrl)" alt ="" class="span2 thumbnail" />
+                }
+                </a>
+           </div>
+           <div style="margin-left:50px;">@Html.ActionLink(@item.UserName, "UserProfile", "Account", new { id = item.Id }, null)</div>
+            <div style="margin-left:50px;"><small>Registered On @item.DateCreated.ToString("dd MMM yyyy -   hh:mm tt ") </small></div>
+         </div>
+        <hr style="margin:23px 0px 0px 0px;" />
+     }
+    </div>
+</div>
+
+
+<div class="span4 well" style="margin-left:22px;height:380px;">
+     <strong>Groups</strong><hr />
+     @if (Model.Groups.Count() == 0)
+     {
+        <div class="alert alert-info">No group to display</div>
+     }
+     <div style="max-height:300px;overflow-y:auto;" id="grouplistcontainer">
+     @foreach (var item in Model.Groups)
+     { 
+         <div>           
+           <div >@Html.ActionLink(item.GroupName, "Index", "Group", new { id = item.GroupId }, null)</div>
+           <div><small><strong>@Html.Action("NoOfUsers", "Group", new { id = item.GroupId })</strong> Members</small></div>
+            <div><small>Created On @item.CreatedDate.ToString("dd MMM yyyy -   hh:mm tt ") </small></div>
+         </div>
+        <hr style="margin:23px 0px 0px 0px;" />
+     }
+    </div>
+</div>
+
+
+
+
+
+<style type="text/css">
+.thumbnail
+{
+width:50px;
+height:40px;
+}
+</style>
+
+
+<script type="text/javascript">
+    $(function () {
+        $('#goallistcontainer').niceScroll();
+        $('#grouplistcontainer').niceScroll();
+        $('#peoplelistcontainer').niceScroll();
+    });
+   
+</script>

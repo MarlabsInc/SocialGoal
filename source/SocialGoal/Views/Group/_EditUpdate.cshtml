@@ -1,0 +1,47 @@
+﻿@model SocialGoal.Web.ViewModels.GroupUpdateFormModel
+@{
+    ViewBag.Title = "_EditUpdate";
+}
+<div id="editupdate">
+    <table class="table">
+        <thead>
+            <h5>
+                Enter Update</h5>
+        </thead>
+        <tr>
+            <td>@*<textarea rows="4" cols="50" id = "Updatemsg+@Model.UpdateId" class ="span12" />*@@Html.TextAreaFor(model => model.Updatemsg, new { @class = "span12", id = "GroupUpdatemsg" + Model.GroupUpdateId })
+            </td>
+            <td id="noUpdate">
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <div class="input-append">
+                    @Html.TextBoxFor(model => model.status, new { @id = "GroupStatus" + Model.GroupUpdateId })
+                    @if (Model.GroupGoal.Metric != null && Model.GroupGoal.Target != null)
+                    { <span class="add-on">/@Model.GroupGoal.Target @Model.GroupGoal.Metric.Type</span>}</div>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                @Html.AntiForgeryToken()
+                <input type="button"  class="btn btn-primary pull-right" onfocus="clearGroupUpdateStatusError()" value="POST" id="postupdate" onclick="saveEditOfGroupUpdate('@Model.GroupGoal.Target','@Model.GroupGoal.MetricId','@Model.GroupUpdateId');"  />
+            </td>
+            <td>
+                <button class="btn" type="reset" value="Cancel" onclick="GroupCancel('@Model.GroupGoalId')">
+                    Cancel</button>
+            </td>
+        </tr>
+        <tr><td colspan="3"><div id="statusErrorEdit"></div></td></tr>
+    </table>
+</div>
+
+
+<script>
+    function clearGroupUpdateStatusError() {
+        $("#statusErrorEdit").html('');        
+
+        //$("#posteditupdate").removeAttr("disabled");
+    }
+
+</script>

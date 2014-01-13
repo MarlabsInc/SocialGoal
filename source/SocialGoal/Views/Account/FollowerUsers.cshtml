@@ -1,0 +1,70 @@
+﻿@model IEnumerable<SocialGoal.Web.ViewModels.FollowersViewModel>
+@{
+    ViewBag.Title = "Followers";
+   // Layout = "../Shared/_PageLayout.cshtml";
+}
+
+
+<div class="well span12"><h4>Followers</h4><hr />
+@if (Model.Count() == 0)
+{ 
+    <div class="alert alert-info">
+            No followers
+        </div>
+
+}
+else
+{
+    <div id="followerscontainer">
+        @Html.Partial("_FollowersView",Model)
+    </div>
+    if (Model.Count() >=10)
+    {
+         <div  id="morelink"> <a href="#" onclick="loadMoreFollowers();">More followers</a></div>
+    }
+}
+</div>
+
+
+
+<script type="text/javascript">
+
+    $(window).scroll(function () {
+        if ($(window).scrollTop() == $(document).height() - $(window).height()) {
+            loadMoreFollowers();
+        }
+    });
+    var currentPage = 0;
+    function loadMoreFollowers() {
+
+        if (currentPage > -1) {
+            currentPage++;
+
+            $.ajax({
+                url: "/Account/Followers",
+                type: "POST",
+                data: { page: currentPage },
+                dataType: "html",
+                beforeSend: function () {                    
+                    $('.msg').remove();
+                    $("#followerscontainer").append('<div class="msg alert alert-info" id="loadimage">Loading...</div>');
+                },
+                success: function (data) {
+                    $('.msg').remove();
+                    if (data.length != 0) {
+                        $("#followerscontainer").append(data);
+                        $('#morelink').show();
+                    } else {
+                        $('#morelink').hide();
+                        currentPage = -1;
+                        $("#followerscontainer").append('<div class="msg alert alert-info" id="alertmsg"> No more followers </div>');
+                    }
+                }
+            });
+
+        }
+    }
+    
+
+   
+</script>

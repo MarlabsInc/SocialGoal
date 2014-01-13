@@ -1,0 +1,28 @@
+﻿@model IEnumerable<SocialGoal.Web.ViewModels.GoalListViewModel>
+@{
+    ViewBag.Title = "_Goalslist";
+}
+
+
+   
+        @foreach (var item in Model)
+        { <tr>
+            <td class="span1">
+                <i class="icon-star"></i>
+            </td>
+            <td class="span9">
+
+                <div>@Html.ActionLink(item.GoalName, "Index", "Goal", new { id = item.GoalId }, null) </div>
+                <div><small>@item.StartDate- @item.EndDate</small></div>
+                <div><small> Created By @Html.ActionLink(item.UserName, "UserProfile", "Account", new { id = item.UserId }, null)on @item.CreatedDate</small></div>
+            </td>
+            <td class="span2"><strong>@item.SupportsCount</strong> Supporters
+            </td>
+        </tr>             
+   
+        }
+           
+   
+
+
+

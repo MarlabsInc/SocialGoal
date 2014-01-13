@@ -1,0 +1,471 @@
+﻿@model dynamic
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Social Goal</title>@* @Styles.Render("~/Content/css")
+	 @Scripts.Render("~/Scripts/js")*@
+    <script src="../../Scripts/jquery-1.7.2.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/jquery-ui-1.8.21.custom.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/jquery.validate.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/jquery.unobtrusive-ajax.js" type="text/javascript"></script>
+    <script src="../../Scripts/jquery.pjax.js" type="text/javascript"></script>
+    <script src="../../Scripts/bootstrap-transition.js" type="text/javascript"></script>
+    <script src="../../Scripts/bootstrap-popover.js" type="text/javascript"></script>
+    <script src="../../Scripts/bootstrap-alert.js" type="text/javascript"></script>
+    <script src="../../Scripts/bootstrap-modal.js" type="text/javascript"></script>
+    <script src="../../Scripts/bootstrap-dropdown.js" type="text/javascript"></script>
+    <script src="../../Scripts/bootstrap-scrollspy.js" type="text/javascript"></script>
+    <script src="../../Scripts/bootstrap-collapse.js" type="text/javascript"></script>
+    <script src="../../Scripts/jquery.autocomplete.js" type="text/javascript"></script>
+    <script src="../../Scripts/jquery-ui-1.8.11.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/jqDnR.js" type="text/javascript"></script>
+    <script src="../../Scripts/jqModal.js" type="text/javascript"></script>
+    <script src="../../Scripts/jqplot.barRenderer.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/jqplot.dateAxisRenderer.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/jqplot.categoryAxisRenderer.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/jqplot.pointLabels.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/jqplot.canvasTextRenderer.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/jqplot.canvasAxisTickRenderer.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/jqplot.canvasAxisTickRenderer.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/jqplot.ohlcRenderer.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/jqplot.highlighter.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/handlebars-1.0.rc.1.js" type="text/javascript"></script>
+    <script src="../../Scripts/jquery.nicescroll.min.js" type="text/javascript"></script>
+    <link href="../../Content/bootstrap.css" rel="stylesheet" type="text/css" />
+    <link href="../../Content/bootstrap-responsive.css" rel="stylesheet" type="text/css" />
+    <link href="../../Content/HomePage.css" rel="stylesheet" type="text/css" />
+    <link href="../../Content/jquery-ui-1.8.21.custom.css" rel="stylesheet" type="text/css" />
+    <link href="../../Content/jqModal.css" rel="stylesheet" type="text/css" />
+    <link href="../../Content/jquery.jqplot.min.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+    <div class="navbar navbar navbar-fixed-top">
+        <div class="navbar-inner">
+            <div class="container-fluid">
+                <section id="login">
+                    @Html.Partial("_Header")
+                </section>
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid margin-top">
+        <div class="row-fluid" style="margin-top: 10px;">
+            <div class="prettyprint linenums" id="content">
+                @RenderBody()
+            </div>
+            @*<div class="span3">
+					<div class="row-fluid">
+						<div id="mygoals" class="well">
+							<h5>
+								MY GOALS</h5>
+							<div>
+								@{ Html.RenderAction("MyGoals", "Goal"); }
+							</div>
+						</div>
+						<div id="followedgoals" class="well">
+							<h5 title="user following goals">
+								FOLLOWED GOALS</h5>
+							<div>
+								@{ Html.RenderAction("GoalsFollowing", "Goal"); }
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="span3">
+					<div class="row-fluid">
+						<div id="mygroup" class="well">
+							<h5>
+								MY GROUPS</h5>
+							<div id="divCreateGroup" style="display: none">
+							</div>
+							<div>
+								@{ Html.RenderAction("GroupsView", "Group"); }
+							</div>
+						</div>
+						<div id="followedgroups" class="well">
+							<div>
+								<h5>
+									FOLLOWED GROUPS</h5>
+								<div>
+									@{ Html.RenderAction("FollowedGroups", "Group"); }
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>*@
+            <!-- end .sidebar2 -->
+        </div>
+    </div>
+    <!---for modal popup -->
+    <div class="modal" id="creategoal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+        style="display: none;" aria-hidden="true">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true" onclick="enableScroll()">
+                ×</button>
+            <h5 id="myModalLabel">
+                Create Goal</h5>
+        </div>
+        <div class="modal-body" id="createGoal">
+        </div>
+        <div class="modal-footer">
+            <button class="btn" data-dismiss="modal" aria-hidden="true" onclick="enableScroll()">
+                Close</button>
+        </div>
+    </div>
+    <div class="modal" id="creategroup" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+        style="display: none;" aria-hidden="true">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true" onclick="enableScroll()">
+                ×</button>
+            <h5 id="myModalLabel">
+                Create Group</h5>
+        </div>
+        <div class="modal-body" id="createGroup">
+        </div>
+        <div class="modal-footer">
+            <button class="btn" data-dismiss="modal" aria-hidden="true" onclick="enableScroll()">
+                Close</button>
+        </div>
+    </div>
+    <div class="modal" id="follower" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+        style="display: none;" aria-hidden="true">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true" onclick="enableScroll()">
+                ×</button>
+            <h5 id="myModalLabel">
+                Followers</h5>
+        </div>
+        <div class="modal-body" id="followedUsers">
+        </div>
+        <div class="modal-footer">
+            <button class="btn" data-dismiss="modal" aria-hidden="true" onclick="enableScroll()">
+                Close</button>
+        </div>
+    </div>
+    <div class="modal" id="following" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+        style="display: none;" aria-hidden="true">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true" onclick="enableScroll()">
+                ×</button>
+            <h5 id="myModalLabel">
+                Followings</h5>
+        </div>
+        <div class="modal-body" id="followingUsers">
+        </div>
+        <div class="modal-footer">
+            <button class="btn" data-dismiss="modal" aria-hidden="true" onclick="enableScroll()">
+                Close</button>
+        </div>
+    </div>
+    <!--ends here---------->
+</body>
+</html>
+<style type="text/css">
+.thumbnail
+{
+width:50px;
+height:40px;
+}
+</style>
+<script type="text/javascript">
+function search(e) {
+window.event.preventDefault();
+
+			var goal = $("#goal").val();
+			window.location = '/Search/SearchAll/'+goal;
+
+	}
+$(function(){
+	$('#follower').niceScroll();
+    $('.tab-content').niceScroll();
+});
+$(function(){
+	$('#following').niceScroll();
+});
+
+$(function(){
+	$('#divFollowedGroup').niceScroll();
+});
+
+$(function(){
+	$('#divGroup').niceScroll();
+});
+$(function(){
+	$('#divSGoals').niceScroll();
+});
+$(function(){
+	$('#divGoals').niceScroll();
+});
+$(function(){
+	$('#notification').niceScroll();
+});
+
+
+	function GetFollowers()
+{
+$('#divFollowedGroup').getNiceScroll().remove();
+$('#divSGoals').getNiceScroll().remove();
+$('#divGoals').getNiceScroll().remove();
+$('#notification').getNiceScroll().remove();
+ var url ="/Account/Followers";
+ $.get(url,function(result){
+	$("#followedUsers").html(result);
+
+ });
+}
+
+function GetFollowings()
+{
+$('#divFollowedGroup').getNiceScroll().remove();
+$('#divSGoals').getNiceScroll().remove();
+$('#divGoals').getNiceScroll().remove();
+$('#notification').getNiceScroll().remove();
+ var url ="/Account/Followings";
+ $.get(url,function(result){
+	$("#followingUsers").html(result);
+
+ });
+}
+
+
+function CreateGoal()
+{
+$('#divFollowedGroup').getNiceScroll().remove();
+$('#divSGoals').getNiceScroll().remove();
+$('#divGoals').getNiceScroll().remove();
+$('#notification').getNiceScroll().remove();
+ var url ="/Goal/Create";
+ $.get(url,function(result){
+	$("#createGoal").html(result);
+
+ });
+}
+
+function DeleteUser(userId,groupId) {
+	
+
+        $.get("/Group/DeleteMember",{'userId':userId,'groupId':groupId}, function (e) {
+			$("#" + userId).html(e);
+			$("#divFollowedGroup").load("/Group/FollowedGroups");
+		});
+	}
+
+
+	function CreateGroup()
+	{
+	$('#divFollowedGroup').getNiceScroll().remove();
+	$('#divSGoals').getNiceScroll().remove();
+	$('#divGoals').getNiceScroll().remove();
+	$('#notification').getNiceScroll().remove();
+	var url ="/Group/CreateGroup";
+	$.get(url,function(result){
+	$("#createGroup").html(result);
+	$('#notification').getNiceScroll();
+ });
+}
+		function toggleDiv(divId){
+			$(eval(divId)).toggle("slow");
+		}
+	function onBegin_CreateGoal(ajaxContext) {
+		var jsonObject = eval(ajaxContext);
+		$("#divCreateGoal").toggle();
+	}
+
+	function enableScroll()
+	{
+		$('#divFollowedGroup').niceScroll();
+		$('#divGroup').niceScroll();
+		$('#divSGoals').niceScroll();
+		$('#divGoals').niceScroll();
+		$('#notification').niceScroll();
+
+	}
+function GroupEdit(GroupId) {
+	var url = '/Group/EditGroup';
+	$('#EditpreviewLayergroup').jqm().jqDrag('#handleGroup');
+	$.get(url, { 'id': GroupId}, function (result) {
+
+		$('#EditpreviewContentgroup').empty().append(result); //empty previewContent and add the generated preview
+		$('#EditpreviewLayergroup').jqmShow(); //show previewLayer
+
+	});
+}
+
+function EditGroup(id,userid) {
+	var url = '/Group/EditGroup';
+	var GroupName = $("#GroupName").val();
+	var Description = $("#Description").val();
+
+	var PostData = { 'GroupId': id, 'GroupName': GroupName, 'Description': Description, 'UserId': userid  };
+	$.post(url, PostData, function (result) {
+	$("#divEditGroup" + id.toString()).html(result);
+		$('#EditpreviewLayergroup').jqmHide();
+	});
+}
+
+function GroupDelete(GroupId) {
+	var url = '/Group/DeleteGroup';
+	$('#DeletepreviewLayergroup').jqm().jqDrag('#handleGroup');
+	$.get(url, { 'id': GroupId }, function (result) {
+
+		$('#DeletetpreviewContentgroup').empty().append(result); //empty previewContent and add the generated preview
+		$('#DeletepreviewLayergroup').jqmShow(); //show previewLayer
+
+	});
+}
+
+function DeleteGrpConfirmed(id) {
+	var GoalId = id;
+	var url = '/Group/DeleteGroup';
+	var postdata = { 'id': id }
+	$.post(url, postdata, function (result) {
+		$("#divDeleteGroup" + id.toString()).html(result);
+		$('#DeletepreviewLayergroup').jqmHide();
+	});
+}
+
+function selectUser(userName, groupId) {
+	var postData = { 'GroupId': groupId, 'Email': userName, 'Admin': false };
+	var url = '/MyGroup/AddNewUser';
+	$.post(url, postData, function (result) {
+		$("#divUsers").html(result);
+	});
+}
+function editGet(id) {
+	var GoalId = id;
+	var url = '/Goal/Edit';
+	$.get(url, { 'GoalId': GoalId }, function (result) {
+	});
+
+}
+
+function DeleteGet(id) {
+	var GoalId = id;
+	var url = '/Goal/Delete';
+	
+	$.get(url, { 'GoalId': GoalId }, function (result) {
+	});
+
+}
+
+function editSave(id) {
+	 var GoalName = $("#GoalName").val();
+	 var Desc = $("#Desc").val();
+	 var StartDate = $("#StartDate" ).val();
+	 var EndDate = $("#EndDate" ).val();
+	 var GoalMetric = $("#MetricId" ).val()  ;
+	 var Target = $("#Target" ).val();
+	 var GoalType = $("#GoalType").val();
+	 var user = $("#UserId").val();
+	 var PostData = { 'GoalId': id, 'GoalName': GoalName,'Desc' : Desc, 'StartDate': StartDate, 'EndDate': EndDate, ' MetricId': GoalMetric ,'Target': Target, 'GoalType': GoalType, 'UserId': user };
+
+	 $.ajax({
+		type:post,
+		 url: "/Goal/Edit",
+		 data: PostData,
+	 }).done(function (result) {
+		 $(this).addClass("done");
+		  $("#divEdit" + id.toString()).html(result);
+	 });
+
+ }
+
+
+ function saveUpdate() {
+		var update = 'Please Enter Update';
+		var data = 'Please Enter Status';
+		var Gid = $('#GoalId').val();
+		var CurrUpdte = $('#Update').val();
+		var CurrStatus = $('#Status').val();
+
+		if ( ($('#Status').val() == '')) {
+			alert(data);
+		}
+
+		else
+			if ($('#Update').val() == '') {
+				alert(update);
+			}
+			else {
+
+				var PostData = { 'GoalId': Gid, 'Updatemsg': CurrUpdte, 'status': CurrStatus };
+				var url = '/MyGoals/SaveUpdate';
+				$.post(url, PostData, function (response) {
+
+
+					$("#divupdate").html(response);
+					$("#Update").val('');
+					$("#Status").val('');
+				}
+	   );
+			}
+	}
+
+	function saveGroupUpdate() {
+	var update = 'Please Enter Update';
+	$("#postupdate").attr("disabled", "true");
+
+	var Gid = $('#GoalId').val();
+	var CurrUpdte = $('#Update').val();
+	var CurrStatus = $('#Status').val();
+
+	if ($('#Update').val() == '') {
+		alert(update);
+		$("#postupdate").removeAttr("disabled");
+	}
+	else {
+		var PostData = { 'GoalId': Gid, 'Updatemsg': CurrUpdte, 'status': CurrStatus };
+		var url = '/Goal/SaveUpdate';
+		$.post(url, PostData, function (response) {
+			$("#divupdate").html(response);
+			$("#Update").val('');
+			$("#Status").val('');
+			$("#postupdate").removeAttr("disabled");
+
+		});
+	}
+}
+
+	 function isNumberKey(evt) {
+		var charCode = (evt.which) ? evt.which : event.keyCode
+		if (charCode > 31 && (charCode < 48 || charCode > 57))
+		  alert('Please Enter Integers');
+	}
+
+	function userslist(id)
+	{
+	 var url = '/MyGroup/UsersList';
+	 $('#userspreviewLayer').jqm().jqDrag('#handleusers');
+	$.get(url, { 'GroupId': id }, function (result) {
+
+		$('#userspreviewContent').empty().append(result); //empty previewContent and add the generated preview
+		$('#userspreviewLayer').jqmShow(); //show previewLayer
+
+	});
+
+	}
+
+   
+	 function UnSupportGoal(goalId) {
+		$.get("/Goal/UnSupportGoal/" + goalId, function (e) {
+			$("#support" + goalId).html('<a id="Support' + goalId + '" onclick="SupportGoal(' + goalId + ')"><i class="icon-plus"></i>Follow</a>');
+			$("#divSGoals").load("/Goal/GoalsFollowing");
+		});
+	}
+
+	function DateValidation()
+	{
+		var SDate = $("#StartDate").val();
+		var EDate = $("#EndDate").val();
+
+		var endDate = new Date(EDate);
+		var startDate = new Date(SDate);
+
+		if (SDate != '' && EDate != '' && startDate > endDate) {
+			alert("Please ensure that the End Date is greater than or equal to the Start Date.");
+			theForm.txtEnd.focus();
+			return false;
+		}
+	}
+</script>

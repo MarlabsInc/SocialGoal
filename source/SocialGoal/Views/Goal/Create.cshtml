@@ -1,0 +1,138 @@
+﻿@using Microsoft.AspNet.Identity
+@model SocialGoal.Web.ViewModels.GoalFormModel
+@{
+    ViewBag.Title = "Home Page";
+        //Layout = "~/Views/Shared/_HomeLayout.cshtml";
+
+}
+<div>
+<div class="span5">
+    @using (Html.BeginForm("Create", "Goal", FormMethod.Post, new { @id = "form" }))
+    {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true)
+        <fieldset>
+        <legend></legend>
+            <table>
+                <tr>
+                
+                    <td>
+                        @Html.TextBoxFor(model => model.GoalName, new { @class = "span3", style = "display:block;width:270px;;float:left", placeholder = "Enter the goal name" })<br>
+                        @Html.ValidationMessageFor(model => model.GoalName)
+                    </td>
+                </tr>
+                <tr>
+                
+                    <td class="editor-field">
+                        @Html.TextAreaFor(model => model.Desc, new { @class = "span3", placeholder = "Enter the description", style = "display:block;width:270px;;float:left" })
+                        @Html.ValidationMessageFor(model => model.Desc)
+                    </td>
+                </tr>
+                <tr>
+                  
+                    <td>
+                        @Html.TextBoxFor(model => model.StartDate, new { @class = "ui-datepicker span3", @style = "display:block;width:270px;;float:left", placeholder = "Enter the start date", @readonly = "readonly" })
+                        @Html.ValidationMessageFor(model => model.StartDate)
+                    </td>
+                </tr>
+                <tr>
+                   
+                    <td >
+                        @Html.TextBoxFor(model => model.EndDate, new { @class = "ui-datepicker span3", @style = "display:block;width:270px;;float:left", placeholder = "Enter the end date", @readonly = "readonly" })
+                        @Html.ValidationMessageFor(model => model.EndDate)
+                    </td>
+                </tr>
+                <tr>
+                  
+                    <td>
+                 
+                        @Html.DropDownListFor(model => model.MetricId, Model.Metrics, "--Select Metric--", new { @class = "span4", @style = "display:block;width:270px;;float:left" })
+                        @Html.ValidationMessageFor(model => model.MetricId)
+                    </td>
+                </tr>
+                <tr>
+                  
+                    <td>
+                        @Html.TextBoxFor(model => model.Target, new { @class = "span3", id = "Target",  placeholder = "Enter the target to be achieved", style = "width: 270px;" })
+                        <a href="#"  id="targetinfo" rel ="popover" data-content= "Fix the target of the goal based on metric selected" data-trigger ="hover" data-placement="top" data-originals-title ="Target"><i class="icon-info-sign"></i> </a>
+                      <div id="NumberValidation"></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>@Html.CheckBoxFor(model => model.GoalType, true)&nbsp;&nbsp;Make this goal as private</td>
+                </tr>
+                <tr><td height="20"></td></tr>
+                <tr>
+                    <td>
+                    <button id="submitbtn" class="btn btn-primary" value="Submit"> Create</button>&nbsp;&nbsp;
+                    <button class="btn" type ="reset" value="Cancel" onclick="window.location.href='@Url.Action("Index", "Home")'">Cancel</button>                        
+                    </td>
+                </tr>
+
+               
+                @Html.Hidden("UserId", User.Identity.GetUserId())
+                
+            </table>
+            
+        </fieldset>
+    }
+</div>
+</div>
+<script type="text/javascript">
+
+
+    $(document).ready(function () {
+
+        $('.ui-datepicker').each(function (i, v) {
+            $(v).datepicker({
+                dateFormat: 'dd-M-yy',
+                buttonImage: '@Url.Content("~/Content/calendar.gif")',
+                buttonImageOnly: true,
+                showOn: "button"
+            });
+
+        });
+
+        $('#form').submit(function(e)  {
+            var target = $('#Target').val();
+            if (target != '') {
+                if (DecimalValidate(target)) {
+                    $('#NumberValidation').html('');
+                    return true;
+                }
+                else {
+                    $('#NumberValidation').html('<label class="field-validation-error">Please enter valid status</label>');
+                    e.preventDefault();
+                    return false;
+                }
+            }
+
+        });
+
+    });
+
+    $("#Description").focus(function () {
+        $(this).animate({ "height": "60px" }, "slow");
+        return false;
+    });
+    $("#Description").blur(function () {
+        $("#Description").animate({ "height": "22px" }, "slow");
+        return false;
+    });
+
+    $(function () {
+        $("#targetinfo").popover();
+    });
+
+
+    function DecimalValidate(num) {
+        var regex = /^[-+]?[0-9]+(\.[0-9]+)?$/;
+        if (regex.test(num)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+
+</script>

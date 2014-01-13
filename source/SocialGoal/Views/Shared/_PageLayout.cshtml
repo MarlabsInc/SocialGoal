@@ -1,0 +1,906 @@
+﻿@model dynamic
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Social Goal</title>@*  @Styles.Render("~/Content/CSS")
+    @Scripts.Render("~/Scripts/js")*@
+    <link href="../../Content/bootstrap.css" rel="stylesheet" type="text/css" />
+    <link href="../../Content/bootstrap-responsive.css" rel="stylesheet" type="text/css" />
+    <script src="../../Scripts/jquery-1.7.2.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/bootstrap-popover.js" type="text/javascript"></script>
+    <script src="../../Scripts/bootstrap-transition.js" type="text/javascript"></script>
+    <script src="../../Scripts/bootstrap-alert.js" type="text/javascript"></script>
+    <script src="../../Scripts/bootstrap-modal.js" type="text/javascript"></script>
+    <script src="../../Scripts/bootstrap-dropdown.js" type="text/javascript"></script>
+    <script src="../../Scripts/bootstrap-scrollspy.js" type="text/javascript"></script>
+    <script src="../../Scripts/bootstrap-collapse.js" type="text/javascript"></script>
+    <script src="../../Scripts/jquery.autocomplete.js" type="text/javascript"></script>
+    <script src="../../Scripts/jquery-ui-1.8.21.custom.min.js" type="text/javascript"></script>
+    <link href="../../Content/HomePage.css" rel="stylesheet" type="text/css" />
+    <link href="../../Content/jquery-ui-1.8.21.custom.css" rel="stylesheet" type="text/css" />
+    <script src="../../Scripts/jquery.unobtrusive-ajax.js" type="text/javascript"></script>
+    <script src="../../Scripts/jquery.pjax.js" type="text/javascript"></script>
+    <script src="../../Scripts/jquery-ui-1.8.11.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/jqDnR.js" type="text/javascript"></script>
+    <script src="../../Scripts/jqModal.js" type="text/javascript"></script>
+    <link href="../../Content/jqModal.css" rel="stylesheet" type="text/css" />
+    <script src="../../Scripts/jquery.jqplot.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/jqplot.barRenderer.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/jqplot.dateAxisRenderer.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/jqplot.categoryAxisRenderer.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/jqplot.pointLabels.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/jqplot.canvasTextRenderer.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/jqplot.canvasAxisTickRenderer.min.js" type="text/javascript"></script>
+    <link href="../../Content/jquery.jqplot.min.css" rel="stylesheet" type="text/css" />
+    <script src="../../Scripts/jqplot.ohlcRenderer.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/jqplot.highlighter.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/jquery.nicescroll.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/handlebars-1.0.rc.1.js" type="text/javascript"></script>
+    <script type="text/javascript">
+
+        function toggleDiv(divId) {
+            $(eval(divId)).toggle("slow");
+        }
+
+        function SearchUserToSupport(e, goalid) {
+
+            evt = e || window.event;
+            var userName = $("#searchUserSupport").val();
+            var url = '/Goal/SearchUser';
+            if ((evt.keyCode != 13) && ($("#searchUserSupport").val() != "" && $("#searchUserSupport").val().length >= 1)) {
+                var getData = { 'username': userName, 'goalId': goalid };
+                $.get(url, getData, function (result) {
+                    $("#searchUserSupport").autocomplete({
+                        source: result,
+                        select: function (event, ui) {
+                            $.post("/Goal/InviteUser", { id: goalid, UserId: ui.item.id }, function (e, res) {
+                                $("#inviteResult").html(e);
+                                $("#searchUserSupport").val("");
+                                $("#searchUserSupport").autocomplete("disable");
+                            });
+                        }
+                    });
+                });
+            }
+        }
+//        function search() {
+//           
+//            var goal = $("#goal").val();
+//            window.location = '/Search/SearchAll/' + goal;
+//        }
+        function SearchUser(e, id) {
+            evt = e || window.event;
+            var userName = $("#searchUser").val();
+            var url = '/Group/SearchUserForGroup';
+
+            if ((evt != 13) && ($("#searchUser").val() != "" && $("#searchUser").val().length >= 1)) {
+
+                var getData = { 'username': userName, 'groupId': id };
+
+                $.get(url, getData, function (result) {
+                    $("#searchUser").autocomplete("enable");
+                    $("#searchUser").autocomplete({
+                        source: result,
+                        select: function (event, ui) {
+                            $.post("/Group/InviteUser", { id: id, UserId: ui.item.id }, function (e, res) {
+                                $("#inviteResult").html(e);
+                                $("#searchUser").val("");
+                                $("#searchUser").autocomplete("disable");
+                            });
+                        }
+                    });
+                });
+            }
+            else if ((window.event.keyCode == 50) || (window.event.keyCode == 46)) {
+                $("#searchUser").autocomplete("disable");
+            }
+        }
+
+		
+
+    </script>
+</head>
+<body>
+    <div class="navbar navbar navbar-fixed-top">
+        <div class="navbar-inner">
+            <div class="container-fluid">
+                <section id="login">
+                    @Html.Partial("_Header")
+                </section>
+            </div>
+        </div>
+    </div>
+  
+    <div class="container-fluid margin-top">
+        <div class="row-fluid">
+            <div class="span9">
+                @RenderBody()
+            </div>
+            <div class="span3">
+                <div id="mygoals" class="well">
+                    <h5>
+                        MY GOALS</h5>
+                    <div>
+                        @{ Html.RenderAction("MyGoals", "Goal"); }
+                    </div>
+                    @*</fieldset>*@
+                </div>
+                <div id="followedgoals" class="well">
+                    <h5 title="user following goals">
+                        FOLLOWED GOALS</h5>
+                    <div>
+                        @{ Html.RenderAction("GoalsFollowing", "Goal"); }
+                    </div>
+                </div>
+                <div id="mygroup" class="well">
+                    <h5>
+                        MY GROUPS</h5>
+                    <div id="divCreateGroup" style="display: none">
+                    </div>
+                    <div>
+                        @{ Html.RenderAction("GroupsView", "Group"); }
+                    </div>
+                </div>
+                <div id="followedgroups" class="well">
+                    <div>
+                        <h5>
+                            FOLLOWED GROUPS</h5>
+                        <div>
+                            @{ Html.RenderAction("FollowedGroups", "Group"); }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal" id="creategoal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+        style="display: none;" aria-hidden="true">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true" onclick="enableScroll()">
+                ×</button>
+            <h5 id="myModalLabel">
+                Create Goal</h5>
+        </div>
+        <div class="modal-body" id="createGoalModal">
+        </div>
+        <div class="modal-footer">
+            <button class="btn" data-dismiss="modal" aria-hidden="true" onclick="enableScroll()">
+                Close</button>
+        </div>
+    </div>
+    <div class="modal" id="creategroup" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+        style="display: none;" aria-hidden="true">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true" onclick="enableScroll()">
+                ×</button>
+            <h5 id="myModalLabel">
+                Create Group</h5>
+        </div>
+        <div class="modal-body" id="createGroup">
+        </div>
+        <div class="modal-footer">
+            <button class="btn" data-dismiss="modal" aria-hidden="true" onclick="enableScroll()">
+                Close</button>
+        </div>
+    </div>
+    <div class="modal" id="follower" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+        style="display: none;" aria-hidden="true">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true" onclick="enableScroll()">
+                ×</button>
+            <h5 id="myModalLabel">
+                Followers</h5>
+        </div>
+        <div class="modal-body" id="followedUsers">
+        </div>
+        <div class="modal-footer">
+            <button class="btn" data-dismiss="modal" aria-hidden="true" onclick="enableScroll()">
+                Close</button>
+        </div>
+    </div>
+    <div class="modal" id="following" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+        style="display: none;" aria-hidden="true">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true" onclick="enableScroll()">
+                ×</button>
+            <h5 id="myModalLabel">
+                Followings</h5>
+        </div>
+        <div class="modal-body" id="followingUsers">
+        </div>
+        <div class="modal-footer">
+            <button class="btn" data-dismiss="modal" aria-hidden="true" onclick="enableScroll()">
+                Close</button>
+        </div>
+    </div>
+    <div class="modal" id="searchMember" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+        style="display: none;" aria-hidden="true">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true" onclick="enableScroll()">
+                ×</button>
+            <h5 id="myModalLabel">
+                Members</h5>
+        </div>
+        <div class="modal-body" id="searchmember">
+        </div>
+        <div class="modal-footer">
+            <button class="btn" data-dismiss="modal" aria-hidden="true" onclick="enableScroll()"
+                id="searchClose">
+                Close</button>
+        </div>
+    </div>
+</body>
+</html>
+<style type="text/css">
+    .thumbnail
+    {
+        width: 50px;
+        heigth: 40px;
+    }
+</style>
+@*<script src="../../Scripts/jquery.jqplot.min.js" type="text/javascript"></script>
+<script src="../../Scripts/jqplot.barRenderer.min.js" type="text/javascript"></script>
+<script src="../../Scripts/jqplot.dateAxisRenderer.min.js" type="text/javascript"></script>
+<script src="../../Scripts/jqplot.categoryAxisRenderer.min.js" type="text/javascript"></script>
+<script src="../../Scripts/jqplot.pointLabels.min.js" type="text/javascript"></script>
+<script src="../../Scripts/jqplot.canvasTextRenderer.min.js" type="text/javascript"></script>
+<script src="../../Scripts/jqplot.canvasAxisTickRenderer.min.js" type="text/javascript"></script>
+<link href="../../Content/jquery.jqplot.min.css" rel="stylesheet" type="text/css" />
+<script src="../../Scripts/jqplot.ohlcRenderer.min.js" type="text/javascript"></script>
+<script src="../../Scripts/jqplot.highlighter.min.js" type="text/javascript"></script>
+<script src="../../Scripts/jquery.nicescroll.min.js" type="text/javascript"></script>*@
+<script type="text/javascript">
+    $(function () {
+        $('#notification').niceScroll();
+    });
+
+    $(function () {
+        $('#divFollowedGroup').niceScroll();
+    });
+
+    $(function () {
+        $('#divGroup').niceScroll();
+    });
+    $(function () {
+        $('#divSGoals').niceScroll();
+    });
+    $(function () {
+        $('#divGoals').niceScroll();
+    });
+    $(function () {
+        $('#goalist').niceScroll();
+    });
+    $(function () {
+        $('#focuslist').niceScroll();
+    });
+    $(function () {
+        $('#memberlist').niceScroll();
+    });
+    $(function () {
+        $('#usersearch').niceScroll();
+    });
+    $(function () {
+        $('#groupsearch').niceScroll();
+    });
+    $(function () {
+        $('#goalsearch').niceScroll();
+    });
+    $(function () {
+        $('#goalslist').niceScroll();
+    });
+    $(function () {
+        $('#groupslist').niceScroll();
+    });
+
+    function cancelProfile(id) {
+        e.preventDefault();
+        window.location.href = '/Account/UserProfile/id'; //"UserProfile", "Account", new { id = (((SocialGoal.Core.Models.SocialGoalUser)(User.Identity)).UserId) })'
+    }
+    function saveUpdate(target, metric) {
+
+        var update = 'Please Enter Update';
+        var status = 'Please Enter Status';
+        $("#postupdate").attr("disabled", "true");
+
+        var Gid = $('#GoalId').val();
+        var CurrUpdte = $('#Update').val();
+        var CurrStatus = $('#Status').val();
+
+        if ($('#Update').val() == '') {
+            alert(update);
+            $("#postupdate").removeAttr("disabled");
+        }
+        //        else if (metric != 0 && $('#Status').val() == '' && target != "") {
+
+        //            //alert(status);
+        //            $("#postupdate").removeAttr("disabled");
+        //        }
+        else {
+            var PostData = { 'GoalId': Gid, 'Updatemsg': CurrUpdte, 'status': CurrStatus };
+            var url = '/Goal/SaveUpdate';
+            $.post(url, PostData, function (response) {
+                LoadReport();
+                $("#divupdate").html(response);
+                $("#Update").val('');
+                $("#Status").val('');
+                $("#postupdate").removeAttr("disabled");
+
+            });
+        }
+    }
+
+
+    function clearStatusError() {
+        $("#statusError").empty();
+        $("#postupdate").removeAttr("disabled");
+    }
+
+    function isNumberKey(evt) {
+        var charCode = (evt.which) ? evt.which : event.keyCode
+        if (charCode > 31 && (charCode < 48 || charCode > 57))
+            alert('Please Enter Integers');
+        var status = $('#Status').val();
+        var dblVar = parseFloat(status);
+        if (isNaN(dblVar)) {
+            $("#statusError").html('<label style="color:red;">Enter a valid status.</label>')
+            $('#Status').val('');
+        }
+        else {
+            $("#statusError").empty();
+        }
+    }
+
+
+    $(document).ready(function () {
+        // function LoadReport() {
+        //        var goalId = $('#GoalId').val();
+        //        var updates = $('#Updates').val();
+        //        if (updates != 0) {
+        //            $.get("/Goal/GetGoalReport", { id: goalId }, function (result) {
+
+        //                var data = [], target = [];
+        //                $(result.Data).each(function (i, v) {
+        //                    data.push([v.Date, v.Value]);
+        //                });
+        //                $(result.Target).each(function (i, v) {
+        //                    target.push([v.EndDate, v.Target]);
+        //                });
+        //                setTimeout(drawChart(data, target), 10000);
+        //            });
+        //        }
+        // }
+
+
+    });
+
+
+    function drawChart(data, target) {
+        //        if (data.length > 2) {
+        $("#goalReport").html("<div style='top: 20px;position: relative;left: 10px;'><strong>Goal Progress</strong></div><div id='chart' style='top:20px'></div>");
+        var plot1 = $.jqplot('chart', [target, data], {
+            animate: true,
+            animateReplot: true,
+            series: [
+			{
+			    pointLabels: {
+			        show: true
+			    },
+			    renderer: $.jqplot.BarRenderer,
+			    showHighlight: false,
+			    yaxis: 'y2axis',
+			    rendererOptions: {
+			        // Speed up the animation a little bit.
+			        // This is a number of milliseconds.  
+			        // Default for bar series is 3000.  
+			        animation: {
+			            speed: 2500
+			        },
+			        barWidth: 15,
+			        barPadding: -15,
+			        barMargin: 0,
+			        highlightMouseOver: false
+			    }
+			},
+			{
+			    rendererOptions: {
+			        // speed up the animation a little bit.
+			        // This is a number of milliseconds.
+			        // Default for a line series is 2500.
+			        animation: {
+			            speed: 2000
+			        }
+			    }
+			}
+		],
+            axes: {
+                // These options will set up the x axis like a category axis.
+                xaxis: {
+                    renderer: $.jqplot.DateAxisRenderer,
+                    tickOptions: {
+                        formatString: '%b %#d, %y'
+                    },
+                    //                tickInterval: 1,
+                    drawMajorGridlines: false,
+                    drawMinorGridlines: true,
+                    drawMajorTickMarks: false,
+                    rendererOptions: {
+                        //                tickInset: 0.5,
+                        //                minorTicks: 1
+                    }
+                },
+                x2axis: {
+                    enderer: $.jqplot.DateAxisRenderer,
+                    tickOptions: {
+                        formatString: '%b %#d, %y'
+                    }
+                },
+                yaxis: {
+                    //                tickOptions: {
+                    //                    formatString: "$%'d"
+                    //                },
+                    rendererOptions: {
+                        forceTickAt0: true
+                    }
+                },
+                y2axis: {
+                    //                tickOptions: {
+                    //                    formatString: "$%'d"
+                    //                },
+                    rendererOptions: {
+                        // align the ticks on the y2 axis with the y axis.
+                        alignTicks: true,
+                        forceTickAt0: true
+                    }
+                }
+            },
+            //                  axes:{
+            //                  showTicks:true,
+            //                    xaxis:{
+            //                      renderer:$.jqplot.DateAxisRenderer,
+            //                      tickOptions:{
+            //                        formatString:'%b %#d, %y'
+            //                      }
+
+            //                    }
+
+            //                  },
+            seriesDefault: {
+                pointLabels: { show: true }
+            },
+            //                  axesDefault:{
+            //                 numberTicks: data.length+1
+            //                  },
+            highlighter: {
+                show: true,
+                sizeAdjust: 7.5
+            },
+            cursor: {
+                show: true
+            }
+        });
+        // }
+    }
+</script>
+<script type="text/javascript">
+		function GetFollowers()
+{
+$('#divFollowedGroup').getNiceScroll().remove();
+$('#divSGoals').getNiceScroll().remove();
+$('#divGoals').getNiceScroll().remove();
+$('#notification').getNiceScroll().remove();
+ var url ="/Account/Followers";
+ $.get(url,function(result){
+	$("#followedUsers").html(result);
+
+ });
+}
+
+function GetFollowings()
+{
+$('#divFollowedGroup').getNiceScroll().remove();
+$('#divSGoals').getNiceScroll().remove();
+$('#divGoals').getNiceScroll().remove();
+$('#notification').getNiceScroll().remove();
+ var url ="/Account/Followings";
+ $.get(url,function(result){
+	$("#followingUsers").html(result);
+
+ });
+}
+
+
+function CreateGoal()
+{
+$('#divFollowedGroup').getNiceScroll().remove();
+$('#divSGoals').getNiceScroll().remove();
+$('#divGoals').getNiceScroll().remove();
+$('#notification').getNiceScroll().remove();
+ var url ="/Goal/Create";
+ $.get(url,function(result){
+	$("#createGoalModal").html(result);
+
+ });
+}
+
+//function CreateGroupGoal(id)
+//{
+////$('#divFollowedGroup').getNiceScroll().remove();
+////$('#divSGoals').getNiceScroll().remove();
+////$('#divGoals').getNiceScroll().remove();
+////$('#notification').getNiceScroll().remove();
+// var url ="/Group/CreateGoal";
+// $.get(url,{'id':id},function(result){
+//	$("#createGoal").html(result);
+
+// });
+//}
+
+function CreateGroup()
+	{
+	$('#divFollowedGroup').getNiceScroll().remove();
+	$('#divSGoals').getNiceScroll().remove();
+	$('#divGoals').getNiceScroll().remove();
+	$('#notification').getNiceScroll().remove();
+	var url ="/Group/CreateGroup";
+	$.get(url,function(result){
+	$("#createGroup").html(result);
+	$('#notification').getNiceScroll();
+ });
+}
+
+function enableScroll()
+	{
+		$('#divFollowedGroup').niceScroll();
+		$('#divGroup').niceScroll();
+		$('#divSGoals').niceScroll();
+		$('#divGoals').niceScroll();
+		$('#notification').niceScroll();
+
+	}
+
+
+	
+
+	 
+  
+	function Invite(groupId) {
+
+	   
+		if ($("Email").val() != "") {
+			$("#btnInvite").attr("disabled", "true");
+			var email = $("#Email").val();
+			var url = '/Group/InviteEmail';
+			var postData = { 'Email': email, 'GrouporGoalId': groupId }
+			$.post(url, postData, function (result) {
+				$("#msgGroup").css({'display':'block'});
+				$("#msgGroup").text(result);
+				$("#msgGroup").fadeOut(3000);
+				$("#Email").val('');
+				$("#btnInvite").removeAttr("disabled");
+			});
+		}
+
+	}
+
+	function SupportInvitation(id) {
+		url = '/Goal/SupportInvitation';
+
+		$.get(url, { goalId: id }, function (result) {
+			$('#InviteForm').html(result);
+
+
+		});
+	}
+
+	function SupportInvite(goalId) {
+		if ($("#SupportEmail").val() != "") {
+
+			$("#btnSupportInvite").attr("disabled", "true");
+			var email = $("#SupportEmail").val();
+			var url = "/Goal/InviteEmail";
+			var postData = { 'Email': email, 'GrouporGoalId': goalId }
+			$.post(url, postData, function (result) {
+				$("#msgSupport").css({'display':'block'});
+				$("#msgSupport").text(result);
+				$("#msgSupport").fadeOut(2000);
+				$("#SupportEmail").val('');
+				$("#btnSupportInvite").removeAttr("disabled");
+			});
+		}
+	}
+	function SupportGoal(goalId) {
+		$.get("/Goal/SupportGoal/" + goalId, function (e) {
+			$("#support" + goalId).html('<input type="button"  class="btn btn-primary" value="UnFollow" id="UnSupportBtn' + goalId + '" onclick ="UnSupportGoal(' + goalId + ')" />');
+			//            <a id="UnSupport' + goalId + '" onclick="UnSupportGoal(' + goalId + ')"><i class="icon-minus"></i>Un-Support</a>');
+			$("#divSGoals").load("/Goal/GoalsFollowing");
+		});
+	}
+
+	function UnSupportGoal(goalId) {
+		$.get("/Goal/UnSupportGoal/" + goalId, function (e) {
+			$("#support" + goalId).html(' <input type="button"  class="btn btn-primary" value="Follow" id="SupportBtn' + goalId + '" onclick ="SupportGoal(' + goalId + ')" />');
+			//            <a id="Support' + goalId + '" onclick="SupportGoal(' + goalId + ')"><i class="icon-plus"></i>Support</a>');
+			$("#divSGoals").load("/Goal/GoalsFollowing");
+		});
+	}
+
+	function SupportGoalNow(goalId) {
+		$.get("/Goal/SupportGoalNow/" + goalId, function (e) {
+			$("#support" + goalId).html(' <input type="button"  class="btn btn-primary" value="Unfollow" id="UnSupportBtn' + goalId + '" onclick ="UnSupportGoal(' + goalId + ')" />');
+//          $("#grp-name").html(
+			$("#divSGoals").load("/Goal/GoalsFollowing");
+		});
+	}
+
+	function DeleteUser(userId,groupId) {
+		$.get("/Group/DeleteMember",{'userId':userId,'groupId':groupId}, function (e) {
+			$("#" + userId).html(e);
+			$("#divFollowedGroup").load("/Group/FollowedGroups");
+		});
+	}
+
+
+	function DropDownChange() {
+		
+			$("#drpdwnBtn").attr("disabled", "true");
+			var id = $("#GoalStatusId").val();
+			var url = '/Goal/GoalStatus';
+			var goalid = $("#GoalId").val();
+			$.post(url, { 'id': id, 'goalid': goalid }, function (e) {
+				$("#goalStatus").html(e);
+				$("#drpdwnBtn").removeAttr("disabled");
+			});
+	}
+
+	function GroupDropDownChange() {
+		
+			$("#grpdrpdwnBtn").attr("disabled", "true");
+			var id = $("#GoalStatusId").val();
+			var url = '/Group/GoalStatus';
+			var goalid = $("#GroupGoalId").val();
+			$.post(url, { 'id': id, 'goalid': goalid }, function (e) {
+				$("#groupgoalStatus").html(e);
+				$("#grpdrpdwnBtn").removeAttr("disabled");
+			});
+	}
+
+
+
+function saveGroupUpdate(target,metric) {
+	var update = 'Please Enter Update';
+	$("#postGroupupdate").attr("disabled", "true");
+
+	var Gid = $('#GoalId').val();
+	var CurrUpdte = $('#GroupUpdate').val();
+	var CurrStatus = $('#Status').val();
+	var GroupId = $('#GroupId').val();
+	
+
+	if ($('#GroupUpdate').val() == '') {
+		alert(update);
+		$("#postGroupupdate").removeAttr("disabled");
+	}
+
+//     else if (metric != 0 && $('#Status').val() == '' && target != "") {
+
+//            //alert(status);
+//            $("#postupdate").removeAttr("disabled");
+//        }
+
+	else {
+		var PostData = { 'GroupGoalId': Gid, 'Updatemsg': CurrUpdte, 'status': CurrStatus ,'GroupId':GroupId};
+//        var url = '/Group/SaveUpdate';
+//        $.post(url, PostData, function (response) {
+//            $("#divgroupupdate").html(response);
+//            $("#GroupUpdate").val('');
+//            $("#GroupStatus").val('');
+//            $("#postGroupupdate").removeAttr("disabled");
+
+		//        });
+
+ $.ajax({
+		type:"POST",
+		 url: "/Group/SaveUpdate",
+		 data: PostData,
+	 }).done(function (result) {
+		 $(this).addClass("done");
+          LoadReport();
+		  $("#divgroupupdate").html(result);
+		   $("#GroupUpdate").val('');
+			$("#Status").val('');
+			 $("#postGroupupdate").removeAttr("disabled");
+	 });
+	}
+}  
+ function CommentExpandInGroupUpdate(UpdateId) {
+		var Updateid = UpdateId;
+		var url = '/Group/DisplayComments';
+		$.get(url, { 'id': Updateid }, function (result) {
+
+			$("#divgroupcommentUpdate" + Updateid.toString()).html(result);
+			$("#divgroupcommentUpdate" + Updateid.toString()).toggle("slow");
+		});
+
+	}
+
+    function checkPressedKey(e,id)
+	{
+		evt=e||window.event;
+		if (evt.keyCode==13) {
+		updateGroupComment(id);
+		}
+		
+	}
+
+	function updateGroupComment(id) {
+		
+			var Updateid = id;
+
+			var CurrCommnt = $("#GroupCommentText" + id.toString()).val();
+
+
+			var url2 = '/Group/DisplayCommentCount';
+			var url = '/Group/SaveComment';
+			var PostData = { 'GroupUpdateId': Updateid, 'CommentText': CurrCommnt };
+			$.post(url, PostData, function (result) {
+				$("#divgroupcommentUpdate" + id.toString()).html(result);
+				$("#GroupCommentText" + id.toString()).val('');
+
+				$.get(url2, { 'id': Updateid }, function (data) {
+
+					$("#commentGroupToggle" + id.toString()).html(data + ' Comments<i class="icon-comment"></i>');
+				});
+
+			});
+		
+	}
+	
+
+	function EnableBtn()
+	{
+		 $("#inviteResult").empty();
+		$("#btnSupportInvite").removeAttr("disabled");
+	}
+	 function DisableBtn()
+	{
+	if($("#SupportEmail").val() == "")
+		{
+		$("#btnSupportInvite").attr("disabled", "disabled");
+	   }
+	}
+	function EnableInviteBtn()
+	{
+		$("#inviteResult").empty();
+		$("#btnInvite").removeAttr("disabled");
+	}
+	function EnableDrpDwn()
+	{
+		$("#drpdwnBtn").removeAttr("disabled");
+	}
+	function EnableGrpDrpDwn()
+	{
+		$("#grpdrpdwnBtn").removeAttr("disabled");
+	}
+	 function DisableInviteBtn()
+	{
+	if($("#Email").val() == "")
+	{	   
+	$("#btnInvite").attr("disabled", "disabled");
+	}
+	}
+
+	function EditBasicInfo()
+	{
+	var url ='/Account/EditBasicInfo'
+	$.get(url,function(result)
+	{
+    $("#divBasicInfo").html('');
+	$("#divBasicInfo").html(result);
+
+	});
+	}
+
+	 function EditPersonalInfo()
+	{
+	var url ='/Account/EditPersonalInfo'
+	$.get(url,function(result)
+	{
+    $("#divPersonalInfo").html('');
+	$("#divPersonalInfo").html(result);
+
+	});
+	}
+
+	 function EditProfile()
+	{
+
+    $.ajax({
+  url: '/Account/ImageUpload',
+  cache:false,
+  success: function(data) {
+    $('#profilepic').html(data);
+
+  }
+})
+//	var url ='/Account/ImageUpload'
+
+//	$.get(url,function(result)
+//	{
+//	$("#profilepic").html(result);
+
+//	});
+	}
+
+
+//  function EnableInviteBtn() {
+//        $("#forgotPasswordEmail").empty();
+//        $("#sendBtn").removeAttr("disabled");
+//    }
+//    
+//    function DisableInviteBtn() {
+//        if ($("#forgotPasswordEmail").val() == "") {
+//            $("#sendBtn").attr("disabled", "disabled");
+//        }
+//    }
+
+    function InviteEmail() {
+        if ($("#inviteEmail").val() != "") {
+
+            $("#sendBtn").attr("disabled", "true");
+            var role=$("#Roles").val();
+            var email = $("#inviteEmail").val();
+            var url = "/Admin/Invite";
+            var postData = { 'Email': email,'Role':role }
+            $.post(url, postData, function (result) {
+                $("#msgInvited").css({ 'display': 'block' });
+                $("#msgInvited").text(result);
+                $("#msgInvited").fadeOut(5000);
+                $("#inviteEmail").val('');
+                $("#sendBtn").removeAttr("disabled");
+            });
+        }
+    }
+
+    function GetLink() {
+        
+
+          
+            var role=$("#Roles").val();
+           
+            var url = "/Admin/GetLink";
+            var postData = {'Role':role }
+            $.post(url, postData, function (result) {
+               $("#link").val(result);
+            });
+        
+    }
+
+
+    
+function SearchMember(groupid)
+{
+ var url ="/Group/SearchMemberForGoalAssigning";
+ $.get(url,{ 'id': groupid },function(result){
+	$("#searchmember").html(result);
+    
+
+ });
+}
+
+function AssigningUser(GroupUserId, UserId,UserName)
+{
+$("#assignedgroupuserId").val(GroupUserId);
+
+$("#AssignedUser").val(UserName);
+$("#searchClose").trigger("click");
+
+}
+
+
+ function RemoveAssigned()
+    {
+        $("#assignedgroupuserId").val('');
+        $("#AssignedUser").val('');
+    }
+</script>

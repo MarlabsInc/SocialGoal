@@ -1,0 +1,48 @@
+﻿@model SocialGoal.Web.ViewModels.UpdateFormModel
+@{
+    ViewBag.Title = "_EditUpdate";
+}
+
+ 
+<div id="editupdate">
+    <table class="table">
+        <thead>
+            <h5>
+                Enter Update</h5>
+        </thead>
+        <tr>
+            <td>@*<textarea rows="4" cols="50" id = "Updatemsg+@Model.UpdateId" class ="span12" />*@@Html.TextAreaFor(model => model.Updatemsg, new { @class = "span12", id = "Updatemsg" + Model.UpdateId })
+            </td>
+            <td id="noUpdate">
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <div class="input-append">
+                    @Html.TextBoxFor(model => model.status, new { @id = "status" + Model.UpdateId, onfocus = "clearUpdateStatusError()" })
+                    @if (Model.Goal.Metric != null && Model.Goal.Target != null)
+                    { <span class="add-on">/@Model.Goal.Target @Model.Goal.Metric.Type</span>}</div>
+            </td>
+            <td> <div id="statusErrorEdit"></div></td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                @Html.AntiForgeryToken()
+                <input type="button"  class="btn btn-primary pull-right" value="POST" id="posteditupdate" onclick="saveEditOfUpdate('@Model.Goal.Target','@Model.Goal.MetricId','@Model.UpdateId');"  />
+            </td>
+            <td>
+                <button class="btn" type="reset" value="Cancel" onclick="Cancel('@Model.GoalId')">
+                    Cancel</button>
+            </td>
+        </tr>
+        <tr><td colspan="3"><div id="updateStatusError" ></div></td></tr>
+    </table>
+</div>
+
+<script>
+    function clearUpdateStatusError() {
+        $("#updateStatusError").empty();
+        //$("#posteditupdate").removeAttr("disabled");
+    }
+
+</script>

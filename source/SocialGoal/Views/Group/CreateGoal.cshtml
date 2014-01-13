@@ -1,0 +1,109 @@
+﻿@model SocialGoal.Web.ViewModels.GroupGoalFormModel
+@{
+    ViewBag.Title = "Create Goal";
+    Layout = "~/Views/Shared/_PageLayout.cshtml";
+}
+@*<script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>*@
+<div class="well span10">
+    <h4>
+        Create Group Goal
+    </h4>
+    @Html.Partial("Header")
+    <br />
+    <div id="createGoal" class="well span8">
+        @using (Html.BeginForm("CreateGoal", "Group"))
+        {
+            @Html.AntiForgeryToken()
+            @Html.HiddenFor(m => m.GroupId)
+
+            @Html.ValidationSummary(true)
+            <table class="table ">
+                <tr>
+                    <td class="span12">
+                        @Html.TextBoxFor(model => model.GoalName, new { placeholder = "Enter The Goal Name" })
+                        @Html.ValidationMessageFor(model => model.GoalName)
+                    </td>
+                </tr>
+                <tr>
+                    <td class="">
+                        @Html.TextBoxFor(model => model.Description, new { placeholder = "Enter The Description" })
+                        @Html.ValidationMessageFor(model => model.Description)
+                    </td>
+                </tr>
+                <tr>
+                    <td class="">
+                        @Html.TextBoxFor(model => model.StartDate, new { @class = "ui-datepicker", @readonly = "readonly", @style = "display:block;float:left", placeholder = "StartDate Of the Goal" })
+                        @Html.ValidationMessageFor(model => model.StartDate)
+                    </td>
+                </tr>
+                <tr>
+                    <td class="">
+                        @Html.TextBoxFor(model => model.EndDate, new { @class = "ui-datepicker", @readonly = "readonly", @style = "display:block;float:left", placeholder = "EndDate Of the Goal" })
+                        @Html.ValidationMessageFor(model => model.EndDate)
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @Html.DropDownListFor(model => model.FocusId, Model.Foci, "--Select Focus--")
+                        @Html.ValidationMessageFor(model => model.FocusId)
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @Html.DropDownListFor(model => model.MetricId, Model.Metrics, "--Select Metric--")
+                        @Html.ValidationMessageFor(model => model.MetricId)
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @Html.TextBoxFor(model => model.Target, new { placeholder = "Enter the Target to be Achieved" })
+                        @Html.ValidationMessageFor(model => model.Target)
+                         <a href="#"  id="targetinfo" rel ="popover" data-content= "Fix the target of the goal based on metric selected. It should be a numeric. eg:100" data-trigger ="hover" data-placement="top" data-originals-title ="Target"><i class="icon-info-sign"></i> </a>
+                    </td>
+                </tr>
+                <tr>
+                  
+                    <td>@Html.TextBoxFor(model => model.AssignedTo, new { id = "AssignedUser", value = "", placeholder = "Assigned To", @readonly = "readonly" })
+                 <a href="#"  id="assigngoalsinfo" rel ="popover" data-content= "You can seach the user by clicking on the search button and assign the current goal for him. " data-trigger ="hover" data-placement="top" data-originals-title ="Assign Goals"><i class="icon-info-sign"></i> </a>
+                    </td>
+                    <td>
+                        <a data-toggle="modal" href="#searchMember" onclick="SearchMember('@Model.GroupId');" class="btn btn-primary" title ="You can assign Goals to the members of the group">Search
+                        </a>  
+                    </td>
+                      <td><input type ="button" id "removeassignedto" class ="btn" value="Remove" onclick ="RemoveAssigned()"  title ="You can remove the Assigned Users"/></td>
+                    <td>
+                    @Html.HiddenFor(m => m.AssignedGroupUserId, new { @id = "assignedgroupuserId" })
+                    @*<input type= "hidden" value = "abc" id ="assignedgroupuserId" />*@</td>
+                </tr>
+            </table>
+            <p>
+                <button class="btn btn-primary" type="submit" value="Create">
+                    Create</button>
+                <button class="btn" type ="reset" value="Cancel" onclick="window.location.href='@Url.Action("Index", "Group", new { @id = Model.GroupId })'">
+                    Cancel</button></p>
+               
+
+        }
+    </div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        $('.ui-datepicker').each(function (i, v) {
+            $(v).datepicker({
+                dateFormat: 'dd-M-yy',
+                buttonImage: '@Url.Content("~/Content/calendar.gif")',
+                buttonImageOnly: true,
+                showOn: "button"
+            });
+        });
+    });
+
+    $(function () {
+        $("#assigngoalsinfo").popover();
+    });
+    $(function () {
+        $("#targetinfo").popover();
+    });
+</script>

@@ -1,0 +1,41 @@
+﻿@model IEnumerable<SocialGoal.Web.ViewModels.GroupsItemViewModel>
+<div id="divGroup" style="height: 150px;">
+    <div id="gr" style="background-color: transparent;">
+        @if (Model.Count() == 0)
+        {
+           <div class ="alert alert-info">No groups to display</div>
+        }
+        @foreach (var item in Model.Take(10))
+        {  
+            <table class="table">
+                <tr>
+                    <td class="span1">
+                        <i class="icon-th"></i>
+                    </td>
+                    <td class="span8">
+                    
+                            @Html.ActionLink(item.GroupName/*.LimitLength(20)*/, "Index", "Group", new { id = item.GroupId },  new { @title = item.GroupName })
+                            @{
+            var not = Html.Action("GetNumberOfRequests", "Group", new { id = item.GroupId });
+            if (not.ToString() != "0")
+            {
+                                <sub><span class="badge badge-important">@not</span></sub>
+            } 
+                            }
+                       
+                    </td>
+                    <td class="span3">
+                        <a href="#" id ="groupEdit" onclick ="window.location.href='@Url.Action("EditGroup", "Group", new { id = item.GroupId })'">
+                            <span rel="tooltip" title="Edit Group"><i class="icon-edit"></i></span></a><a href="#" id ="groupDelete" onclick ="window.location.href='@Url.Action("DeleteGroup", "Group", new { id = item.GroupId })'">
+                                <span rel="tooltip" title="Delete Group"><i class="icon-trash"></i></span>
+                    </td>
+                </tr>
+            </table>
+
+        }
+    </div>
+</div>
+@if (Model.Count() > 10)
+{
+    @Html.ActionLink("See All", "GroupList", "Group", new { filterBy = "My Groups" }, new { @style = "float:right;" })
+}

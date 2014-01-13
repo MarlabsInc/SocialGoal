@@ -1,0 +1,40 @@
+﻿@{
+    ViewBag.Title = "Supporters";
+    Layout = "~/Views/Shared/_PageLayout.cshtml";
+}
+@model SocialGoal.Web.ViewModels.GoalSupporterViewModel
+<div class ="span10 well" >
+<h4>
+    Supporters
+</h4>
+<div class="span8">
+    @foreach (var item in Model.Users)
+            {
+         <div>
+                    <div style="position: relative">
+                        <div>
+                            <a href="@Url.Action("UserProfile", "Account", new { id = item.UserId }, null)" >
+                                @if (String.IsNullOrEmpty(@item.ProfilePicUrl))
+                                {
+                                    <img src="../../Content/templatemo_329_blue_urban/images/facebook-avatar.png"  class="thumbnail span2" />
+                                }
+                                else
+                                {
+                                    <img src="@Url.Content(@item.ProfilePicUrl)" alt ="" class="thumbnail span2" />
+                                }
+                            </a>
+                        </div>
+                    </div>
+                    <div>
+                        @Html.ActionLink(@item.UserName, "UserProfile", "Account", new { id = item.UserId }, null)
+                    </div>
+                     <div>@item.Email
+                        </div>
+                        </div>
+                  <br />
+                <hr >
+              
+            }
+</div>
+</div>
+

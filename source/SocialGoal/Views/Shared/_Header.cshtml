@@ -1,0 +1,89 @@
+﻿@using Microsoft.AspNet.Identity
+@if (Request.IsAuthenticated)
+{
+    <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"><span
+        class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span>
+    </a>
+    <a class="brand" href='@Url.Action("Index", "Home")'>Social Goal</a>
+    <div class="btn-group pull-right">
+        <a class="btn dropdown-toggle" data-toggle="dropdown" href="#"><i class="icon-user">
+        </i>
+            @{
+    var name = User.Identity.Name;
+                <text> @name </text>
+            }
+            <span class="caret"></span></a>
+        <ul class="dropdown-menu">
+            <li>@Html.ActionLink("Profile", "UserProfile", "Account", new { id = User.Identity.GetUserId() }, new { @title = "View Profile" })
+            </li>
+            <li class="divider"></li>
+            @*<li><a href="/Account/LogOff">Sign Out</a></li>*@
+            <li>@Html.ActionLink("Sign Out","LogOff","Account")</li>
+        </ul>
+    </div>
+    
+    <div class="nav-collapse">
+        <ul class="nav">
+            <li><a href="/Home/Index">Home</a></li>
+            <li><a href="/Notification/Index">My Invitations
+                @{
+    var not = Html.Action("GetNumberOfInvitations", "Notification");
+    if (not.ToString() != "0")
+    { 
+                    <sup><span class="badge badge-important">@not</span> </sup>
+    }
+                }
+            </a></li>
+            @*<li><a href="/Goal/ListOfGoals">Goals</a></li>*@
+            <li><a href="/Goal/GoalList">Goals</a></li>
+            @*<li><a href="/Group/ListOfGroups">Groups</a></li>*@
+            <li><a href="/Group/GroupList">Groups</a></li>
+            <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">People
+                <b class="caret"></b></a>
+                <ul class="dropdown-menu">
+                    <li class=""><a href="/Account/Followers">Followers</a></li>@*onclick="GetFollowers();"*@
+                    <li class=""><a href="/Account/Followings">Following</a> </li>
+                </ul>
+            </li>
+            <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Create
+                <b class="caret"></b></a>
+                <ul class="dropdown-menu">
+                    <li class=""><a data-toggle="modal" href="#creategoal" onclick="CreateGoal();">Create
+                        Goal</a></li>
+                    <li class=""><a data-toggle="modal" href="#creategroup" onclick="CreateGroup();">Create
+                        Group</a> </li>
+                </ul>
+            </li>
+            @if (User.IsInRole("Admin"))
+            { 
+                <li><a href="/Admin/Index">Admin Dashboard</a></li>
+            }
+            <li>
+                <form action="/Search/SearchAll" class="navbar-search" id="searchform" method="post">
+                <input class="search-query span2" id="searchText" name="searchText" placeholder="Search"  type="text" value="@ViewBag.searchtext" />
+                <input type="submit" style="display: none;" />
+                </form>
+            </li>
+        </ul>
+    </div>
+    
+}
+
+<link href="/Content/CustomStyles.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript">
+    $(document).ready(function () {
+        $(".nav-collapse .nav li a").click(function (e) {
+            $(".nav-collapse .nav .active").removeClass("active")
+            $(this).parent().addClass("active")
+        });
+    });
+
+    $('#searchText').keypress(function (e) {
+        var code = (e.keyCode ? e.keyCode : e.which);
+        if (code == 13 && $(this).val() != "") {
+            $('#searchform').submit();
+        }
+
+    });
+
+</script>

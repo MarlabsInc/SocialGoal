@@ -1,0 +1,93 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title</title>
+   @* @Styles.Render("~/Content/CSS")
+    @Scripts.Render("~/Scripts/js")*@
+   <script src="../../Scripts/jquery-1.7.2.min.js" type="text/javascript"></script>
+	<script src="../../Scripts/jquery-ui-1.8.21.custom.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/jquery.validate.min.js" type="text/javascript"></script>
+	<script src="../../Scripts/jquery.unobtrusive-ajax.js" type="text/javascript"></script>
+    <script src="../../Scripts/jquery.pjax.js" type="text/javascript"></script>
+    <script src="../../Scripts/bootstrap-transition.js" type="text/javascript"></script>
+    <script src="../../Scripts/bootstrap-alert.js" type="text/javascript"></script>
+	<script src="../../Scripts/bootstrap-modal.js" type="text/javascript"></script>
+	<script src="../../Scripts/bootstrap-dropdown.js" type="text/javascript"></script>
+	<script src="../../Scripts/bootstrap-scrollspy.js" type="text/javascript"></script>
+	<script src="../../Scripts/bootstrap-collapse.js" type="text/javascript"></script>
+    <script src="../../Scripts/jquery.autocomplete.js" type="text/javascript"></script>
+    <script src="../../Scripts/jquery-ui-1.8.11.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/jqDnR.js" type="text/javascript"></script>
+	<script src="../../Scripts/jqModal.js" type="text/javascript"></script>
+   @* <script src="../../Scripts/jqplot.barRenderer.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/jqplot.dateAxisRenderer.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/jqplot.categoryAxisRenderer.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/jqplot.pointLabels.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/jqplot.canvasTextRenderer.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/jqplot.canvasAxisTickRenderer.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/jqplot.canvasAxisTickRenderer.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/jqplot.ohlcRenderer.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/jqplot.highlighter.min.js" type="text/javascript"></script>*@
+    <script src="../../Scripts/handlebars-1.0.rc.1.js" type="text/javascript"></script>
+    <script src="../../Scripts/jquery.nicescroll.min.js" type="text/javascript"></script>
+
+    <link href="../../Content/bootstrap.css" rel="stylesheet" type="text/css" />
+	<link href="../../Content/bootstrap-responsive.css" rel="stylesheet" type="text/css" />
+	<link href="../../Content/HomePage.css" rel="stylesheet" type="text/css" />
+	<link href="../../Content/jquery-ui-1.8.21.custom.css" rel="stylesheet" type="text/css" />
+    <link href="../../Content/jqModal.css" rel="stylesheet" type="text/css" />
+    <link href="../../Content/jquery.jqplot.min.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+    @RenderBody()
+</body>
+</html>
+<script type="text/javascript">
+    
+    function EnableBtn() {
+        $("#forgotPasswordEmail").empty();
+        $("#sendBtn").removeAttr("disabled");
+    }
+    
+    function DisableBtn() {
+        if ($("#forgotPasswordEmail").val() == "") {
+            $("#sendBtn").attr("disabled", "disabled");
+        }
+    }
+
+    function SentEmail() {
+        if ($("#forgotPasswordEmail").val() != "") {
+
+            $("#sendBtn").attr("disabled", "true");
+            var email = $("#forgotPasswordEmail").val();
+            var url = "/Account/ForgotPassword";
+            var postData = { 'Email': email}
+            $.post(url, postData, function (result) {
+                $("#msgReset").css({ 'display': 'block' });
+                $("#msgReset").text(result);
+                $("#msgReset").fadeOut(5000);
+                $("#forgotPasswordEmail").val('');
+                $("#sendBtn").removeAttr("disabled");
+            });
+        }
+    }
+
+    function InviteEmail() {
+        if ($("#inviteEmail").val() != "") {
+
+            $("#sendBtn").attr("disabled", "true");
+            var email = $("#inviteEmail").val();
+            var url = "/Admin/Invite";
+            var postData = { 'Email': email }
+            $.post(url, postData, function (result) {
+                $("#msgInvited").css({ 'display': 'block' });
+                $("#msgInvited").text(result);
+                $("#msgInvited").fadeOut(5000);
+                $("#inviteEmail").val('');
+                $("#sendBtn").removeAttr("disabled");
+            });
+        }
+    }
+</script>

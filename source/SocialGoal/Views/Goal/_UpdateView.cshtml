@@ -1,0 +1,153 @@
+﻿@using Microsoft.AspNet.Identity
+@model SocialGoal.Web.ViewModels.UpdateListViewModel
+    
+@if (Model.Updates.Count() == 0)
+{
+    <div class="alert alert-info">
+        No updates on this goal
+    </div>    
+}
+else
+{
+<div class="span12 hero-unit" id="DisplayUpdates" style="margin-left: 0px;padding: 15px;" >
+    @foreach (var item in Model.Updates)
+    {
+        <div class="well span12" style="margin-left:1px;">
+
+        <div class="span12" id="UpdateStatus@(item.UpdateId)" >           
+                @*<span style="margin-left:13px; font-size:14px;cursor:help;" title="@item.Updatemsg">@item.Updatemsg.LimitLength(60)</span>*@                
+            <span style="margin-left:13px; font-size:14px;cursor:help;" title="@item.Updatemsg">@item.Updatemsg</span>
+                @if (item.Goal.UserId ==  User.Identity.GetUserId())
+                { 
+                    <div class="EditDeleteUpdate span3" style="float:right;" >
+                        <a  style="float:right;" href="JavaScript:void(0);" id="deleteupdate" onclick ="DeleteUpdate('@item.UpdateId')" >
+                            <span rel="tooltip" title="Delete Update"><i class="icon-trash"></i></span></a>
+                        <a  style="float:right;" href="JavaScript:void(0);" id ="editupdate" value ="@item.Updatemsg"onclick ="EditUpdate('@item.UpdateId')">
+                            <span rel="tooltip" title="Edit Update"><i class=" icon-edit"></i></span></a>
+                       
+                    </div>
+                }
+                <div class="span12" style="font-size:11px;">On @item.UpdateDate.ToString("dd MMM yyyy - hh:mm tt")</div>        
+           
+        </div>
+         
+   
+        <div id="supportUpdate@(item.UpdateId)" class ="row-fluid span7" style ="font-size:12px;">
+            @if (item.IsSupported == false)
+            {
+                <a href ="JavaScript:void(0);" id ="support@(item.UpdateId)" onclick ="SupportUpdate('@item.UpdateId')" title="Support this update">Support</a><text> | </text> 
+            }
+            else
+            { 
+             <a href ="JavaScript:void(0);" id ="unsupport@(item.UpdateId)" onclick ="UnSupportUpdate('@item.UpdateId')" title="Un Support this update">Unsupport</a><text> | </text> 
+            }
+
+            @{
+            var supportCount = Html.Action("NoOfSupports", new { id = item.UpdateId });
+            var commentCount = Html.Action("NoOfComments", new { id = item.UpdateId });
+             }
+          
+             @if (supportCount.ToHtmlString() != "0")
+             {
+                <a data-toggle="modal" href="#updateSupporters" id ="SupportCount@(item.UpdateId)" onclick="SupportersOfUpdate('@item.UpdateId')">@supportCount Supports<i class="icon-thumbs-up"></i></a> <text> | </text>
+             }
+             else
+             {
+                <a data-toggle="modal" href="#updateSupporters" id ="SupportCount@(item.UpdateId)" onclick="SupportersOfUpdate('@item.UpdateId')">0 Supports</a> <text> | </text>
+             }
+             @if (commentCount.ToHtmlString() != "0")
+             {
+                <a href="JavaScript:void(0);" id="commentToggle@(item.UpdateId)" onclick = "CommentExpandInUpdate(@item.UpdateId,'@commentCount')" title="Comment this update"> @commentCount Comments<i class="icon-comment"></i> </a>
+             }
+
+             else
+             {
+                   <a href="JavaScript:void(0);" id="commentToggle@(item.UpdateId)"  title="Comment this update">0 Comments </a>
+             }        
+        </div>
+         
+        
+        <div id="divcommentUpdate@(item.UpdateId)" class="span9 well" style="display:none">
+        </div>
+        <div class="span12">
+            <div class="span8 input-append">
+                <input type="text" class ="span8" id="CommentText@(item.UpdateId)" onfocus ="EnableCommentBtn('@item.UpdateId')" onblur="DisableCommentBtn('@item.UpdateId')" Placeholder="Write your comments here.." onkeypress="checkKey(event,@item.UpdateId);"/>
+                <button id="postComment@(item.UpdateId)" class="btn" style="margin-bottom:10px;" onclick="updateComment(@item.UpdateId);" disabled ="disabled";>Post</button>
+            </div>
+            
+             @if ((Model.Target != null) && (item.status != null) && (Model.Target != 0)&& Model.Metric.Type!="%")
+                {
+                    <div class="span11 alert alert-info goal-status-message">
+                        <strong>Status</strong> : <strong>@item.status @Model.Metric.Type</strong> achieved out of <strong>@Model.Target @Model.Metric.Type</strong>
+                    </div>
+                }
+                else
+                {
+            
+            <div class="span4" style="float:right;margin-right:0px;padding-left:10px;">
+                @if ((Model.Target == null) && (item.status != null))
+                {              
+                    @:Status: item.status
+                    if (Model.Metric != null)
+                    {@Model.Metric.Type}
+                }
+                else if ((Model.Target != null) && (item.status != null) && (Model.Target != 0)&& Model.Metric.Type=="%")
+                {
+                    
+                    <div class="progress progress-striped active" style="height:25px;width:150px;border:1px solid #B6B4B4;">
+                        <div class="bar" style="color:Black;width:@Html.Action("GoalProgress", "Goal", new { id = item.UpdateId })%;">
+                           @if (item.status < Model.Target)
+                           {<span style="float:left;line-height:25px;padding-left:10px;" >@item.status/@Model.Target</span>}
+                           else
+                           {<span style="float:left;line-height:25px;padding-left:10px;" >Target Achieved</span>}                                                                    
+                        </div>
+                    </div>
+                }
+               
+            </div>
+           
+                 }
+        </div>
+        
+        
+
+               
+    </div>
+      @Html.Hidden("UpdateId" + item.UpdateId, item.UpdateId)
+    }
+
+    <script type="text/javascript">
+        function EnableCommentBtn(id) {
+            $("#postComment" +id).removeAttr("disabled");
+        }
+
+
+        function DisableCommentBtn(id) {
+            if ($("#CommentText" + id).val() == "") {
+                $("#postComment" +id).attr("disabled", "disabled");
+            }
+        }
+
+        function updateComment(id) {
+            var Updateid = id;
+
+            var CurrCommnt = $("#CommentText" + id.toString()).val();
+
+            var url2 = '/Goal/DisplayCommentCount';
+            var url = '/Goal/SaveComment';
+            var PostData = { 'UpdateId': Updateid, 'CommentText': CurrCommnt };
+            $.post(url, PostData, function (result) {
+                $("#divcommentUpdate" + id.toString()).html(result);
+               $("#commentToggle" + id.toString()).attr("onclick", "CommentExpandInUpdate("+id+")");
+                $("#CommentText" + id.toString()).val('');
+
+                $.get(url2, { 'UpdId': Updateid }, function (data) {
+
+                    $("#commentToggle" + id.toString()).html( data + ' Comments<i class="icon-comment"></i>');
+                });
+
+            });
+        }
+</script>
+</div>
+}

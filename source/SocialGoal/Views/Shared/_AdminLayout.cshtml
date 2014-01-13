@@ -1,0 +1,318 @@
+﻿@model dynamic
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Social Goal</title>
+   @*   @Styles.Render("~/Content/CSS")
+    @Scripts.Render("~/Scripts/js")*@
+    <link href="../../Content/bootstrap.css" rel="stylesheet" type="text/css" />
+    <link href="../../Content/bootstrap-responsive.css" rel="stylesheet" type="text/css" />
+    <script src="../../Scripts/jquery-1.7.2.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/bootstrap-transition.js" type="text/javascript"></script>
+    <script src="../../Scripts/bootstrap-alert.js" type="text/javascript"></script>
+    <script src="../../Scripts/bootstrap-modal.js" type="text/javascript"></script>
+    <script src="../../Scripts/bootstrap-dropdown.js" type="text/javascript"></script>
+    <script src="../../Scripts/bootstrap-scrollspy.js" type="text/javascript"></script>
+    <script src="../../Scripts/bootstrap-collapse.js" type="text/javascript"></script>
+    <script src="../../Scripts/jquery.autocomplete.js" type="text/javascript"></script>
+    <script src="../../Scripts/jquery-ui-1.8.21.custom.min.js" type="text/javascript"></script>
+    <link href="../../Content/HomePage.css" rel="stylesheet" type="text/css" />
+    <link href="../../Content/jquery-ui-1.8.21.custom.css" rel="stylesheet" type="text/css" />
+    <script src="../../Scripts/jquery.unobtrusive-ajax.js" type="text/javascript"></script>
+    <script src="../../Scripts/jquery.pjax.js" type="text/javascript"></script>
+    <script src="../../Scripts/jquery-ui-1.8.11.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/jqDnR.js" type="text/javascript"></script>
+    <script src="../../Scripts/jqModal.js" type="text/javascript"></script>
+    <link href="../../Content/jqModal.css" rel="stylesheet" type="text/css" />
+    <script src="../../Scripts/jquery.jqplot.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/jqplot.barRenderer.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/jqplot.dateAxisRenderer.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/jqplot.categoryAxisRenderer.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/jqplot.pointLabels.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/jqplot.canvasTextRenderer.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/jqplot.canvasAxisTickRenderer.min.js" type="text/javascript"></script>
+    <link href="../../Content/jquery.jqplot.min.css" rel="stylesheet" type="text/css" />
+    <script src="../../Scripts/jqplot.ohlcRenderer.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/jqplot.highlighter.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/jquery.nicescroll.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/handlebars-1.0.rc.1.js" type="text/javascript"></script>
+    <script type="text/javascript">
+
+        function toggleDiv(divId) {
+            $(eval(divId)).toggle("slow");
+        }
+
+
+        function search() {
+            var goal = $("#goal").val();
+            window.location = '/Search/SearchAll/' + goal;
+        }
+        
+    </script>
+</head>
+<body>
+    <div class="navbar navbar navbar-fixed-top">
+        <div class="navbar-inner">
+            <div class="container-fluid">
+                <section id="login">
+                    @Html.Partial("_Header")
+                </section>
+            </div>
+        </div>
+    </div>
+    
+    <div class="container-fluid margin-top">
+        <div class="row-fluid">
+            <div class="span9">
+                @RenderBody()
+            </div>
+        </div>
+    </div>
+    <div class="modal" id="creategoal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+        style="display: none;" aria-hidden="true">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true" onclick="enableScroll()">
+                ×</button>
+            <h5 id="myModalLabel">
+                Create Goal</h5>
+        </div>
+        <div class="modal-body" id="createGoalModal">
+        </div>
+        <div class="modal-footer">
+            <button class="btn" data-dismiss="modal" aria-hidden="true" onclick="enableScroll()">
+                Close</button>
+        </div>
+    </div>
+    <div class="modal" id="creategroup" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+        style="display: none;" aria-hidden="true">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true" onclick="enableScroll()">
+                ×</button>
+            <h5 id="myModalLabel">
+                Create Group</h5>
+        </div>
+        <div class="modal-body" id="createGroup">
+        </div>
+        <div class="modal-footer">
+            <button class="btn" data-dismiss="modal" aria-hidden="true" onclick="enableScroll()">
+                Close</button>
+        </div>
+    </div>
+    <div class="modal" id="follower" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+        style="display: none;" aria-hidden="true">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true" onclick="enableScroll()">
+                ×</button>
+            <h5 id="myModalLabel">
+                Followers</h5>
+        </div>
+        <div class="modal-body" id="followedUsers">
+        </div>
+        <div class="modal-footer">
+            <button class="btn" data-dismiss="modal" aria-hidden="true" onclick="enableScroll()">
+                Close</button>
+        </div>
+    </div>
+    <div class="modal" id="following" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+        style="display: none;" aria-hidden="true">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true" onclick="enableScroll()">
+                ×</button>
+            <h5 id="myModalLabel">
+                Followings</h5>
+        </div>
+        <div class="modal-body" id="followingUsers">
+        </div>
+        <div class="modal-footer">
+            <button class="btn" data-dismiss="modal" aria-hidden="true" onclick="enableScroll()">
+                Close</button>
+        </div>
+    </div>
+</body>
+</html>
+<style type="text/css">
+.thumbnail
+{
+width:50px;
+heigth:40px;
+}
+</style>
+<script type="text/javascript">
+    $(function () {
+        $('#notification').niceScroll();
+    });
+
+    $(function () {
+        $('#divFollowedGroup').niceScroll();
+    });
+
+    $(function () {
+        $('#divGroup').niceScroll();
+    });
+    $(function () {
+        $('#divSGoals').niceScroll();
+    });
+    $(function () {
+        $('#divGoals').niceScroll();
+    });
+    $(function () {
+        $('#goalist').niceScroll();
+    });
+    $(function () {
+        $('#focuslist').niceScroll();
+    });
+    $(function () {
+        $('#memberlist').niceScroll();
+    });
+    $(function () {
+        $('#usersearch').niceScroll();
+    });
+    $(function () {
+        $('#groupsearch').niceScroll();
+    });
+    $(function () {
+        $('#goalsearch').niceScroll();
+    });
+    $(function () {
+        $('#goalslist').niceScroll();
+    });
+    $(function () {
+        $('#groupslist').niceScroll();
+    });
+
+
+    $(document).ready(function () {
+    });
+</script>
+<script type="text/javascript">
+    function GetFollowers() {
+        $('#divFollowedGroup').getNiceScroll().remove();
+        $('#divSGoals').getNiceScroll().remove();
+        $('#divGoals').getNiceScroll().remove();
+        $('#notification').getNiceScroll().remove();
+        var url = "/Account/Followers";
+        $.get(url, function (result) {
+            $("#followedUsers").html(result);
+
+        });
+    }
+
+    function GetFollowings() {
+        $('#divFollowedGroup').getNiceScroll().remove();
+        $('#divSGoals').getNiceScroll().remove();
+        $('#divGoals').getNiceScroll().remove();
+        $('#notification').getNiceScroll().remove();
+        var url = "/Account/Followings";
+        $.get(url, function (result) {
+            $("#followingUsers").html(result);
+
+        });
+    }
+
+
+    function CreateGoal() {
+        $('#divFollowedGroup').getNiceScroll().remove();
+        $('#divSGoals').getNiceScroll().remove();
+        $('#divGoals').getNiceScroll().remove();
+        $('#notification').getNiceScroll().remove();
+        var url = "/Goal/Create";
+        $.get(url, function (result) {
+            $("#createGoalModal").html(result);
+
+        });
+    }
+
+    function CreateGroup() {
+        $('#divFollowedGroup').getNiceScroll().remove();
+        $('#divSGoals').getNiceScroll().remove();
+        $('#divGoals').getNiceScroll().remove();
+        $('#notification').getNiceScroll().remove();
+        var url = "/Group/CreateGroup";
+        $.get(url, function (result) {
+            $("#createGroup").html(result);
+            $('#notification').getNiceScroll();
+        });
+    }
+
+    function enableScroll() {
+        $('#divFollowedGroup').niceScroll();
+        $('#divGroup').niceScroll();
+        $('#divSGoals').niceScroll();
+        $('#divGoals').niceScroll();
+        $('#notification').niceScroll();
+
+    }
+
+
+    function EnableInviteBtn() {
+        $("#forgotPasswordEmail").empty();
+        $("#sendBtn").removeAttr("disabled");
+    }
+
+    function DisableInviteBtn() {
+        if ($("#forgotPasswordEmail").val() == "") {
+            $("#sendBtn").attr("disabled", "disabled");
+        }
+    }
+
+//    function InviteEmail() {
+//        if ($("#inviteEmail").val() != "") {
+
+//            $("#sendBtn").attr("disabled", "true");
+//            var role = $("#Roles").val();
+//            var email = $("#inviteEmail").val();
+
+//            //var url = "/Admin/Invite";                      
+//            //var postData = { 'Email': email, 'Role': role }
+
+//            $.ajax({
+//                url: "/Admin/Invite",
+//                data: { Email: email, Role: role },
+//                type: "POST",
+//                beforeSend: function () {
+//                    $('#msgInvited').html('Sending in progress...');
+//                },
+//                success: function (data) {
+//                    $("#msgInvited").css({ 'display': 'block' });
+//                    $("#msgInvited").html(data);
+//                    $("#msgInvited").fadeOut(7000);
+//                    $("#inviteEmail").val('');
+//                    $("#sendBtn").removeAttr("disabled");
+//                },
+//                error: function () {
+//                    $('#msgInvited').html('Error occured..!');
+//                }
+//            });
+
+
+
+//            //            $.post(url, postData, function (result) {
+//            //                $("#msgInvited").css({ 'display': 'block' });
+//            //                $("#msgInvited").text(result);
+//            //                $("#msgInvited").fadeOut(5000);
+//            //                $("#inviteEmail").val('');
+//            //                $("#sendBtn").removeAttr("disabled");
+//            //            });
+//        }
+//    }
+
+//    $('#msgInvited').ajaxStart(function () {
+//        $(this).show();
+//    });
+
+
+//    function GetLink() {
+
+//        $('#msgInvited').html('Getting invitation link...');
+//        var role = $("#Roles").val();
+//        var url = "/Admin/GetLink";
+//        var postData = { 'Role': role }
+//        $.post(url, postData, function (result) {
+//            $("#link").val(result);
+//            $('#msgInvited').hide();
+//        });
+//    }
+
+
+</script>

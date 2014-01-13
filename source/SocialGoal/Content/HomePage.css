@@ -1,0 +1,200 @@
+﻿/*body
+{
+	font: 100%/1.4 Verdana, Arial, Helvetica, sans-serif; 
+	margin: 0;
+	padding: 0;
+	color: #000;
+	font-size: 12px;
+}*/
+body
+{
+	/* background-color: #F0F8FF;
+	font-color: #008B8B;*/
+}
+
+
+
+
+.goal-page
+{
+	background-color: #D9EDF7;
+	border-color: #BCE8F1;
+	color: black;
+}
+.goal-page a:hover
+{
+	text-decoration: underline;
+}
+
+.goals
+{
+	background-color: #D9EBF7;
+	border-color: #BCE8F1;
+	color: #3A87AD; /*background-color: #E4D589;     border-color: #CAA74D;     color: #684507;     background: #E4D589;     background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#E4D589), color-stop(100%,#C9BA70));     background: -webkit-linear-gradient(top, #E4D589 0%,#C9BA70 100%);     background: -o-linear-gradient(top, #E4D589 0%,#C9BA70 100%);     background: -ms-linear-gradient(top, #E4D589 0%,#C9BA70 100%);     background: linear-gradient(top, #E4D589 0%,#C9BA70 100%);     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffb260', endColorstr='#C9BA70',GradientType=0 );*/
+}
+.goals a
+{
+	color: #3A87AD;
+}
+.goals a:hover
+{
+	color: #3A87AD;
+	text-decoration: underline;
+}
+.support
+{
+	display: none;
+	position: absolute;
+	z-index: 3;
+	top: -2px;
+	right: -15px; /*left: -8px;*/
+	float:right;
+}
+
+.goals:hover .support
+{
+	display: block;
+}
+.goals:hover
+{
+	cursor: pointer;
+	background-color: #FCF8F8;
+	border-color: #BCE8F1;
+	color: #3A87AD; /*background-color: rgba(228, 213, 137, 0.44);     background: linear-gradient(top, #EEE9CD 0%,#E0D8B0 100%);     border-color: #CAA74D;     color: #684507;     background: #EEE9CD;     background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#EEE9CD), color-stop(100%,#E0D8B0));     background: -webkit-linear-gradient(top, #EEE9CD 0%,#E0D8B0 100%);     background: -o-linear-gradient(top, #EEE9CD 0%,#E0D8B0 100%);     background: -ms-linear-gradient(top, #EEE9CD 0%,#E0D8B0 100%);     background: linear-gradient(top, #EEE9CD 0%,#E0D8B0 100%);     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#EEE9CD', endColorstr='#E0D8B0',GradientType=0 );*/
+}
+.users
+{
+	background-color: #DAD9F7;
+	border-color: #BCBCF1;
+	color: #3A3AAD;
+}
+.users a:hover
+{
+	text-decoration: underline;
+}
+
+.users:hover
+{
+	background-color: #F6F5FF;
+	cursor: pointer;
+}
+.validation-summary-errors
+{
+	color: #E80C0C;
+	font-weight: bold;
+	font-size: 0.9em;
+}
+.validation-summary-errors ul
+{
+	list-style-type:none;
+}
+.field-validation-error
+{
+	color: #E80C0C;
+	font-size: 12px;
+}
+
+.field-validation-valid
+{
+	display: none;
+}
+
+input[type="text"].input-validation-error, input[type="password"].input-validation-error,textarea.input-validation-error
+{
+	border: 1px solid #e80c4d;
+}
+
+.validation-summary-valid
+{
+	display: none;
+}
+
+.goal-created .support
+{
+	display: none;
+	position: absolute;
+	z-index: 3;
+	top: 5px;
+	right: 5px;
+}
+.goal-created .support a:hover
+{
+	cursor: pointer;
+	cursor: hand;
+	text-decoration: underline;
+	padding: 5px;
+}
+.goal-created:hover .support
+{
+	display: block;
+}
+
+/* ~~ Element/tag selectors ~~ */
+ul, ol, dl
+{
+	/* Due to variations between browsers, it's best practices to zero padding and margin on lists. For consistency, you can either specify the amounts you want here, or on the list items (LI, DT, DD) they contain. Remember that what you do here will cascade to the .nav list unless you write a more specific selector. */
+	padding: 0;
+	margin: 0;
+}
+
+
+/* ~~ Styling for your site's links must remain in this order - including the group of selectors that create the hover effect. ~~ */
+/*a:link {
+	color: #42413C;
+	text-decoration: underline; /* unless you style your links to look extremely unique, it's best to provide underlines for quick visual identification 
+}*/
+/*a:visited {
+	/*color: #6E6C64;*/
+/*text-decoration: underline;
+}*/
+
+/* ~~ The header is not given a width. It will extend the full width of your layout. It contains an image placeholder that should be replaced with your own linked logo. ~~ */
+
+
+/* ~~ These are the columns for the layout. ~~ 
+
+1) Padding is only placed on the top and/or bottom of the divs. The elements within these divs have padding on their sides. This saves you from any "box model math". Keep in mind, if you add any side padding or border to the div itself, it will be added to the width you define to create the *total* width. You may also choose to remove the padding on the element in the div and place a second div within it with no width and the padding necessary for your design.
+
+2) No margin has been given to the columns since they are all floated. If you must add margin, avoid placing it on the side you're floating toward (for example: a right margin on a div set to float right). Many times, padding can be used instead. For divs where this rule must be broken, you should add a "display:inline" declaration to the div's rule to tame a bug where some versions of Internet Explorer double the margin.
+
+3) Since classes can be used multiple times in a document (and an element can also have multiple classes applied), the columns have been assigned class names instead of IDs. For example, two sidebar divs could be stacked if necessary. These can very easily be changed to IDs if that's your preference, as long as you'll only be using them once per document.
+
+4) If you prefer your nav on the right instead of the left, simply float these columns the opposite direction (all right instead of all left) and they'll render in reverse order. There's no need to move the divs around in the HTML source.
+
+*/
+
+/* ~~ This grouped selector gives the lists in the .content area space ~~ */
+
+/* ~~ The navigation list styles (can be removed if you choose to use a premade flyout menu like Spry) ~~ */
+
+/* ~~ The footer styles ~~ */
+.footer
+{
+	padding: 10px 0;
+	background: #CCC49F;
+	position: relative; /* this gives IE6 hasLayout to properly clear */
+	clear: both; /* this clear property forces the .container to understand where the columns end and contain them */
+}
+
+/* Styles for the image uploader
+-----------------------------------------------------------*/
+#upload-choices
+{
+	width: 450px;
+	float: left;
+}
+
+
+
+
+
+
+.td-label span4
+{
+width:45px;
+}
+
+.td-label span
+{
+width:100px;
+}

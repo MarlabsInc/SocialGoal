@@ -1,0 +1,49 @@
+﻿@model SocialGoal.Model.Models.Update
+
+@{
+    ViewBag.Title = "_DeleteUpdate";
+}
+
+<div class="span12 alert alert-error fade in">
+      
+  <strong>Are you sure, you want to delete this update..?</strong>
+
+
+    
+    <table style="font-size:13px;font-weight:bold;">
+        <tr >
+            <td>Message :</td>
+            <td>@Html.DisplayFor(model => model.Updatemsg)</td>
+        </tr>
+        <tr>
+            <td>Status :</td>
+            <td>  
+                @Html.DisplayFor(model => model.status) 
+                @if (Model.Goal.Metric != null && Model.Goal.Target != null)
+                {
+                    @Model.Goal.Metric.Type  @:/ @Model.Goal.Target @Model.Goal.Metric.Type 
+                 }
+            
+            </td>
+            
+           
+        </tr>
+        
+        
+    </table>
+   
+    <div id="divDelete@(Model.UpdateId)">
+    </div>
+    @using (Html.BeginForm())
+    {
+        <p>
+            <button class="btn btn-danger" type="submit" value="Submit">
+                Delete</button>
+                 <button class="btn" type="reset" value="Cancel" onclick="Cancel('@Model.GoalId')">
+        Cancel</button>
+        </p>
+      
+        
+    }
+   
+</div>

@@ -1,0 +1,89 @@
+﻿@model SocialGoal.Models.RegisterViewModel
+@{
+    ViewBag.Title = "Register";
+    Layout = "../Shared/_Layout.cshtml";
+}
+
+<h2>@ViewBag.Title.</h2>
+
+<link href="/Content/CustomStyles.css" rel="stylesheet" type="text/css" />
+
+<div class="navbar navbar navbar-fixed-top">
+    <div class="navbar-inner">
+        <div class="container-fluid">
+            <a class="brand" href='@Url.Action("Index", "Home")'>Social Goal</a>
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid margin-top">
+    <div class="row-fluid">
+        <div class="span7" id="content">
+            <div style="padding:80px;">
+                <img src="/Images/replacement%20people.jpg" />
+                @*   <p>
+                    Setting goals is an integral component of career and life success. You don't always
+                    need to write down the goals you set, although goal setting gurus say you should
+                    for best success. Bu
+                    t, set firm goals in your mind so you always know where you
+                    are going and what you plan to achieve. Set goals for the sheer joy of accomplishment.
+                    I have always set goals and believe they have been a cornerstone for all my accomplishments.
+                    Do you set goals? And, if you do, even if the goals are only in your mind or heart,
+                    please share a goal you are currently working to accomplish.&nbsp;</p>*@
+            </div>
+
+        </div>
+
+
+        <div class="span4 row-fluid">
+            <div class="row">
+                <div class="col-md-8">
+                    <section id="registerForm">
+                        @using (Html.BeginForm("Register", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+                        {
+                            @Html.AntiForgeryToken()
+                            <h4>Create a new account.</h4>
+                            <hr />
+                            @Html.ValidationSummary()
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.UserName, new { @class = "col-md-2 control-label", style = "text-align: left;width:80px;" })
+                                <div class="col-md-10">
+                                    @Html.TextBoxFor(m => m.UserName, new { @class = "form-control" })
+                                </div>
+                            </div>
+                            <br/>
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.Password, new { @class = "col-md-2 control-label", style = "text-align: left;width:80px;" })
+                                <div class="col-md-10">
+                                    @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
+                                </div>
+                            </div>
+                            <br/>
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.ConfirmPassword, new { @class = "col-md-2 control-label", style = "text-align: left;width:80px;" })
+                                <div class="col-md-10">
+                                    @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control" })
+                                </div>
+                            </div>
+                            <br/>
+                            <div class="form-group">
+                                <div class="col-md-offset-2 col-md-10">
+                                    <input type="submit" class="btn btn-primary" value="Register" />
+                                </div>
+                            </div>
+                        }
+                    </section>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@*@section Scripts {
+        @Scripts.Render("~/bundles/jqueryval")
+    }*@
+<script src="~/Scripts/jquery.validate-vsdoc.js"></script>
+<script src="~/Scripts/jquery.validate.js"></script>
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>

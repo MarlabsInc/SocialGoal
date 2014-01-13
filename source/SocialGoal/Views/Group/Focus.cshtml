@@ -1,0 +1,99 @@
+﻿@model SocialGoal.Web.ViewModels.FocusViewModel
+@{
+    ViewBag.Title = "Focus Page";
+    Layout = "~/Views/Shared/_PageLayout.cshtml";
+}
+
+<div class="span12">
+    <div style="float:left;margin-left:25px;">
+        <h4>@Model.FocusName</h4>
+        <h6>@Model.Description</h6>
+    </div>
+
+    <div style="float:right;">
+    @Html.ActionLink("Back To Group", "Index", "Group", new { id = Model.GroupId }, new { @class ="btn btn-info", style ="float:right"})
+    </div>
+</div>
+
+<div class="span12">
+    
+        <div class="well span7" id="goalistinfocus" style="height: 320px">
+        <h5>
+            GOALS</h5>
+            @if (Model.GroupGoal.Count() == 0)
+            {
+                <h6>
+                    No Goals</h6>
+            }
+        @foreach (var item in Model.GroupGoal)
+        { 
+            <div>
+                <div style="position: relative">@Html.ActionLink(item.GoalName, "GroupGoal", "Group", new { id = item.GroupGoalId }, null)
+                </div>
+                <div>@item.StartDate.ToString("dd MMM yyyy")- @item.EndDate.ToString("dd MMM yyyy")</div>
+                <div>Created By @Html.ActionLink(item.User.UserName, "UserProfile", "Account", new { id = item.User.UserId }, null)</div>
+                @if (Model.IsAMember == true)
+                { 
+                    <div align="right" id="div@(item.GroupGoalId)">
+                        <a data-toggle="modal" href="#" id ="edit" onclick ="window.location.href='@Url.Action("EditGoal", "Group", new { id = item.GroupGoalId })'"@*editGet('@item.GoalId')*@>
+                            <span rel="tooltip" title="Edit goals"><i class="icon-edit"></i></span></a><a href="#" id="delete" onclick ="window.location.href='@Url.Action("DeleteGoal", "Group", new { id = item.GroupGoalId })'"@*"DeleteGet('@item.GoalId')"*@>
+                                <span rel="tooltip" title="Delete goals"><i class="icon-trash"></i></span>
+                        </a>
+                    </div>
+                }
+            </div>
+            <hr />
+		
+        }
+    </div>
+   <div class="span5">
+		<div class="well">
+			<table class="table">
+				<tr>
+					<td>
+						Focus Name
+					</td>
+					<td>
+						@Html.DisplayFor(m => m.FocusName)
+					</td>
+				</tr>
+				<tr>
+					<td>
+						Description
+					</td>
+					<td>
+						@Html.DisplayFor(m => m.Description)
+					</td>
+				</tr>
+			
+			
+			</table>
+		</div>
+       
+		<div class="well">
+			<table class="table">
+				<tr>
+					<td>
+						GroupName
+					</td>
+					<td>
+						@Html.DisplayFor(m => m.Group.GroupName)
+					</td>
+				</tr>
+				<tr>
+					<td>
+						Description
+					</td>
+					<td>
+						@Html.DisplayFor(m => m.Group.Description)
+					</td>
+				</tr>
+			
+			
+			</table>
+		</div>
+		
+		
+    </div>
+
+</div>

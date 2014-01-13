@@ -1,0 +1,49 @@
+﻿@model SocialGoal.Web.ViewModels.FocusFormModel
+@*<script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>*@
+<div class="well span10">
+<h4>
+    Create Focus
+</h4>
+ @Html.Partial("Header")
+<div>
+<br />
+<div  class="span5">
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(m => m.GroupId)
+        @Html.ValidationSummary(true)
+        @*<div class="span4">*@
+        <table class ="table">
+            <tr>
+                <td>
+           FocusName
+           </td>
+           <td >
+            @Html.TextBoxFor(model => model.FocusName, new {@class ="span12",placeholder ="Focus Name" })
+            @Html.ValidationMessageFor(model => model.FocusName)
+            </td>
+            </tr>
+      
+        <tr>
+                <td >
+            Description
+            </td>
+            <td >
+            @Html.TextAreaFor(model => model.Description, new { @class = "span12", placeholder = "Description" })
+            @Html.ValidationMessageFor(model => model.Description)
+           </td>
+           </tr>
+           </table>
+        @*</div>*@
+        <div class="control-group">
+            <button type="submit" class="btn btn-primary">
+                Create </button>
+                 <button class="btn" type ="reset" value="Cancel" onclick="window.location.href='@Url.Action("Index", "Group", new { id = Model.GroupId})'">
+        Cancel</button>
+        </div>
+    }
+</div>
+</div>
+</div>

@@ -1,0 +1,20 @@
+﻿@model IEnumerable<SocialGoal.Model.Models.Goal>
+@{
+    ViewBag.Title = "MyGoals";
+    Layout = "~/Views/Shared/_PageLayout.cshtml";
+}
+@if (Model.Count() == 0)
+{
+   <div class ="alert alert-info">
+   No results To Display
+   </div>
+}
+
+@foreach (var item in Model)
+{ 
+    <div class="span2 alert alert-info">
+        <div>
+            @Html.ActionLink(@item.GoalName + " - " + @item.Supports.Count() + " Follower(s)", "Index", "Goal", new { id = @item.GoalId }, null) </div>
+        <b>@Html.ActionLink(item.User.UserName, "UserProfile", "Account", new { id = item.UserId }, null)</b>
+    </div>
+}

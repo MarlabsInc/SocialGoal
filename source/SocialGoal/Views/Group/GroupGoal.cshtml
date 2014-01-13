@@ -1,0 +1,251 @@
+﻿@using Microsoft.AspNet.Identity
+@model SocialGoal.Web.ViewModels.GroupGoalViewModel
+@{
+    ViewBag.Title = Model.GoalName;
+    ViewContext.Controller.ViewBag.IncludeJqplot = true;
+    Layout = "~/Views/Shared/_GoalLayout.cshtml";
+    string goalstatus = Model.GoalStatus.GoalStatusType;
+}
+@Html.Hidden("Targt", Model.Target)
+@Html.Hidden("Met", Model.MetricId)
+@Html.Hidden("GoalId", @Model.GroupGoalId)
+@*@Html.HiddenFor(m => m.GroupGoalId)*@
+@Html.Hidden("GroupId", @Model.GroupId)
+@Html.Hidden("GroupUpdates", Model.Updates.Count())
+<div class="well" style="height: 170px;">
+    <div class="span5">
+        <h4>@Model.GoalName
+            @if (User.Identity.GetUserId() == Model.UserId)
+            { 
+                <a href="#" id ="editBtn" onclick ="location.href='@Url.Action("EditGoal", "Group", new { id = Model.GroupGoalId })'" style="padding-right:5px;">
+                    <span rel="tooltip" title="Edit Goal"><i class="icon-edit"></i></span></a>
+                <a href="#" id="delete" onclick="window.location.href='@Url.Action("DeleteGoal", "Group", new { id = Model.GroupGoalId })'">
+                    <span rel="tooltip" title="Delete goal"><i class="icon-trash"></i></span></a>
+            }
+        </h4>
+        <small>@Model.Description </small>
+        <div>
+            <small>Created by @Html.ActionLink(Model.User.UserName, "UserProfile", "Account", new { id = Model.UserId }, null)
+                On @Model.CreatedDate.ToString("dd MMM yyyy -   hh:mm tt ") </small>
+        </div>
+        @if (Model.AssignedGroupUserId != 0)
+        {
+               
+            <div>
+                <small>Assigned to @Html.ActionLink(Model.AssignedTo, "UserProfile", "Account", new { id = Model.AssignedUserId })</small>
+            </div>
+        }
+     </div>
+    <div class="span6" style="float: right; padding-bottom: 10px;">
+        <table class="table">
+             <tr>
+                <td>
+                    <strong>Start Date</strong> : @Html.DisplayFor(m => m.StartDate)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <strong>End Date</strong> : @Html.DisplayFor(m => m.EndDate)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <strong>Metric</strong> :
+                    @if (Model.Metric == null)
+                    { 
+
+                        <text> No Metric</text>
+                    }
+                    else
+                    { 
+                        @Html.DisplayFor(m => m.Metric.Type)
+                    }
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <strong>Target</strong>:
+                    @if (Model.Target == null)
+                    {
+                        <text>No Target</text>
+                    }
+                    else
+                    { 
+                        @Html.DisplayFor(m => m.Target)
+                    }
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <strong>Status</strong>:
+                    @Html.DisplayFor(m => m.GoalStatus.GoalStatusType)
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+
+<!--Update section -->
+<div class="span6 well" style="margin-left: 0px;">
+    @if (User.Identity.GetUserId() == Model.UserId || User.Identity.GetUserId() == Model.AssignedUserId)
+    {        
+        <table class="table" id="UpdatePostContent">
+            <thead>
+                <tr>
+                    <th>
+                        <h5>
+                            Post Your Update</h5>
+                    </th>
+                </tr>
+            </thead>
+            <tr>
+                <td>@Html.TextArea("GroupUpdate", "", new { @class = "span12", placeholder = "Add an update for this goal" })
+                </td>
+            </tr>
+               <tr><td><div id="UpdateGroupValidation"></div></td></tr>
+            @if (Model.Metric != null)
+            {		
+                <tr>
+                    <td class="span8">
+                        <div class="input-append">
+                            @if (Model.Metric != null)
+                            { 
+                                <input type="text" id="Status" onfocus="clearStatusError()" class="span8" placeholder="Add new satus of this update" /> 
+                                
+                            }
+                            @if (Model.Metric != null && Model.Target != null)
+                            { <span class="add-on">/@Model.Target @Model.Metric.Type</span>}
+                        </div>
+                        <input type="button"  class="btn btn-primary pull-right" value="Post" id="postGroupupdate" onclick="saveGroupUpdate('@Model.Target','@Model.MetricId');"  />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div id="statusError">
+                        </div>
+                    </td>
+                </tr>
+            }
+        </table>
+    }
+    <div id="divgroupupdate" style="margin: 0px;">
+        @{ Html.RenderAction("DisplayUpdates", "Group", Model.GroupGoalId); }
+    </div>
+    <div id="divInviteLayer" class="jqmWindow">
+        <div id="handle" style="float: right">
+            <a href="#" class="jqmClose">Close</a>
+        </div>
+        <div id="DivInviteContent">
+        </div>
+    </div>
+</div>
+<!--Update Section Ends here-->
+<!---Right Section--->
+<div class="span6">
+    <!--Graph  section -->
+    <div id="graph">
+        @Html.Action("ReportPage", new { id = Model.GroupGoalId })
+    </div>
+    <!--Graph Section End here-->
+    <!--update status section  -->
+    <div class="well span12" style="float: right; min-height: 202px;">
+        <strong>Goal Status</strong>
+        <hr />
+        @if (Model.IsAMember == true)
+        {
+            <div id="groupgoalStatus">
+                @Html.DropDownListFor(model => model.GoalStatusId, Model.GoalStatuses, new { @class = "span12", id = "GoalStatusId", onchange = "EnableGrpDrpDwn();" })
+                <input type="button" id="grpdrpdwnBtn" class="btn btn-primary pull-right" value="Change"
+                    onclick="GroupDropDownChange();" disabled="disabled" />
+            </div>
+               
+           
+        }
+        else
+        {
+            
+            @Html.DisplayFor(m => m.GoalStatus.GoalStatusType)
+               
+                                       
+        }
+    </div>
+</div>
+<!--Right Section Ends here-->
+<script src="../../Scripts/jquery-ui-1.8.21.custom.min.js" type="text/javascript"></script>
+<script type="text/javascript">
+    $(document).ready(function(){
+    var goalstatus="@goalstatus";
+    
+    if(goalstatus=="Completed")
+    {
+        $("#UpdatePostContent").hide();
+        $(".EditDeleteUpdate").hide();
+    }
+    
+    
+    });
+    $(function () {
+        $("#Update").focus(function () {
+            $(this).animate({ "height": "85px" }, "slow");
+            return false;
+        });
+        $("#Update").blur(function () {
+            $("#Update").animate({ "height": "22px" }, "slow");
+            return false;
+        });
+    });
+
+        $(window).resize(function () {
+        var url = '/Group/ReportPage';
+        $.get(url, { 'id': @Model.GroupGoalId }, function (data) {
+            $('#graph').html(data);
+        });
+    });
+ 
+    $('#GroupUpdate').focusout(function(){
+        if ($('#GroupUpdate').val() == '') {
+			 $('#UpdateGroupValidation').html('<label class="field-validation-error">Please Enter Update</label>');
+		}        
+		else 
+        {
+            $('#UpdateGroupValidation').html('');
+        }
+    
+    });
+ 
+</script>
+<script type="text/javascript">
+    function saveGroupUpdate(target, metric) {
+
+        var update = 'Please Enter Update';
+
+
+        var Gid = $('#GoalId').val();
+        var CurrUpdte = $('#GroupUpdate').val();
+        var CurrStatus = $('#Status').val();
+        var GroupId = $('#GroupId').val();
+
+
+        if (CurrUpdte == '') {
+            $('#UpdateGroupValidation').html('<label class="field-validation-error">Please Enter Update</label>');
+            
+        }
+        else {
+            $('#UpdateGroupValidation').html('');
+            var PostData = { 'GroupGoalId': Gid, 'Updatemsg': CurrUpdte, 'status': CurrStatus, 'GroupId': GroupId };
+            var url = '/Group/SaveUpdate';
+            var numericCheck = DecimalValidate(CurrStatus);
+            if ((CurrStatus == '') || (CurrStatus != '' && numericCheck)) {
+                $.post(url, PostData, function (response) {
+                    $("#divgroupupdate").html(response);
+                    $("#GroupUpdate").val('');
+                    $("#Status").val('');
+                });
+            }
+            else {
+                $("#statusError").html('<label style="color:red;">Enter a valid status.</label>');
+            }
+        }
+    }  
+
+</script>

@@ -1,0 +1,113 @@
+﻿@model SocialGoal.Web.ViewModels.GroupsPageViewModel
+@*<script src="/Scripts/handlebars-1.0.rc.1.js" type="text/javascript"></script>*@
+@{
+    ViewBag.Title = "ListOfGroups";
+}
+<div class="well span12">
+<div class="span7" style="padding-left:30px;"><h4>Groups</h4></div>
+    <div class="span5" style="padding-left:38px;">
+        <strong>Filter By</strong> @Html.DropDownList("filteredby", Model.FilterBy, new { @onchange = "ListOfGroups();" })
+    </div>
+    <div id="listofgroups" class="span11">
+        @if (Model.GroupList.Count() == 0)
+        {
+            <div class="alert alert-info">
+                No results found
+            </div>
+        }
+        else
+        {       
+        
+            <div class="span12" id="groupListContainer" style="margin-top: 10px;">
+               
+                <table class="table">
+                    @Html.Partial("_Groupslist", Model.GroupList)
+                </table>
+            </div>
+            if (Model.GroupList.Count() > 7)
+            {
+            <div id="morelink" style="float: left;">
+                <a href="#" onclick="loadMoreGroups();">More Groups</a></div>
+            }
+        }
+    </div>
+</div>
+<div class="hiddenTemplateData" style="display: none;">
+</div>
+<script type="text/javascript">
+
+    $(document).ready(function () {
+
+        //to load templates to a hidden div
+        $.get('/Templates/Templates.htm', function (data) {
+            $('.hiddenTemplateData').html(data);
+        });
+    });
+
+    $(window).scroll(function () {
+        if ($(window).scrollTop() == $(document).height() - $(window).height()) {
+            loadMoreGroups();
+        }
+    });
+    var current = 0;
+    function loadMoreGroups() {
+
+        var filterBy = $('#filteredby').val();
+        if (current > -1) {
+            current++;
+            $.ajax({
+                url: "/Group/GroupList",
+                type: "POST",
+                data: { filterBy: filterBy, page: current },
+                dataType: "json",
+                beforeSend: function () {
+                    $('#loadimage').remove();
+                    $("#groupListContainer").append('<div class="alert alert-info" id="loadimage">Loading..</div>');
+                },
+
+                success: function (data) {
+
+                    $('#loadimage').remove();
+                    if (data != '') {
+                        loadGroupListTemplate(data);
+                        $('#morelink').show();
+                    } else {
+
+                        $('#morelink').hide();
+                        current = -1;
+                        $("#groupListContainer").append('<div class="alert alert-info" id="loadimage" > No more groups found </div>');
+                    }
+                }
+            });
+
+        }
+    }
+
+    function loadGroupListTemplate(data) {
+        var source = $("#groupList-template").html();
+
+        var template = Handlebars.compile(source);
+        $("#groupListContainer").append(template({ groups: data }));
+    }
+
+
+    function ListOfGroups() {
+        current = 0;
+        var filterby = $("#filteredby").val();
+
+        var url = '/Group/GroupList';
+        $.get(url, { 'filterBy': filterby }, function (result) {
+            $("#groupListContainer").html('');
+            if (result == '') {
+                $('#loadimage').remove();
+                $("#groupListContainer").append('<div class="alert alert-info"  id="loadimage"> No groups found </div>');
+                $('#morelink').hide();
+            }
+            else {
+                $('#morelink').show();
+            }
+            loadGroupListTemplate(result);
+        });
+    }
+       
+</script>

@@ -1,0 +1,114 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{BFBAB8EE-BE97-4467-837E-09F142F1BF44}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>SocialGoal.Service</RootNamespace>
+    <AssemblyName>SocialGoal.Service</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.AspNet.Identity.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.Identity.Core.1.0.0\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.EntityFramework, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.Identity.EntityFramework.1.0.0\lib\net45\Microsoft.AspNet.Identity.EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="CommentService.cs" />
+    <Compile Include="CommentUserService.cs" />
+    <Compile Include="FocusService.cs" />
+    <Compile Include="FollowRequestService.cs" />
+    <Compile Include="FollowUserService.cs" />
+    <Compile Include="GoalService.cs" />
+    <Compile Include="GoalStatusService.cs" />
+    <Compile Include="GroupCommentService.cs" />
+    <Compile Include="GroupCommentUserService.cs" />
+    <Compile Include="GroupGoalService.cs" />
+    <Compile Include="GroupInvitationService.cs" />
+    <Compile Include="GroupRequestService.cs" />
+    <Compile Include="GroupService.cs" />
+    <Compile Include="GroupUpdateServices.cs" />
+    <Compile Include="GroupUpdateSupportService.cs" />
+    <Compile Include="GroupUpdateUserService.cs" />
+    <Compile Include="GroupUserService.cs" />
+    <Compile Include="MetricService.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="SecurityTockenService.cs" />
+    <Compile Include="SupportInvitationService.cs" />
+    <Compile Include="SupportService.cs" />
+    <Compile Include="UpdateService.cs" />
+    <Compile Include="UpdateSupportService.cs" />
+    <Compile Include="UserProfileService.cs" />
+    <Compile Include="UserService.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SocialGoal.Core\SocialGoal.Core.csproj">
+      <Project>{b1053a2d-a1ea-412f-ba95-19ce794f8891}</Project>
+      <Name>SocialGoal.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SocialGoal.Data\SocialGoal.Data.csproj">
+      <Project>{23b3d0d9-0f5c-4fd7-ba7e-a9e0c53a86c9}</Project>
+      <Name>SocialGoal.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SocialGoal.Model\SocialGoal.Model.csproj">
+      <Project>{4d4923f5-548c-4d13-859d-7f5e9699facd}</Project>
+      <Name>SocialGoal.Model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SocialGoal.Web.Core\SocialGoal.Web.Core.csproj">
+      <Project>{ad4d8636-776d-4d8d-834f-0fdd132591f8}</Project>
+      <Name>SocialGoal.Web.Core</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

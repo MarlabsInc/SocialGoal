@@ -1,0 +1,30 @@
+﻿@model IEnumerable<SocialGoal.Web.ViewModels.GroupRequestViewModel>
+@{
+    ViewBag.Title = "Join Requests";
+    Layout = "~/Views/Shared/_PageLayout.cshtml";
+}
+<div class="well">
+    <strong>Requests</strong>
+    <div style="float:right;"><a style="float:right" href="/Group/Index/@ViewBag.CurrentGroupID" class="btn btn-info">Back To Group</a></div>
+</div>
+
+@if (Model.Count() == 0)
+{
+    <div class="alert alert-info">
+        No results to display
+    </div>
+}
+else
+{
+    foreach (var item in Model)
+    { 
+    <div class="span alert alert-info">
+        @Html.ActionLink(item.User.UserName, "UserProfile", "Account", new { id = item.UserId }, null)<text> wants to join</text>
+        @Html.ActionLink(@item.Group.GroupName, "Index", "Group", new { id = @item.GroupId }, null)
+        <span style = "float:right">
+        @Html.ActionLink("Accept", "AcceptRequest", "Group", new { groupId = item.GroupId,item.UserId }, new { @class = "btn btn-primary btn-small" })
+        @Html.ActionLink("Reject", "RejectRequest", "Group", new { groupId = item.GroupId, item.UserId }, new {@class="btn btn-primary btn-small" })
+        </span>
+    </div>
+    }
+}

@@ -1,0 +1,32 @@
+﻿@model IEnumerable<SocialGoal.Model.Models.Goal>
+<div id="divSGoals" style="height: 150px;">
+<div id="goals">
+    @if (Model.Count() == 0)
+    {
+        <div class ="alert alert-info">No goals to display</div>
+    }
+    @foreach (var item in Model.Take(10))
+    {
+        <table class="table">
+            <tr>
+                <td class="span1">
+                    <i class="icon-star"></i>
+                </td>
+                <td class="span9">
+                    @Html.ActionLink(item.GoalName/*.LimitLength(30)*/, "Index", new { id = item.GoalId }, new { @title = item.GoalName })
+                </td>
+                <td class="span2">
+                    <a id="UnSupport" href="#" onclick="UnSupportGoal(@item.GoalId)" style="float:right"><small>UnFollow</small>
+                    </a>
+                </td>
+            </tr>
+        </table>
+			 
+    }
+    </div>
+     </div>
+   @if (Model.Count() > 10)
+    { 
+        @Html.ActionLink("See All", "GoalList", "Goal", new { filterBy = "My Followed Goals" }, new { @style = "float:right;" })
+    }
+   

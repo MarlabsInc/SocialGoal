@@ -1,0 +1,122 @@
+﻿@using Microsoft.AspNet.Identity
+@model SocialGoal.Web.ViewModels.GoalFormModel
+@{
+    ViewBag.Title = "Edit Goal";
+   }
+@*<script src="@Url.Content("~/Scripts/jquery.validate.min.js")"></script>
+<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")"></script>*@
+<div class ="span12 well">
+@using (Html.BeginForm())
+{
+       @Html.ValidationSummary(true)
+
+    <fieldset>
+         <h4>Edit @Html.DisplayFor(model => model.GoalName)</h4>
+        @Html.HiddenFor(model => model.GoalId)
+        <table class ="table">
+            <tr>
+                <td>
+                    @Html.LabelFor(model => model.GoalName, "Goal Name")
+                </td>
+                <td>
+                    @Html.TextBoxFor(model => model.GoalName, new { @class ="span11" })
+                    @Html.ValidationMessageFor(model => model.GoalName)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.LabelFor(model => model.Desc, "Description")
+                </td>
+                <td>
+                    @Html.TextBoxFor(model => model.Desc, new { @class ="span11" })
+                    @Html.ValidationMessageFor(model => model.Desc)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.LabelFor(model => model.StartDate, "Start Date")
+                </td>
+                <td>
+                    @Html.TextBoxFor(model => model.StartDate,String.Format("{0:dd-MMM-yyyy}", Model.StartDate), new { @class = "ui-datepicker span11",@readonly="readonly"})
+                    @Html.ValidationMessageFor(model => model.StartDate)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.LabelFor(model => model.EndDate, "End Date")
+                </td>
+                <td >
+                    @Html.TextBoxFor(model => model.EndDate, String.Format("{0:dd-MMM-yyyy}", Model.EndDate), new { @class = "ui-datepicker span11", @readonly = "readonly" })
+                    @Html.ValidationMessageFor(model => model.EndDate)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.LabelFor(model => model.MetricId, "Metric")
+                </td>
+                <td >
+                    @Html.DropDownListFor(model => model.MetricId, Model.Metrics,"--Select--", new { @class ="span11"})
+                    @Html.ValidationMessageFor(model => model.MetricId)
+                </td>
+            </tr>
+           
+            <tr>
+                <td >
+                    @Html.LabelFor(model => model.Target, "Target")
+                </td>
+                <td >
+                    @Html.TextBoxFor(model => model.Target, new { @class ="span11" })
+                    @Html.ValidationMessageFor(model => model.Target)
+                </td>
+                <td>
+                    @Html.Hidden("UserId", User.Identity.GetUserId())
+                </td>
+            </tr>
+            <tr>
+                <td>@Html.CheckBoxFor(model => model.GoalType, true)
+                </td>
+                <td>@Html.Label("Make this Goal Private")
+                </td>
+            </tr>
+        </table>
+        <button class="btn btn-primary" type="submit" value="Save" onclick ="editSave(@Model.GoalId)" >
+            Save</button>
+             <button class="btn" type ="reset" value="Cancel" onclick="window.location.href='@Url.Action("Index", "Goal", new {id =@Model.GoalId })'">
+        Cancel</button>
+    </fieldset>
+    
+    <div id="divEdit@(Model.GoalId)">
+    </div> 
+}
+
+</div>
+<script type="text/javascript">
+//    $(document).ready(function () {
+//       
+//        $('.ui-datepicker').each(function (i, v) {
+//            $(v).val($.datepicker.formatDate('dd-M-yy', new Date($(v).val())))
+//            $(v).datepicker({
+//                dateFormat: 'dd-M-yy',
+//                buttonImage: 'Url.Content("~/Content/calendar.gif")',
+//                buttonImageOnly: true,
+//                showOn: "button"
+//            });
+//        });
+//    });
+
+
+    $(document).ready(function () {
+        $('.ui-datepicker').each(function (i, v) {
+
+            $(".ui - datepicker").val(" ");
+            //$(v).val($.datepicker.formatDate('dd-M-yy', new Date($(v).val())));
+            $(v).datepicker({
+                dateFormat: 'dd-M-yy',
+                buttonImage: '@Url.Content("~/Content/calendar.gif")',
+                buttonImageOnly: true,
+                showOn: "button"
+            });
+        });
+    });
+
+</script>

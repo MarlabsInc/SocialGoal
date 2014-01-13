@@ -1,0 +1,42 @@
+﻿@model SocialGoal.Web.ViewModels.GroupMemberViewModel
+@{
+    ViewBag.Title = "Members";
+}
+<h3>
+    @Html.ActionLink(@Model.Group.GroupName, "Index", new { id = @Model.GroupId })
+</h3>
+@Html.Partial("Header")
+<br />
+<br />
+<div class="well span4" id="memberlist" style="height: 320px">
+        <h4>
+            MEMBERS</h4>
+         @foreach (var item in Model.Users)
+            {
+                <div >
+                <div style="position:relative">
+                <div>
+                    <a href="@Url.Action("UserProfile", "Account", new { id = item.UserId }, null)" >
+                        @if (String.IsNullOrEmpty(@item.ProfilePicUrl))
+                        {
+                            <img src="../../Content/templatemo_329_blue_urban/images/facebook-avatar.png" class="thumbnail span1"/>
+                        }
+                        else
+                        {
+                            <img src="@Url.Content(@item.ProfilePicUrl)" class="thumbnail span1" />
+                        }
+                    </a></div>
+                    </div>
+                  
+                        <div>
+                            @Html.ActionLink(@item.UserName, "UserProfile", "Account", new { id = item.UserId }, null)
+                        </div>
+                       @* <div>@item.Email
+                        </div>*@
+                    
+                </div>
+                  <br />
+                <hr >
+              
+            }
+    </div>

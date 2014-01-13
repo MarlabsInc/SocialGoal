@@ -1,0 +1,82 @@
+﻿@using Microsoft.AspNet.Identity
+@model SocialGoal.Web.ViewModels.UserProfileFormModel
+@{
+   
+}
+<strong>
+    Edit Personal Info</strong>
+<div id="edituserprofile" class="span12">
+    @using (Html.BeginForm("EditProfile","Account"))
+    {
+        
+      
+        <table class ="table">
+            <tr>
+                <td class="editor-label" style="width:150px;">
+                    <label>
+                        Address:</label>
+                </td>
+                <td class="editor-field">@Html.TextAreaFor(m => m.Address, new { @class = "span11", cols = "10", rows = "2", wrap = "virtual", id ="Address" })
+                    @Html.ValidationMessageFor(model => model.Address)
+                </td>
+            </tr>
+            <tr>
+                <td class="editor-label">
+                    <label>
+                        City:</label>
+                </td>
+                <td class="editor-field">@Html.TextBoxFor(m => m.City, new { @class = "span11" })
+                    @Html.ValidationMessageFor(model => model.City)
+                </td>
+            </tr>
+            <tr>
+                <td class="editor-label">
+                    <label>
+                        State:</label>
+                </td>
+                <td class="editor-field">@Html.TextBoxFor(m => m.State, new { @class = "span11" })
+                    @Html.ValidationMessageFor(model => model.State)
+                </td>
+            </tr>
+            <tr>
+                <td class="editor-label">
+                    <label>
+                        Country:</label>
+                </td>
+                <td class="editor-field">@Html.TextBoxFor(m => m.Country, new { @class = "span11" })
+                    @Html.ValidationMessageFor(model => model.Country)
+                </td>
+            </tr>
+            <tr>
+                <td class="editor-label">
+                    <label>
+                        ZipCode:</label>
+                </td>
+                <td class="editor-field">@Html.TextBoxFor(m => m.ZipCode, new { @class = "span11" })
+                    @Html.ValidationMessageFor(model => model.ZipCode)
+                </td>
+            </tr>
+            <tr>
+                <td class="editor-label">
+                    <label>
+                        Contact No:</label>
+                </td>
+                <td class="editor-field">@Html.TextBoxFor(m => m.ContactNo, new { @class = "span11" })
+                    @Html.ValidationMessageFor(model => model.ContactNo)
+                </td>
+                @Html.HiddenFor(m => m.UserProfileId)
+                @Html.HiddenFor(m => m.UserId)
+                @Html.HiddenFor(m=>m.FirstName)
+                @Html.HiddenFor(m=>m.LastName)
+                @Html.HiddenFor(m=>m.Email)
+                @Html.HiddenFor(m=>m.DateOfBirth)
+                @Html.HiddenFor(m=>m.Gender)
+            </tr>
+        </table>
+        
+        <button class="btn btn-primary" type="submit" value="Save">
+            Save</button>
+        <button class="btn" type="reset" value="Cancel" onclick="window.location.href='@Url.Action("UserProfile", "Account", new { id = User.Identity.GetUserId() })'">
+            Cancel</button>
+    }
+</div>

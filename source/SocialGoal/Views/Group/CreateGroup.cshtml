@@ -1,0 +1,52 @@
+﻿@{
+    ViewBag.Title = "CreateGroup";
+    //Layout = "~/Views/Shared/_HomeLayout.cshtml";
+}
+@model SocialGoal.Web.ViewModels.GroupFormModel
+<div class ="span5 ">
+    @using (Html.BeginForm())
+    { 
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true)
+        <table>
+            <tr>               
+                <td>
+                    @Html.TextBoxFor(m => m.GroupName, new { @class="span5",id = "InputGroup",style ="display:block;",placeholder = "Group Name" }) @Html.ValidationMessageFor(m => m.GroupName)                
+                </td>                
+            </tr>
+            <tr>               
+                <td>
+                    @Html.TextAreaFor(m => m.Description, new { @class = "span5", id = "InputGroupDesc", placeholder = "Description for new group", style = "display:block;" }) @Html.ValidationMessageFor(m => m.Description)                
+                </td>
+                
+            </tr>
+            <tr>
+                <td>
+                <input type="submit" class="btn btn-primary pull-left" value="Create" id="CreateGroup" style="margin-right:5px;" /> 
+                 <input type="button" class="btn" value="Cancel" id="cancel" style="margin-right:5px;" onclick="window.location.href='@Url.Action("Index", "Home")'" /> 
+        
+                </td>
+            </tr>
+             </table>
+           
+                    
+    }
+       
+   
+</div>
+@*<style type="text/css">
+            table
+            {
+                border-collapse: collapse;
+                
+            }
+            table,td
+            {
+               @* border: 1px solid black;
+            }
+            input
+            {
+                border-radius:5px;
+            }
+        </style>
+*@

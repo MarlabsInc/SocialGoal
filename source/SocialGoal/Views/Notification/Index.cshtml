@@ -1,0 +1,72 @@
+﻿@model IEnumerable<SocialGoal.Web.ViewModels.NotificationViewModel>
+@{
+    ViewBag.Title = "Notifications";
+    Layout = "~/Views/Shared/_PageLayout.cshtml";
+}
+
+<div class="well">
+
+<h4>Invitations for you</h4><hr />
+@if (Model.Count() == 0)
+{
+    <div class ="alert alert-info">
+        No invitations for you.
+   </div>
+}
+else
+{
+    <div id="NotificationContainer" class="alert alert-info">
+        @Html.Partial("_NotificationList", Model)
+    </div>
+    if (Model.Count() > 10)
+    {
+         <div  id="morelink"> <a href="#" onclick="loadMoreNotifications();">More Notifications</a></div>
+    }
+}
+
+
+</div>
+
+
+
+<script type="text/javascript">
+
+    $(window).scroll(function () {
+        if ($(window).scrollTop() == $(document).height() - $(window).height()) {
+            loadMoreNotifications();
+        }
+    });
+    var currentPage = 0;
+    function loadMoreNotifications() {
+
+        if (currentPage > -1) {
+            currentPage++;
+
+            $.ajax({
+                url: "/Notification/Index",
+                type: "POST",
+                data: { page: currentPage },
+                dataType: "html",
+                beforeSend: function () {
+                    $('.msg').remove();
+                    $("#NotificationContainer").append('<div class="msg alert alert-info" id="loadimage">Loading...</div>');
+                },
+                success: function (data) {
+                    $('.msg').remove();
+                    if (data.length != 0) {
+                        $("#NotificationContainer").append(data);
+                        $('#morelink').show();
+                    } else {
+                        $('#morelink').hide();
+                        currentPage = -1;
+                        $("#NotificationContainer").append('<div class="msg alert alert-info" id="alertmsg">  No more notifications found </div>');
+                    }
+                }
+            });
+
+        }
+    }
+    
+
+   
+</script>

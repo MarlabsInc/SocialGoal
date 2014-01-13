@@ -1,0 +1,72 @@
+﻿@model SocialGoal.Web.ViewModels.RegisterFormModel
+@{ Html.BeginForm("Register", "Account", FormMethod.Post);}
+<div class="span12" @*style="padding-top: 20px;"*@>
+    <h4>
+        New User? Register</h4>
+    <hr />
+    @Html.ValidationSummary(true)
+    @Html.AntiForgeryToken()
+    <ul>
+        <li>@Html.TextBoxFor(m => m.Email, new { @placeholder = "Email Id" }) @Html.ValidationMessageFor(m => m.Email)</li>
+        <li>@Html.TextBoxFor(m => m.FirstName, new { @placeholder = "First Name" }) @Html.ValidationMessageFor(m => m.FirstName)
+        </li>
+        <li>@Html.TextBoxFor(m => m.LastName, new { @placeholder = "Last Name" }) @Html.ValidationMessageFor(m => m.LastName)</li>
+        <li>@Html.TextBoxFor(m => m.Password, new { @placeholder = "Password", @type = "password" })@Html.ValidationMessageFor(m => m.Password)
+        </li>
+        <li>@Html.TextBoxFor(m => m.ConfirmPassword, new { @placeholder = "Re-type Password", @type = "password" })
+            @Html.ValidationMessageFor(m => m.ConfirmPassword) </li>
+        <li>
+            <input id="register" type="submit" value="Register" class="btn btn-primary" />
+        </li>
+    </ul>
+</div>
+@*<table >
+    <tr>
+        <td>
+            @Html.LabelFor(m => m.Email)
+        </td>
+        <td>
+            @Html.TextBoxFor(m => m.Email, new { @class = "form-input" })
+            @Html.ValidationMessageFor(m => m.Email)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            @Html.LabelFor(m => m.FirstName)
+        </td>
+        <td>
+            @Html.TextBoxFor(m => m.FirstName, new { @class = "form-input" })
+            @Html.ValidationMessageFor(m => m.FirstName)
+        </td>
+    </tr>
+    <tr>
+        <td >@Html.LabelFor(m => m.LastName)
+        </td>
+        <td>
+            @Html.TextBoxFor(m => m.LastName, new { @class = "form-input" })
+            @Html.ValidationMessageFor(m => m.LastName)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            @Html.LabelFor(m => m.Password)
+        </td>
+        <td>
+            @Html.PasswordFor(m => m.Password, new { @class = "form-input", @type = "password" })
+        @Html.ValidationMessageFor(m => m.Password)</tr>
+    <tr>
+        <td>
+            @Html.LabelFor(m => m.ConfirmPassword)
+        </td>
+        <td>
+            @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-input", @type = "password" })
+            @Html.ValidationMessageFor(m => m.ConfirmPassword)
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2">
+            <input id="register" type="submit" value="Register" class="btn btn-primary pull-right" />
+        </td>
+    </tr>
+</table>*@
+@{ Html.EndForm();}

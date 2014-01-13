@@ -1,0 +1,31 @@
+﻿@model SocialGoal.Models.LoginViewModel
+<style>
+    ul
+    {
+        list-style-type: none;
+    }
+  
+</style>
+@{ Html.BeginForm("Login", "Account", FormMethod.Post);}
+<div class="span12">
+    <h4>
+        Login</h4>
+    <hr />
+    <ul>
+        <li>@Html.ValidationSummary(true)</li>
+        <li>@Html.TextBoxFor(m => m.Email, new { @id = "username", @placeholder = "Email" })@Html.ValidationMessageFor(m => m.Email)
+        </li>
+        <li>@Html.PasswordFor(m => m.Password, new { @id = "password", @type = "password", @placeholder = "Password" })@Html.ValidationMessageFor(m => m.Password)
+        </li>
+        <li>
+            <input id="loginbtn" style="" type="submit" class="btn btn-primary" name="login"
+                value="Log In" />
+        </li>
+        <li>
+        @Html.ActionLink("Forgot Password?","ForgotPassword","Account",null,null)
+        </li>
+    </ul>
+    @Html.AntiForgeryToken()
+</div>
+@*</div>*@ @*@Html.LabelFor(m => m.Email, new { @class = "td-label" })*@ @*@Html.LabelFor(m => m.Password, new { @class = "td-label" })*@
+@{ Html.EndForm();}

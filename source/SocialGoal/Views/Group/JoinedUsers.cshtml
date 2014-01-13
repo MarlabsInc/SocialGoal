@@ -1,0 +1,27 @@
+﻿@model SocialGoal.Web.ViewModels.GroupMemberViewModel
+@{
+    ViewBag.Title = "Members";
+}
+<h3>
+    @Html.ActionLink(@Model.Group.GroupName, "Index", new { id = @Model.GroupId })
+</h3>
+<div class="subnav">
+    <ul class="nav nav-pills">
+        <li class="">@Html.ActionLink(@Html.Action("NoOfUsers", new { id = @Model.GroupId }) + " Members", "JoinedUsers", new { id = @Model.GroupId }, null)
+          
+    </ul>
+</div>
+<br />
+<br />
+<div class="span12" >
+    @foreach (var item in Model.Users)
+    {
+        <div class="alert alert-info span3">
+            <div>
+                @Html.ActionLink(@item.UserName, "UserProfile", "Account", new { id = item.UserId }, null)
+            </div>
+            <div>@item.Email
+            </div>
+        </div>
+    }
+</div>

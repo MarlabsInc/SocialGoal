@@ -1,0 +1,171 @@
+﻿@model SocialGoal.Web.ViewModels.GroupGoalFormModel
+@{
+    ViewBag.Title = "Create Goal";
+    Layout = "~/Views/Shared/_PageLayout.cshtml";
+}
+@*<script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>*@
+
+
+
+<div class="span12 well">
+    <div class="span6" style="margin-left:10px;">
+        <h4>@Html.ActionLink(@Model.Group.GroupName, "Index", new { id = @Model.GroupId })</h4>
+        <div><small>@Model.Group.Description</small></div>
+    </div>
+
+    <div class="span5" style="margin-left:90px;" >
+        @Html.Partial("Header")
+    </div>
+</div>
+
+<div id="createGoal" class="span12 well" style="margin:0px;">
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(m => m.GroupId)
+
+        @Html.ValidationSummary(true)
+
+        <table class ="table">
+            <tr>
+                <td>Goal Name</td>
+                <td >
+                    @Html.TextBoxFor(model => model.GoalName, new { @class ="span11" })
+                    @Html.ValidationMessageFor(model => model.GoalName)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Description
+                </td>
+                <td >
+                    @Html.TextAreaFor(model => model.Description, new { @class ="span11" })
+                    @Html.ValidationMessageFor(model => model.Description)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                   Start Date
+                </td>
+                <td >
+                    @Html.TextBoxFor(model => model.StartDate, String.Format("{0:dd-MMM-yyyy}", Model.StartDate), new { @class = "ui-datepicker span11", @readonly = "readonly", @style = "display:block;width:150;float:left;margin-right:7px;" })
+                    @Html.ValidationMessageFor(model => model.StartDate)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                   End Date
+                </td>
+                <td >
+                    @Html.TextBoxFor(model => model.EndDate,String.Format("{0:dd-MMM-yyyy}",Model.EndDate), new { @class = "ui-datepicker span11", @readonly = "readonly", @style = "display:block;width:150;float:left;margin-right:7px;" })
+                   @Html.ValidationMessageFor(model => model.EndDate)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                   Goal Metric
+                </td>
+                <td >
+                     @Html.DropDownListFor(model => model.MetricId, Model.Metrics, "--Select--", new { @class = "span11" })
+                    @Html.ValidationMessageFor(model => model.MetricId)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Focus
+                </td>
+                <td >
+                    @Html.DropDownListFor(model => model.FocusId, Model.Foci, "--Select--", new { @class = "span11" })
+                    @Html.ValidationMessageFor(model => model.FocusId)
+                </td>
+                <td>
+                    @Html.Hidden("UserId", User.Identity.GetUserId())
+                    
+                    @Html.HiddenFor(m=>m.GroupGoalId)
+                    @Html.HiddenFor(m=>m.GroupUserId)
+                </td>
+            </tr>
+            
+            
+            <tr>
+                <td>
+                Target
+                </td>
+                <td >
+                    @Html.TextBoxFor(model => model.Target, new { @class = "span11" })
+                    @Html.ValidationMessageFor(model => model.Target)
+                    <a href="#"  id="targetinfo" rel ="popover" data-content= "Fix the target of the goal based on metric selected" data-trigger ="hover" data-placement="top" data-originals-title ="Target"><i class="icon-info-sign"></i> </a>
+                </td>
+            </tr>
+
+              <tr>
+                  <td>Assigned To</td>
+                  <td>
+                        @Html.TextBoxFor(model => model.AssignedTo, new { id = "AssignedUser", value = "", placeholder = "Assigned To", @readonly = "readonly",@class="span8" })
+                        <a href="#"  id="assigngoalsinfo" rel ="popover" data-content= "You can seach the user by clicking on the search button and assign the current goal for him. " data-trigger ="hover" data-placement="top" data-originals-title ="Assign Goals">
+                            <i class="icon-info-sign"></i> 
+                        </a>
+                        <a data-toggle="modal" href="#searchMember" onclick="SearchMember('@Model.GroupId');" class="btn btn-primary" title ="You can assign Goals to the members of the group">Search </a>  
+                        <a data-toggle="modal" id= "removeassignedto" href="#" onclick="RemoveAssigned()" class="btn" title ="You can remove the assigned user">Remove </a>                          
+                        @Html.HiddenFor(m => m.AssignedGroupUserId, new { @id = "assignedgroupuserId" })
+                  </td>
+                </tr>
+                <tr>
+                <td colspan="2">
+                             <p>
+                       <button class="btn btn-primary" type="submit" value="Save" >
+                        Save</button>
+                           <button class="btn" type ="reset" value="Cancel" onclick="window.location.href='@Url.Action("GroupGoal", "Group", new { id = Model.GroupGoalId })'">
+                    Cancel</button>
+                    </p>
+                </td>
+                </tr>
+        </table>
+       
+      
+
+    }
+    
+</div>
+@*<style type="text/css">
+    input, button
+    {
+        border-radius: 5px;
+    }
+    select
+    {
+       @* width: 155px;
+        height: 22px;
+        background-color: white;
+        @*border: 2px inset;
+        border-radius: 5px;
+    }
+</style>*@
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        //        $('.ui-datepicker').datepicker({
+        //            dateFormat: 'mm/dd/yy',
+        //            buttonImage: '@Url.Content("~/Content/calendar.gif")',
+        //            buttonImageOnly: true,
+        //            showOn: "button"
+        //        });
+        $('.ui-datepicker').each(function (i, v) {
+           // $(v).val($.datepicker.formatDate('dd-M-yy', new Date($(v).val())))
+            $(v).datepicker({
+                dateFormat: 'dd-M-yy',
+                buttonImage: '@Url.Content("~/Content/calendar.gif")',
+                buttonImageOnly: true,
+                showOn: "button"
+            });
+        });
+    });
+
+    $(function () {
+        $("#targetinfo").popover();
+    });
+    $(function () {
+        $("#assigngoalsinfo").popover();
+    });
+</script>

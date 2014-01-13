@@ -1,0 +1,304 @@
+﻿@model SocialGoal.Web.ViewModels.HomeViewModel
+@if (Model.Notification.Count() == 0)
+{ 
+    <p style="padding:30px;margin-top:5px;line-height:25px;text-align:justify;">
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@*Social Goal is a social networking platform for goals. 
+        Users can create their accounts in Social Goal and start setting their goals. The goals can be private or public.
+        A public goal is visible to all other users in the system. Users can follow other
+        users or goals. User can put updates and status on the created goals and the followers
+        can comment on it. Also a graphical representation of goal progress is available.
+   It is also possible to create group goals where the goals and updates are visible
+        only for the group members. Users can invite other Social Goal users to follow a
+        goal or to join a group. Invitations can also send through emails. Users receive
+        updates of followed users and goals. Goals, users and groups can be searched from
+        a search bar on the header.*@No feeds available.  Connect with people.</p>
+
+}
+else
+{ 
+foreach (var item in Model.Notification)
+{
+    if (item.NotificationType == 0)
+    {
+
+    <table class="table">
+        <tr class="span12">
+            <td class="span2">
+                <a href="@Url.Action("UserProfile", "Account", new { id = item.UserId }, null)"  style="float:left;">
+                    @if (String.IsNullOrEmpty(@item.ProfilePicUrl))
+                    {
+                        <img src="../../Content/templatemo_329_blue_urban/images/facebook-avatar.png" alt=""
+                            class="thumbnail" />
+                    }
+                    else
+                    {
+                        <img src="@Url.Content(@item.ProfilePicUrl)"  alt= "" class="thumbnail" />
+                    }
+                </a>
+            </td>
+            <td class="span10">
+                <div>
+                    @Html.ActionLink(item.UserName, "UserProfile", "Account", new { id = item.UserId }, null)
+                    Created @Html.ActionLink(item.GoalName/*.LimitLength(15)*/, "Index", "Goal", new { id = item.GoalId }, null)
+                </div>
+                <small style="float: left; color: darkGray; margin-top: 5px;">@item.NotificationDate
+                </small>
+            </td>
+        </tr>
+    </table>
+
+    }
+
+    if (item.NotificationType == 1)
+    { 
+
+    <div>
+        <table class="table">
+            <tr class="span12">
+                <td class="span2">
+                    <a href="@Url.Action("UserProfile", "Account", new { id = item.UserId }, null)"  style="float:left;">
+                        @if (String.IsNullOrEmpty(@item.ProfilePicUrl))
+                        {
+                            <img src="../../Content/templatemo_329_blue_urban/images/facebook-avatar.png" class="thumbnail" />
+                        }
+                        else
+                        {
+                            <img src="@Url.Content(@item.ProfilePicUrl)" class="thumbnail"/>
+                        }
+                    </a>
+                </td>
+                <td class="span10">
+                    <div>
+                        @Html.ActionLink(item.UserName, "UserProfile", "Account", new { id = item.UserId }, null)
+                        Updated @Html.ActionLink(item.Updatemsg/*.LimitLength(15)*/, "Index", "Goal", new { id = item.GoalId }, null)
+                        On Goal
+                        @Html.ActionLink(item.GoalName/*.LimitLength(15)*/, "Index", "Goal", new { id = item.GoalId }, null)
+                        <br />
+                    </div>
+                    <small style="float: left; color: darkGray; margin-top: 5px;">@item.NotificationDate
+                    </small>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+	
+    }
+    if (item.NotificationType == 2)
+    {
+    <table class="table">
+        <tr class="span12">
+            <td class="span2">
+                <a href="@Url.Action("UserProfile", "Account", new { id = item.UserId }, null)" style="float:left;">
+                    @if (String.IsNullOrEmpty(@item.ProfilePicUrl))
+                    {
+                        <img src="../../Content/templatemo_329_blue_urban/images/facebook-avatar.png" class="thumbnail" />
+                    }
+                    else
+                    {
+                        <img src="@Url.Content(@item.ProfilePicUrl)"  class="thumbnail" />
+                    }
+                </a>
+            </td>
+            <td class="span10">
+                <div>
+                    @Html.ActionLink(item.UserName, "UserProfile", "Account", new { id = item.UserId }, null)
+                    @*Commented "@item.CommentText.LimitLength(15)" on Update @Html.ActionLink(item.Updatemsg.LimitLength(15), "Index", "Goal", new { id = item.GoalId }, null)*@
+                    Commented "@item.CommentText" on Update @Html.ActionLink(item.Updatemsg, "Index", "Goal", new { id = item.GoalId }, null)
+                    of Goal @Html.ActionLink(item.GoalName/*.LimitLength(15)*/, "Index", "Goal", new { id = item.GoalId }, null)
+                </div>
+                <small style="float: left; color: darkGray; margin-top: 5px;">@item.NotificationDate
+                </small>
+            </td>
+        </tr>
+    </table>
+    }
+    if (item.NotificationType == 3)
+    { 
+
+    <table class="table">
+        <tr class="span12">
+            <td class="span2">
+                <a href="@Url.Action("UserProfile", "Account", new { id = item.UserId }, null)" style="float:left;">
+                    @if (String.IsNullOrEmpty(@item.ProfilePicUrl))
+                    {
+                        <img src="../../Content/templatemo_329_blue_urban/images/facebook-avatar.png" class="thumbnail" />
+                    }
+                    else
+                    {
+                        <img src="@Url.Content(@item.ProfilePicUrl)" class="thumbnail" />
+                    }
+                </a>
+            </td>
+            <td class="span10">
+                <div>
+                    @Html.ActionLink(item.UserName, "UserProfile", "Account", new { id = item.UserId }, null)
+                    Created Goal @Html.ActionLink(item.GroupGoalName/*.LimitLength(15)*/, "GroupGoal", "Group", new { id = item.GroupGoalId }, null)
+                    for the Group @Html.ActionLink(item.GroupName/*.LimitLength(15)*/, "Index", "Group", new { id = item.GroupId }, null)
+                </div>
+                <small style="float: left; color: darkGray; margin-top: 5px;">@item.NotificationDate
+                </small>
+            </td>
+        </tr>
+    </table>
+
+    }
+    if (item.NotificationType == 5)
+    {
+
+    <table class="table">
+        <tr class="span12">
+            <td class="span2">
+                <a href="@Url.Action("UserProfile", "Account", new { id = item.UserId }, null)"  style="float:left;">
+                    @if (String.IsNullOrEmpty(@item.ProfilePicUrl))
+                    {
+                        <img src="../../Content/templatemo_329_blue_urban/images/facebook-avatar.png" alt=""
+                            class="thumbnail" />
+                    }
+                    else
+                    {
+                        <img src="@Url.Content(@item.ProfilePicUrl)" alt ="" class="thumbnail" />
+                    }
+                </a>
+            </td>
+            <td class="span10">
+                <div>
+                    @Html.ActionLink(item.UserName, "UserProfile", "Account", new { id = item.UserId }, null)
+                    Joined Group @Html.ActionLink(item.GroupName/*.LimitLength(15)*/, "Index", "Group", new { id = item.GroupId }, null)
+                </div>
+                <small style="float: left; color: darkGray; margin-top: 5px;">@item.NotificationDate
+                </small>
+            </td>
+        </tr>
+    </table>
+    }
+    if (item.NotificationType == 4)
+    {
+    <table class="table">
+        <tr class="span12">
+            <td class="span2">
+                <a href="@Url.Action("UserProfile", "Account", new { id = item.UserId }, null)"  style="float:left;">
+                    @if (String.IsNullOrEmpty(@item.ProfilePicUrl))
+                    {
+                        <img src="../../Content/templatemo_329_blue_urban/images/facebook-avatar.png" alt=""
+                            class="thumbnail" />
+                    }
+                    else
+                    {
+                        <img src="@Url.Content(@item.ProfilePicUrl)"  alt ="" class="thumbnail" />
+                    }
+                </a>
+            </td>
+            <td class="span10">
+                <div>
+                    @Html.ActionLink(item.UserName, "UserProfile", "Account", new { id = item.UserId }, null)
+                    is Following the Goal @Html.ActionLink(item.GoalName/*.LimitLength(15)*/, "Index", "Goal", new { id = item.GoalId }, null)
+                </div>
+                <small style="float: left; color: darkGray; margin-top: 5px;">@item.NotificationDate
+                </small>
+            </td>
+        </tr>
+    </table>
+        
+    }
+    if (item.NotificationType == 6)
+    {
+
+    <table class="table">
+        <tr class="span12">
+            <td class="span2">
+                <a href="@Url.Action("UserProfile", "Account", new { id = item.UserId }, null)"  style="float:left;">
+                    @if (String.IsNullOrEmpty(@item.ProfilePicUrl))
+                    {
+                        <img src="../../Content/templatemo_329_blue_urban/images/facebook-avatar.png" alt=""
+                            class="thumbnail" />
+                    }
+                    else
+                    {
+                        <img src="@Url.Content(@item.ProfilePicUrl)"  alt =""class="thumbnail" />
+                    }
+                </a>
+            </td>
+            <td class="span10">
+                <div>
+                    @Html.ActionLink(item.UserName, "UserProfile", "Account", new { id = item.UserId }, null)
+                    Updated @Html.ActionLink(item.GroupUpdatemsg/*.LimitLength(15)*/, "GroupGoal", "Group", new { id = item.GroupGoalId }, null)
+                    on the Goal @Html.ActionLink(item.GroupGoalName/*.LimitLength(15)*/, "GroupGoal", "Group", new { id = item.GroupGoalId }, null)
+                    for the Group @Html.ActionLink(item.GroupName/*.LimitLength(15)*/, "Index", "Group", new { id = item.GroupId }, null)
+                </div>
+                <small style="float: left; color: darkGray; margin-top: 5px;">@item.NotificationDate
+                </small>
+            </td>
+        </tr>
+    </table>
+
+    }
+
+
+
+    if (item.NotificationType == 7)
+    {
+
+    <table class="table">
+        <tr class="span12">
+            <td class="span2">
+                <a href="@Url.Action("UserProfile", "Account", new { id = item.UserId }, null)" style="float:left;">
+                    @if (String.IsNullOrEmpty(@item.ProfilePicUrl))
+                    {
+                        <img src="../../Content/templatemo_329_blue_urban/images/facebook-avatar.png" alt=""
+                            class="thumbnail" />
+                    }
+                    else
+                    {
+                        <img src="@Url.Content(@item.ProfilePicUrl)" alt=""  class="thumbnail" />
+                    }
+                </a>
+            </td>
+            <td class="span10">
+                <div>
+                    @Html.ActionLink(item.UserName, "UserProfile", "Account", new { id = item.UserId }, null)
+                    @*Commented "@item.GroupCommentText.LimitLength(15)" on Update @Html.ActionLink(item.GroupUpdatemsg.LimitLength(15), "GroupGoal", "Group", new { id = item.GroupGoalId }, null)*@
+                    Commented "@item.GroupCommentText" on Update @Html.ActionLink(item.GroupUpdatemsg, "GroupGoal", "Group", new { id = item.GroupGoalId }, null)
+                    of the Goal @Html.ActionLink(item.GroupGoalName/*.LimitLength(15)*/, "GroupGoal", "Group", new { id = item.GroupGoalId }, null)
+                    for the Group @Html.ActionLink(item.GroupName/*.LimitLength(15)*/, "Index", "Group", new { id = item.GroupId }, null)
+                </div>
+                <small style="float: left; color: darkGray; margin-top: 5px;">@item.NotificationDate
+                </small>
+            </td>
+        </tr>
+    </table>
+
+    }
+
+    if (item.NotificationType == 8)
+    { 
+
+    <table class="table">
+        <tr class="span12">
+            <td class="span2">
+                <a href="@Url.Action("UserProfile", "Account", new { id = item.FromUserId }, null)"  style="float:left;">
+                    @if (String.IsNullOrEmpty(@item.ProfilePicUrl))
+                    {
+                        <img src="../../Content/templatemo_329_blue_urban/images/facebook-avatar.png" alt=""
+                            class="thumbnail" />
+                    }
+                    else
+                    {
+                        <img src="@Url.Content(@item.ProfilePicUrl)"  alt =""class="thumbnail" />
+                    }
+                </a>
+            </td>
+            <td class="span10">
+                <div>
+                    @Html.ActionLink(item.FromUser.UserName, "UserProfile", "Account", new { id = item.FromUserId }, null)
+                    is Following @Html.ActionLink(item.ToUser.UserName, "UserProfile", "Account", new { id = item.ToUserId }, null)
+                </div>
+                <small style="float: left; color: darkGray; margin-top: 5px;">@item.NotificationDate
+                </small>
+            </td>
+        </tr>
+    </table>
+
+    }
+}
+}

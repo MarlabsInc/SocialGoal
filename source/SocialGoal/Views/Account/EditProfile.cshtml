@@ -1,0 +1,179 @@
+﻿@using Microsoft.AspNet.Identity
+@model SocialGoal.Web.ViewModels.UserProfileFormModel
+@{
+    ViewBag.Title = "EditProfileView";
+    Layout = "~/Views/Shared/_PageLayout.cshtml";
+}
+
+<h4>
+    Edit Your Profile</h4>
+<div id="edituserprofile" class="well span7">
+    @using (Html.BeginForm())
+    {
+        <legend>Basic Info</legend>
+        <table class ="table">
+            <tr>
+                <td style="width:150px;">
+                    <label>
+                        First Name</label>
+                </td>
+                <td>@Html.TextBoxFor(m => m.FirstName, new { @class = "span11" })
+                    @Html.ValidationMessageFor(model => model.FirstName)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label>
+                        Last Name</label>
+                </td>
+                <td>@Html.TextBoxFor(m => m.LastName, new { @class = "span11" })
+                    @Html.ValidationMessageFor(model => model.LastName)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label>
+                        Email</label>
+                </td>
+                <td>@Html.TextBoxFor(m => m.Email, new { @class = "span11" })
+                    @Html.ValidationMessageFor(model => model.Email)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label>
+                        Date Of Birth</label>
+                </td>
+                <td>
+                @if (Model.DateOfBirth.HasValue)
+                { 
+                    @Html.TextBoxFor(m => m.DateOfBirth, String.Format("{0:d}", Model.DateOfBirth), new { @class = "ui-datepicker", @style = "display:block;float:left;" })
+                    @Html.ValidationMessageFor(model => model.DateOfBirth)
+                }
+                else
+                { 
+                    @Html.TextBoxFor(m => m.DateOfBirth, new { @value = 1 / 1 / 1001, @class = "ui-datepicker span11", @style = "display:block;float:left;" })
+                }
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label>
+                        Gender</label>
+                </td>
+                <td>
+                    @if (Model.Gender == true)
+                    {
+                        @Html.RadioButtonFor(model => model.Gender, false) <font>Male</font>
+                        @Html.RadioButtonFor(model => model.Gender, true, new { @checked = "checked" })<font> Female</font>
+                    }
+                    else if (Model.Gender == false)
+                    {
+                        @Html.RadioButtonFor(model => model.Gender, false, new { @checked = "checked" })<font> Male</font>
+                        @Html.RadioButtonFor(model => model.Gender, true)<font> Female</font>
+                    }
+                    else
+                    {
+                        @Html.RadioButtonFor(model => model.Gender, false)<font> Male</font>
+                        @Html.RadioButtonFor(model => model.Gender, false)<font> Female</font>
+                    }
+                </td>
+            </tr>
+        </table>
+        <hr />
+        <legend>Personal Info</legend>
+        <table class ="table">
+            <tr>
+                <td class="editor-label">
+                    <label>
+                        Address</label>
+                </td>
+                <td class="editor-field">@Html.TextAreaFor(m => m.Address, new { @class = "span11", cols = "10", rows = "5", wrap = "virtual", id = "Address" })
+                    @Html.ValidationMessageFor(model => model.Address)
+                </td>
+            </tr>
+            <tr>
+                <td class="editor-label">
+                    <label>
+                        City</label>
+                </td>
+                <td class="editor-field">@Html.TextBoxFor(m => m.City, new { @class = "span11" })
+                    @Html.ValidationMessageFor(model => model.City)
+                </td>
+            </tr>
+            <tr>
+                <td class="editor-label">
+                    <label>
+                        State</label>
+                </td>
+                <td class="editor-field">@Html.TextBoxFor(m => m.State, new { @class = "span11" })
+                    @Html.ValidationMessageFor(model => model.State)
+                </td>
+            </tr>
+            <tr>
+                <td class="editor-label">
+                    <label>
+                        Country</label>
+                </td>
+                <td class="editor-field">@Html.TextBoxFor(m => m.Country, new { @class = "span11" })
+                    @Html.ValidationMessageFor(model => model.Country)
+                </td>
+            </tr>
+            <tr>
+                <td class="editor-label">
+                    <label>
+                        ZipCode</label>
+                </td>
+                <td class="editor-field">@Html.TextBoxFor(m => m.ZipCode, new { @class = "span11" })
+                    @Html.ValidationMessageFor(model => model.ZipCode)
+                </td>
+            </tr>
+            <tr>
+                <td class="editor-label">
+                    <label>
+                        Contact No</label>
+                </td>
+                <td class="editor-field">@Html.TextBoxFor(m => m.ContactNo, new { @class = "span11" })
+                    @Html.ValidationMessageFor(model => model.ContactNo)
+                </td>
+                @Html.HiddenFor(m => m.UserProfileId)
+                @Html.HiddenFor(m => m.UserId)
+            </tr>
+        </table>
+        <hr />
+        <button class="btn btn-primary" type="submit" value="Save">
+            Save</button>
+        <button class="btn btn-primary" type="reset" value="Cancel" onclick="window.location.href='@Url.Action("UserProfile", "Account", new { id = User.Identity.GetUserId() })'">
+            Cancel</button>
+    }
+</div>
+<div class="span4">
+    @Html.Action("ImageUpload", "Account")
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('.ui-datepicker').each(function (i, v) {
+
+            $(".ui - datepicker").val(" ");
+
+            $(v).datepicker({
+                dateFormat: 'dd-M-yy', changeYear: true,
+                yearRange: '1950:2010',
+                buttonImage: '@Url.Content("~/Content/calendar.gif")',
+                buttonImageOnly: true,
+                showOn: "button"
+            });
+        });
+    });
+
+    $(function () {
+        $("#Address").focus(function () {
+            $(this).animate({ "height": "85px" }, "slow");
+            return false;
+        });
+        $("#Address").blur(function () {
+            $("#Address").animate({ "height": "30px" }, "slow");
+            return false;
+        });
+    });
+</script>

@@ -1,0 +1,238 @@
+﻿@using Microsoft.AspNet.Identity
+@model SocialGoal.Web.ViewModels.GroupViewModel
+@{
+    ViewBag.Title = "Index";
+    //Layout = "~/Views/Shared/_PageLayout.cshtml";
+    Layout = "~/Views/Shared/_GoalLayout.cshtml";
+}
+
+
+<!--Top section-->
+<div class="well" style="height:100px;">
+        <div class="span6">
+            <h4>
+                @Model.GroupName
+                @if (Model.Admin)
+                {
+                    <a href="#" id ="groupEdit" onclick ="window.location.href='@Url.Action("EditGroup", "Group", new { id = Model.GroupId })'" style="padding-right:2px;">
+                        <span rel="tooltip" title="Edit Group"><i class="icon-edit"></i></span></a>
+                    <a href="#" id ="groupDelete" onclick ="window.location.href='@Url.Action("DeleteGroup", "Group", new { id = Model.GroupId })'">
+                        <span rel="tooltip" title="Delete Group"><i class="icon-trash"></i></span></a>
+                }
+            </h4>
+            <small>@Model.Description</small>
+            <div><small>Created On @Model.CreatedDate.ToString("dd MMM yyyy - hh:mm tt ") </small></div>
+        </div>
+
+        <div class="span6" style="float:right;">
+            @if (Model.IsAMember == false)
+            {
+                if (Model.RequestSent == false && Model.InvitationSent == false)
+                { 
+                    @Html.ActionLink("Join Now", "GroupJoinRequest", "Group", new { id = Model.GroupId }, new { @class = "btn btn-primary btn-small", @style = "float:right" })
+                }
+                else if (Model.RequestSent == false && Model.InvitationSent == true)
+                {
+                    @Html.ActionLink("Accept Invitation", "JoinGroup", "Group", new { id = Model.GroupId }, new { @class = "btn btn-primary btn-small", @style = "float:right" })
+                }
+                else if (Model.RequestSent == true && Model.InvitationSent == true)
+                {
+                    @Html.ActionLink("Accept Invitation", "JoinGroup", "Group", new { id = Model.GroupId }, new { @class = "btn btn-primary btn-small", @style = "float:right" })
+                }
+                else if (Model.RequestSent == true && Model.InvitationSent == false)
+                {
+                    <div class="alert alert-success">
+                        Your joining request is waiting for approval from group admin.
+                    </div>
+                }
+            }
+            @if (Model.IsAMember == true)
+            {       
+                @Html.Partial("Header")        
+            }
+        </div>
+</div>
+<!--Top section ends-->
+
+
+
+<div>
+    <div id="createGoal" style="display: none;" class="span5 alert alert-info">
+    </div>
+    <div id="inviteUser" style="display: none;" class="span4 alert alert-info">
+    </div>
+    <div id="createFocus" style="display: none;" class="span4 alert alert-info">
+    </div>
+
+</div>
+
+
+
+
+
+<!--goal listing section-->
+<div class="span3 well" style="margin-left:0px;height:350px;">
+       <strong>Goals</strong><hr />
+        @if (Model.Goals.Count() == 0)
+        {
+           <div class="alert alert-info">No goals to display</div>
+        }
+        <div style="max-height:270px;overflow-y:auto;" id="goallistcontainer">
+        @foreach (var item in Model.Goals)
+        { 
+                <div>
+                    @if (Model.IsAMember == true)
+                    {<strong>@Html.ActionLink(item.GoalName, "GroupGoal", "Group", new { id = item.GroupGoalId }, null)</strong> }
+                    else
+                    {@item.GoalName}
+                </div>
+                <small>@item.StartDate.ToString("dd MMM yyyy") to @item.EndDate.ToString("dd MMM yyyy")</small>
+               <div><small>Created By @Html.ActionLink(item.User.UserName, "UserProfile", "Account", new { id = item.UserId }, null)</small></div>
+                    if (item.UserId == User.Identity.GetUserId())
+                    { 
+                    <div id="div@(item.GroupGoalId)" style="float:right;margin-right:10px;">
+                        <a data-toggle="modal" href="#" id ="edit" onclick ="window.location.href='@Url.Action("EditGoal", "Group", new { id = item.GroupGoalId })'"@*editGet('@item.GoalId')*@>
+                            <span rel="tooltip" title="Edit goals"><i class="icon-edit"></i></span></a><a href="#" id="delete" onclick ="window.location.href='@Url.Action("DeleteGoal", "Group", new { id = item.GroupGoalId })'"@*"DeleteGet('@item.GoalId')"*@>
+                                <span rel="tooltip" title="Delete goals"><i class="icon-trash"></i></span>
+                        </a>
+                    </div>
+                    }
+           
+            <hr style="margin:22px 0px 0px 0px;" />
+        }
+        </div>
+
+</div>
+<!--goal listing section ends-->
+
+<!--focus listing section-->
+<div class="span3 well"  style="margin-left:8px;height:350px;"> 
+
+       <strong>Focus</strong><hr />
+        @if (Model.Focus.Count() == 0)
+        {
+           <div class="alert alert-info">No focus to display</div>
+        }
+        <div style="max-height:270px;overflow-y:auto;" id="focuslistcontainer">
+        @foreach (var item in Model.Focus)
+        {            
+           <strong>@Html.ActionLink(item.FocusName, "Focus", "Group", new { id = item.FocusId }, null)</strong>
+            if (Model.IsAMember == true)
+            { 
+                <div id="div@(item.FocusId)" style="float:right;margin-right:10px;">
+                    <a data-toggle="modal" href="#" id ="edit" onclick ="window.location.href='@Url.Action("EditFocus", "Group", new { id = item.FocusId })'"@*editGet('@item.GoalId')*@>
+                        <span rel="tooltip" title="Edit goals"><i class="icon-edit"></i></span></a>
+                     <a href="#" id="delete" onclick ="window.location.href='@Url.Action("DeleteFocus", "Group", new { id = item.FocusId })'"@*"DeleteGet('@item.GoalId')"*@>
+                            <span rel="tooltip" title="Delete goals"><i class="icon-trash"></i></span></a>
+                </div>
+            }
+            <hr />		
+        }
+        </div>
+
+
+
+</div>
+<!--focus listing section ends-->
+
+<!--members listing section-->
+<div class="span3 well"  style="margin-left:8px;height:350px;"> 
+        <strong>Members</strong><hr />       
+        <div style="max-height:270px;overflow-y:auto;" id="memberlistcontainer">
+        @foreach (var item in Model.Users)
+        { 
+            <div style="margin-bottom:10px;">
+            <div>
+                <a href="@Url.Action("UserProfile", "Account", new { id = item.Id }, null)" >
+                    @if (String.IsNullOrEmpty(@item.ProfilePicUrl))
+                    {
+                        <img src="../../Content/templatemo_329_blue_urban/images/facebook-avatar.png" class="thumbnail span2" />
+                    }
+                    else
+                    {
+                        <img src="@Url.Content(@item.ProfilePicUrl)" alt =""  class="thumbnail span2" />
+                    }
+                </a>
+            </div>
+             <div >
+                @if ((item.Id == User.Identity.GetUserId()) && (Model.Admin == false))
+                {
+                   <small> @Html.ActionLink("Unfollow", "DeleteMember", "Group", new { id = item.Id }, new { style = "float:right" })</small>					   
+                }
+                @if (Model.Admin == true && item.Id != User.Identity.GetUserId())
+                {
+                    <a href="@Url.Action("DeleteMember", "Group", new { userId = item.Id, groupId = Model.GroupId })" id="delete" style ="float:right" >
+                        <span rel="tooltip" title="Delete this member"><i class="icon-trash"></i></span></a>
+                }
+            </div>
+            <div style="margin-left:50px;">
+                @Html.ActionLink(@item.UserName, "UserProfile", "Account", new { id = item.Id }, null)
+                <div><small> @item.Email </small></div>
+            </div>
+           
+            </div>
+          		<hr style="margin:22px 0px 0px 0px;" />
+        }
+        </div>
+
+</div>
+<!--members listing section ends-->
+
+
+
+<!--Right section -->
+<div class="span3" >    
+    <div class="well span12" style="margin-left:0px;padding:15px;">
+        <strong>Goals Assigned By Me</strong><hr />
+        @if (Model.GoalsAssignedToOthers == null)
+        {  
+           <div class="alert alert-info">No results to display</div>      
+        }
+        else
+        {
+            foreach (var item in Model.GoalsAssignedToOthers)
+            {
+                @Html.ActionLink(item.GoalName, "GroupGoal", "Group", new { id = item.GroupGoalId }, null)
+                <div><small>Assigned on @item.CreatedDate.ToString("dd MMM yyyy -   hh:mm tt ")</small></div>    
+            <hr/>
+            }
+        }
+    </div>
+    <div class="well span12" style="margin-left:0px;padding:15px;">
+        <strong> Goals Assigned To Me</strong><hr />
+        @if (Model.GoalsAssignedToMe == null)
+        {       
+            <div class="alert alert-info">No results to display</div>             
+        }
+        else
+        {
+            foreach (var item in Model.GoalsAssignedToMe)
+            {
+                @Html.ActionLink(item.GoalName, "GroupGoal", "Group", new { id = item.GroupGoalId }, null)<hr />
+            }
+        }
+    </div>
+</div>
+<!--Right section end -->
+
+
+<style type="text/css">
+    .thumbnail
+    {
+        width: 50px;
+        height: 40px;
+    }
+</style>
+
+
+
+<script type="text/javascript">
+    $(function () {
+        $('#goallistcontainer').niceScroll();
+        $('#focuslistcontainer').niceScroll();
+        $('#memberlistcontainer').niceScroll();
+
+        
+    });
+   
+</script>
