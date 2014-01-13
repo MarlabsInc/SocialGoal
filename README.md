@@ -2,7 +2,7 @@ SocialGoal v1.0.0
 ================
 [![alt text](http://www.marlabs.com/sites/default/files/logo.png "Marlabs")](https://www.marlabs.com)
 
-SocialGoal is a social networking web app for socilaizing your goals and strategies with people. This app is developed as a reference web app for ASP.NET MVC 5, EF 6 Code First, Test-Driven Development (TDD) and Domain Driven Design (DDD). The application architecture is inspired from [EFMVC](http://efmvc.codeplex.com/). SocialGoal is developed by [Marlabs](https://www.marlabs.com).
+SocialGoal is a social networking web app for socializing your goals and strategies with people. This app is developed as a reference web app for ASP.NET MVC 5, EF 6 Code First, Test-Driven Development (TDD) and Domain Driven Design (DDD). The application architecture is inspired from [EFMVC](http://efmvc.codeplex.com/). SocialGoal is developed by [Marlabs](https://www.marlabs.com).
 
 
 Technologies
