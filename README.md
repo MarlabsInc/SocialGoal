@@ -23,6 +23,9 @@ Patterns & Practices
 * Unit of Work 
 * Dependency Injection
 
+## Build Solution in Visual Studio 2013
+The NuGet package folder excluded from the source control. To download NuGet packages and building the solution, right click on the Visual Studio solution, and click “Enable NuGet Package Restore”, and then build the solution which will download the NuGet packages and build the solution.
+
 Goals and Roadmap
 -----------------
 
