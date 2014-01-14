@@ -11,6 +11,7 @@ Technologies
 * EF 6 Code First 
 * AutoMapper
 * Autofac
+* Twitter Bootstrap
 * NUnit
 * Moq
 
