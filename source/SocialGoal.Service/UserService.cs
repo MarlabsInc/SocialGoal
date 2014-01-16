@@ -46,7 +46,7 @@ namespace SocialGoal.Service
         }
         public ApplicationUser GetUserProfile(string userid)
         {
-            var userprofile = userRepository.GetById(userid);
+            var userprofile = userRepository.Get(u=>u.Id==userid);
             return userprofile;
         }
 
