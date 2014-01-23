@@ -14,7 +14,6 @@ namespace SocialGoal.Tests.Helpers
     {
         private Dictionary<string, ApplicationUser> _users = new Dictionary<string, ApplicationUser>();
         private Dictionary<IdentityUserLogin, ApplicationUser> _logins = new Dictionary<IdentityUserLogin, ApplicationUser>();
-        //new LoginComparer()
 
         public Task CreateAsync(ApplicationUser user,string password)
         {
@@ -53,10 +52,15 @@ namespace SocialGoal.Tests.Helpers
                 return _users.Values.AsQueryable();
             }
         }
-
+        public Task<ApplicationUser> FindAsync(string userName, string password)
+        {
+            var user = new ApplicationUser() { UserName = "adarsh", Id = "402bd590-fdc7-49ad-9728-40efbfe512ec", PasswordHash = "abcd" };
+            return Task.FromResult(user);
+        }
         public Task<ApplicationUser> FindByNameAsync(string userName)
         {
-            return Task.FromResult(Users.Where(u => u.UserName.ToUpper() == userName.ToUpper()).FirstOrDefault());
+            var user = new ApplicationUser() { UserName = "adarsh", Id = "402bd590-fdc7-49ad-9728-40efbfe512ec", PasswordHash = "abcd",Activated=true };
+            return Task.FromResult(user);
         }
 
         public Task AddLoginAsync(ApplicationUser user, IdentityUserLogin login)
@@ -86,8 +90,6 @@ namespace SocialGoal.Tests.Helpers
             throw new NotImplementedException();
         }
 
-
-
         public Task<IList<UserLoginInfo>> GetLoginsAsync(ApplicationUser user)
         {
             throw new NotImplementedException();
@@ -102,11 +104,7 @@ namespace SocialGoal.Tests.Helpers
             return Task.FromResult<ApplicationUser>(null);
         }
 
-        public Task<ApplicationUser> FindAsync(string userId,string password)
-        {
-            var user = new ApplicationUser() {UserName="adarsh",Id="402bd590-fdc7-49ad-9728-40efbfe512ec" };
-            return Task.FromResult(user);
-        }
+        
         public Task<ApplicationUser> FindAsync(UserLoginInfo login)
         {
             throw new NotImplementedException();
@@ -135,17 +133,17 @@ namespace SocialGoal.Tests.Helpers
 
         public Task<IList<string>> GetRolesAsync(ApplicationUser user)
         {
-            throw new NotImplementedException();
+            return Task.FromResult<IList<string>>(new List<string>());
         }
 
         public Task<bool> IsInRoleAsync(ApplicationUser user, string role)
         {
-            throw new NotImplementedException();
+            return Task.FromResult<bool>(true);
         }
 
         public Task<IList<Claim>> GetClaimsAsync(ApplicationUser user)
         {
-            throw new NotImplementedException();
+            return Task.FromResult<IList<Claim>>(new List<Claim>());
         }
 
         public Task AddClaimAsync(ApplicationUser user, IdentityUserClaim claim)

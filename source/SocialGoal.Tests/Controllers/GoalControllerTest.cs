@@ -143,14 +143,6 @@ namespace SocialGoal.Tests.Controllers
         [Test]
         public void Index()
         {
-            //User user = new User()
-            //{
-            //    UserName = "razkp",
-            //    UserId = 1,
-            //    Password = "12344",
-            //    Email = "raz@raz.com",
-            //    RoleId = 2
-            //};
 
             MemoryUser user = new MemoryUser("adarsh");
             ApplicationUser applicationUser = new ApplicationUser()

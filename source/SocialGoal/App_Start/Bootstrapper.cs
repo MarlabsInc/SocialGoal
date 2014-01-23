@@ -7,6 +7,10 @@ using SocialGoal.Data.Infrastructure;
 using SocialGoal.Service;
 using SocialGoal.Mappings;
 using SocialGoal.Web.Core.Authentication;
+using Microsoft.AspNet.Identity.EntityFramework;
+using SocialGoal.Model.Models;
+using SocialGoal.Data.Models;
+using Microsoft.AspNet.Identity;
 
 namespace SocialGoal
 {
@@ -33,7 +37,11 @@ namespace SocialGoal
 
             builder.RegisterAssemblyTypes(typeof(DefaultFormsAuthentication).Assembly)
          .Where(t => t.Name.EndsWith("Authentication"))
-         .AsImplementedInterfaces().InstancePerHttpRequest();   
+         .AsImplementedInterfaces().InstancePerHttpRequest();
+
+            builder.Register(c => new UserManager<ApplicationUser>(new UserStore<ApplicationUser>( new SocialGoalEntities())))
+                .As<UserManager<ApplicationUser>>().InstancePerHttpRequest();
+
             builder.RegisterFilterProvider();
             IContainer container = builder.Build();
             DependencyResolver.SetResolver(new AutofacDependencyResolver(container));            

@@ -37,8 +37,8 @@ namespace SocialGoal.Web.Controllers
         private IFollowUserService followUserService;
         private ISecurityTokenService securityTokenService;
         private IUserMailer userMailer = new UserMailer();
-        public AccountController(IUserService userService, IUserProfileService userProfileService, IGoalService goalService, IUpdateService updateService, ICommentService commentService, IFollowRequestService followRequestService, IFollowUserService followUserService, ISecurityTokenService securityTokenService)
-            : this(new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(new SocialGoalEntities())))
+        private UserManager<ApplicationUser> UserManager;
+        public AccountController(IUserService userService, IUserProfileService userProfileService, IGoalService goalService, IUpdateService updateService, ICommentService commentService, IFollowRequestService followRequestService, IFollowUserService followUserService, ISecurityTokenService securityTokenService, UserManager<ApplicationUser> userManager)
         {
             this.userService = userService;
             this.userProfileService = userProfileService;
@@ -48,14 +48,8 @@ namespace SocialGoal.Web.Controllers
             this.followRequestService = followRequestService;
             this.followUserService = followUserService;
             this.securityTokenService = securityTokenService;
+            this.UserManager = userManager;
         }
-
-        public AccountController(UserManager<ApplicationUser> userManager)
-        {
-            UserManager = userManager;
-        }
-
-        public UserManager<ApplicationUser> UserManager { get; private set; }
 
         //
         // GET: /Account/Login
@@ -688,28 +682,29 @@ namespace SocialGoal.Web.Controllers
         // Used for XSRF protection when adding external logins
         private const string XsrfKey = "XsrfId";
 
-        //private IAuthenticationManager AuthenticationManager
+        //public IAuthenticationManager AuthenticationManager
         //{
         //    get
         //    {
         //        return HttpContext.GetOwinContext().Authentication;
         //    }
+        //    set { _authnManager = value; }
         //}
 
         // Add this private variable
-        private IAuthenticationManager _authnManager;
+      private IAuthenticationManager _authnManager;
 
         // Modified this from private to public and add the setter
-        public IAuthenticationManager AuthenticationManager
-        {
-            get
-            {
-                if (_authnManager == null)
-                    _authnManager = HttpContext.GetOwinContext().Authentication;
-                return _authnManager;
-            }
-            set { _authnManager = value; }
-        }
+      public IAuthenticationManager AuthenticationManager
+      {
+          get
+          {
+              if (_authnManager == null)
+                  _authnManager = HttpContext.GetOwinContext().Authentication;
+              return _authnManager;
+          }
+          set { _authnManager = value; }
+      }
 
         private async Task SignInAsync(ApplicationUser user, bool isPersistent)
         {
