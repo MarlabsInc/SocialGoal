@@ -21,17 +21,7 @@ namespace SocialGoal.Model.Models
         public string FirstName { get; set; }
 
         //[Required]
-        public string LastName { get; set; }
-
-        //private string userName;
-
-        //public string UserName
-        //{
-        //    get { return userName; }
-        //    set { userName = FirstName + " " + LastName; }
-        //}
-
-        //public string PasswordHash { get; set; }
+        public string LastName { get; set; }       
 
         public string ProfilePicUrl { get; set; }
 
@@ -49,33 +39,7 @@ namespace SocialGoal.Model.Models
 
         public virtual ICollection<FollowUser> FollowToUser { get; set; }
 
-        public virtual ICollection<GroupRequest> GroupRequests { get; set; }
-
-        
-
-        //public string Password
-        //{
-        //    set { PasswordHash = Md5Encrypt.Md5EncryptPassword(value); }
-        //}
-
-        //internal static string GenerateRandomString()
-        //{
-        //    var builder = new StringBuilder();
-        //    var random = new Random();
-        //    for (int i = 0; i < 6; i++)
-        //    {
-        //        char ch = Convert.ToChar(Convert.ToInt32(Math.Floor(25 * random.NextDouble() + 75)));
-        //        builder.Append(ch);
-        //    }
-        //    return builder.ToString();
-        //}
-
-        //public string ResetPassword()
-        //{
-        //    var newPass = GenerateRandomString();
-        //    Password = newPass;
-        //    return newPass;
-        //}
+        public virtual ICollection<GroupRequest> GroupRequests { get; set; }        
 
         public string DisplayName
         {

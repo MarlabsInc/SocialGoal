@@ -8,17 +8,10 @@ namespace SocialGoal.Data.Repository
             : base(databaseFactory)
             {
             }
-
-        //public int Add(Comment comment)
-        //{
-        //    this.DataContext.Comments.Add(comment);
-        //    this.DataContext.SaveChanges();
-        //    return comment.CommentId;
-        //}
+      
         }
     public interface ICommentRepository : IRepository<Comment>
-    {
-        //int Add(Comment comment);
+    {    
 
     }
 }

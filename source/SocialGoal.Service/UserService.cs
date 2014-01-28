@@ -21,8 +21,7 @@ namespace SocialGoal.Service
         IEnumerable<ApplicationUser> GetUserByUserId(IEnumerable<string> userid);
         IEnumerable<ApplicationUser> SearchUser(string searchString);        
         void CreateUserProfile(string userId, string userName);
-        IEnumerable<ValidationResult> CanAddUser(string email);
-        void EditUser(ApplicationUser user);
+        IEnumerable<ValidationResult> CanAddUser(string email);      
         void UpdateUser(ApplicationUser user);
        void SaveUser();
        void EditUser(string id, string firstname, string lastname, string email);
@@ -62,13 +61,6 @@ namespace SocialGoal.Service
             var users = userRepository.GetAll();
             return users;
         }
-
-        public void EditUser(ApplicationUser user)
-        {
-            userRepository.Update(user);
-            SaveUser();
-        }
-
         public ApplicationUser GetUsersByEmail(string email)
         {
             var users = userRepository.Get(u => u.Email.Contains(email));

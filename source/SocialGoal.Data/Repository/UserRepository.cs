@@ -10,17 +10,10 @@ namespace SocialGoal.Data.Repository
         public UserRepository(IDatabaseFactory databaseFactory)
             : base(databaseFactory)
             {
-            }
-        public ApplicationUser GetUserById(string userId)
-        {
-            SocialGoalEntities dbContext=new SocialGoalEntities();
-            var user = dbContext.Users.Find(userId);
-            return user;
-        }
+            }        
         }
     public interface IUserRepository : IRepository<ApplicationUser>
     {
-        ApplicationUser GetUserById(string userId);
         
     }
 }
