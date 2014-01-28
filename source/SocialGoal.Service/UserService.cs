@@ -19,8 +19,7 @@ namespace SocialGoal.Service
         ApplicationUser GetUsersByEmail(string email);
         IEnumerable<ApplicationUser> GetInvitedUsers(string username, int groupId, IGroupInvitationService groupInvitationService);
         IEnumerable<ApplicationUser> GetUserByUserId(IEnumerable<string> userid);
-        IEnumerable<ApplicationUser> SearchUser(string searchString);
-        ApplicationUser Login(string userName, string password);
+        IEnumerable<ApplicationUser> SearchUser(string searchString);        
         void CreateUserProfile(string userId, string userName);
         IEnumerable<ValidationResult> CanAddUser(string email);
         void EditUser(ApplicationUser user);
@@ -143,19 +142,7 @@ namespace SocialGoal.Service
         {
             unitOfWork.Commit();
         }
-
-       public ApplicationUser Login(string userName, string password)
-        {
-            var user = userRepository.Get(u => u.Email == userName);
-            if (user != null && ValidatePassword(user, password)) return user;
-            return null;
-        }
-
-        private bool ValidatePassword(ApplicationUser user, string password)
-        {
-            var encoded = Md5Encrypt.Md5EncryptPassword(password);
-            return user.PasswordHash.Equals(encoded);
-        }
+      
         public IEnumerable<ApplicationUser> GetUserByUserId(IEnumerable<string> userid)
         {
             List<ApplicationUser> users = new List<ApplicationUser> { };

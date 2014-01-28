@@ -12,28 +12,7 @@ namespace SocialGoal.Data
     {
         protected override void Seed(SocialGoalEntities context)
         {
-            //var ApplicationUser = new ApplicationUser
-            //{
-            //    Email = "admin@socialgoal.com",
-            //    FirstName = "Admin",
-            //    LastName = "Social Goal",
-            //    Password = "123456",
-            //    Activated = true,
-            //    RoleId = 1
-            //};
-            //context.Users.Add(user);
-            //context.Commit();
-
-            //user = context.Users.Where(u => u.Email == "admin@socialgoal.com").FirstOrDefault();
-            //var userProfile = new UserProfile
-            //{
-            //    Email = "admin@socialgoal.com",
-            //    FirstName = "Admin",
-            //    LastName = "Social Goal",
-            //    UserId = user.UserId
-            //};
-            //context.UserProfile.Add(userProfile);
-            //context.Commit();
+           
             var UserManager = new UserManager<ApplicationUser>(new
 
                                                 UserStore<ApplicationUser>(context));
