@@ -11,14 +11,7 @@
          <div style="margin-left:1px;">
           
                 <a href="@Url.Action("UserProfile", "Account", new { id = item.UserId }, null)" >
-                @if (String.IsNullOrEmpty(@item.ProfilePicUrl))
-                {
-                    <img src="/Content/templatemo_329_blue_urban/images/facebook-avatar.png"  class="thumbnail span3" style="margin-right:10px;" />
-                }
-                else
-                {
-                    <img src="@Url.Content(@item.ProfilePicUrl)" alt ="" class="thumbnail span3" style="margin-right:10px;" />
-                }
+                    @Html.User().Avatar(item.ProfilePicUrl, new { @class = "span3", style = "margin-right:10px;" })
                 </a>    
          </div>
          <div style="margin:0px;">  

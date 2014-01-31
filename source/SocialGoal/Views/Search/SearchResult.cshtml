@@ -1,4 +1,5 @@
-﻿@model SocialGoal.Web.ViewModels.SearchViewModel
+﻿@using SocialGoal.Web.Core.Extensions
+@model SocialGoal.Web.ViewModels.SearchViewModel
 @{
     ViewBag.Title = "SearchResult";
     Layout = "~/Views/Shared/_PageLayout.cshtml";
@@ -52,14 +53,7 @@
          <div>
             <div>
                 <a href="@Url.Action("UserProfile", "Account", new { id = item.Id }, null)" >
-                @if (String.IsNullOrEmpty(item.ProfilePicUrl))
-                {
-                    <img src="/Content/templatemo_329_blue_urban/images/facebook-avatar.png"  alt ="" class="span2 thumbnail" />
-                }
-                else
-                {
-                    <img src="@Url.Content(item.ProfilePicUrl)" alt ="" class="span2 thumbnail" />
-                }
+                    @Html.User().Avatar(item.ProfilePicUrl, new { @class = "span2" })
                 </a>
            </div>
            <div style="margin-left:50px;">@Html.ActionLink(@item.UserName, "UserProfile", "Account", new { id = item.Id }, null)</div>
