@@ -12,14 +12,7 @@
             <div style="margin-bottom:10px;">
             <div>
                 <a href="Javascript:void(0);" onclick ="AssigningUser('@item.GroupUserId','@item.UserId','@item.UserName');" >
-                    @if (String.IsNullOrEmpty(@item.User.ProfilePicUrl))
-                    {
-                        <img src="/Content/templatemo_329_blue_urban/images/facebook-avatar.png" class="thumbnail span2" />
-                    }
-                    else
-                    {
-                        <img src="@Url.Content(@item.User.ProfilePicUrl)" alt =""  class="thumbnail span2" />
-                    }
+                    @Html.User().Avatar(item.User.ProfilePicUrl, new { @class = "span2" })
                 </a>
             </div>
             

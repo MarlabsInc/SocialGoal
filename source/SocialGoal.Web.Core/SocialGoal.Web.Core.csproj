@@ -54,9 +54,12 @@
     <Compile Include="Authentication\DefaultFormsAuthentication.cs" />
     <Compile Include="Authentication\IFormsAuthentication.cs" />
     <Compile Include="Authentication\UserAuthenticationTicketBuilder.cs" />
+    <Compile Include="Helpers\BaseHtmlHelper.cs" />
     <Compile Include="Extensions\ControllerExtensions.cs" />
     <Compile Include="Extensions\HtmlExtensions.cs" />
+    <Compile Include="Extensions\HtmlHelperExtensions.cs" />
     <Compile Include="Extensions\SelectListExtensions.cs" />
+    <Compile Include="Helpers\UserHtmlHelper.cs" />
     <Compile Include="Models\Role.cs" />
     <Compile Include="Models\SocialGoalUser.cs" />
     <Compile Include="Models\UserInfo.cs" />
