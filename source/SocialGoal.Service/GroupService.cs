@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using PagedList;
 using SocialGoal.Model.Models;
 using SocialGoal.Data.Repository;
 using SocialGoal.Data.Infrastructure;
@@ -23,14 +24,7 @@ namespace SocialGoal.Service
         void DeleteGroup(int id);
         void SaveGroup();
         IEnumerable<ValidationResult> CanAddGroup(Group group);
-
-        /// <summary>
-        /// Getting groups by page
-        /// </summary>
-        /// <param name="filterBy"></param>
-        /// <param name="page"></param>
-        /// <returns></returns>
-        IEnumerable<Group> GetGroupsByPage(string userId, string filterBy, int noOfrecods, int page);
+        IPagedList<Group> GetGroups(string userId, string filterBy, Page page);
     }
 
     public class GroupService : IGroupService
@@ -159,68 +153,36 @@ namespace SocialGoal.Service
             }
         }
 
-
-
-        /// <summary>
-        /// For getting groups by page
-        /// </summary>
-        /// <param name="userId"></param>
-        /// <param name="filterBy"></param>
-        /// <param name="page"></param>
-        /// <returns></returns>
-        public IEnumerable<Group> GetGroupsByPage(string userId, string filterBy, int noOfrecods, int page)
+        public IPagedList<Group> GetGroups(string userId, string filterBy, Page page)
         {
-            var skipGroup = noOfrecods * page;
-            var groupList = GetGroups();
-
-
-            if (filterBy =="My Followings Groups")
+            switch (filterBy)
             {
-                List<string> userIds = new List<string> { };
-                var followings = followUserrepository.GetMany(g => g.FromUserId == userId).ToList();
-                foreach (var item in followings)
+                case "All":
                 {
-                    var ids = item.ToUserId;
-                    userIds.Add(ids);
+                    return groupRepository.GetPage(page,x=>true,order=>order.GroupName);
                 }
-                List<int> groupsIds = new List<int> { };
-                foreach (var item in userIds)
+                case "My Groups":
                 {
-                    var groupUsers = groupUserrepository.GetMany(g => g.UserId == item);
-                    foreach (GroupUser gruser in groupUsers)
-                    {
-                        groupsIds.Add(gruser.GroupId);
-                    }
+                    var groupsIds = groupUserrepository.GetMany(gru => gru.UserId == userId && gru.Admin).Select(gru => gru.GroupId);
+                    return groupRepository.GetPage(page, where => groupsIds.Contains(where.GroupId), order => order.CreatedDate);
                 }
-                groupList = this.GetGroups(groupsIds);
-            }
-            else if (filterBy =="My Groups")
-            {                
-
-                groupList=from g in groupRepository.GetAll()
-                           join gu in groupUserrepository.GetMany(gru=>gru.UserId==userId && gru.Admin==true) on g.GroupId equals gu.GroupId
-                           orderby g.CreatedDate
-                           select g ;            
-
-            }
-            else if (filterBy == "My Followed Groups")
-            {
-
-                List<int> groupIds = new List<int> { };
-                var groupUsers = groupUserrepository.GetMany(g => (g.UserId == userId) && (g.Admin == false)).OrderByDescending(g => g.GroupUserId).ToList();
-                foreach (GroupUser item in groupUsers)
+                case "My Followings Groups":
                 {
-                    var groupId = item.GroupId;
-                    groupIds.Add(groupId);
+                    var userIds = followUserrepository.GetMany(g => g.FromUserId == userId).Select(x => x.ToUserId);
+                    var groupIds = from item in userIds from gruser in groupUserrepository.GetMany(g => g.UserId == item) select gruser.GroupId;
+                    return groupRepository.GetPage(page, where => groupIds.Contains(where.GroupId), order => order.CreatedDate);
                 }
-
-                groupList = this.GetGroups(groupIds);
+                case "My Followed Groups":
+                {
+                    var groupIds = groupUserrepository.GetMany(g => (g.UserId == userId) && (g.Admin == false)).Select(item => item.GroupId);
+                    return groupRepository.GetPage(page, where => groupIds.Contains(where.GroupId), order => order.CreatedDate);
+                }
+                default:
+                {
+                    throw new ApplicationException("Filter not understood");
+                }
             }
-
-            groupList = groupList.Skip(skipGroup).Take(noOfrecods);
-            return groupList;
         }
-
 
         public void SaveGroup()
         {

@@ -1,4 +1,7 @@
-﻿using AutoMapper;
+﻿using System.Drawing.Drawing2D;
+using AutoMapper;
+using PagedList;
+using SocialGoal.Data.Infrastructure;
 using SocialGoal.Model.Models;
 using SocialGoal.Service;
 using SocialGoal.Web.Core.Models;
@@ -778,11 +781,13 @@ namespace SocialGoal.Web.Controllers
         /// <param name="filterBy"></param>
         /// <param name="page"></param>
         /// <returns></returns>
-        public ActionResult GroupList(string filterBy = "All", int page = 0)
+        public ActionResult GroupList(string filterBy = "All", int page = 1)
         {
-            var groups = groupService.GetGroupsByPage(User.Identity.GetUserId(), filterBy, 8, page).ToList();
-
-            var groupsViewModel = Mapper.Map<IEnumerable<Group>, IEnumerable<GroupsItemViewModel>>(groups).ToList();
+            // Get a paged list of groups
+            var groups = groupService.GetGroups(User.Identity.GetUserId(), filterBy, new Page(page,8));
+            
+            // map it to a paged list of models.
+            var groupsViewModel = Mapper.Map<IPagedList<Group>, IPagedList<GroupsItemViewModel>>(groups);
 
             foreach (var item in groupsViewModel)
             {
@@ -791,12 +796,12 @@ namespace SocialGoal.Web.Controllers
                 item.UserId = groupUserAdmin.Id;
                 item.UserName = groupUserAdmin.UserName;
             }
-            var groupsList = new GroupsPageViewModel(filterBy);
-            groupsList.GroupList = groupsViewModel;
+            var groupsList = new GroupsPageViewModel(filterBy) {GroupList = groupsViewModel};
 
+            // If its an ajax request, just return the table
             if (Request.IsAjaxRequest())
             {
-                return Json(groupsViewModel, JsonRequestBehavior.AllowGet);
+                return PartialView("_GroupsTable", groupsList);
             }
             return View("ListOfGroups", groupsList);
         }

@@ -71,6 +71,13 @@
     <Reference Include="Mvc.Mailer">
       <HintPath>..\packages\MvcMailer.4.5\lib\45\Mvc.Mailer.dll</HintPath>
     </Reference>
+    <Reference Include="PagedList, Version=1.17.0.0, Culture=neutral, PublicKeyToken=abbb863e9397c5e1, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\PagedList.1.17.0.0\lib\net40\PagedList.dll</HintPath>
+    </Reference>
+    <Reference Include="PagedList.Mvc">
+      <HintPath>..\packages\PagedList.Mvc.4.5.0.0\lib\net40\PagedList.Mvc.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -291,6 +298,7 @@
     <Content Include="Content\jquery.jqplot.min.css" />
     <Content Include="Content\js\bootstrap.js" />
     <Content Include="Content\js\bootstrap.min.js" />
+    <Content Include="Content\PagedList.css" />
     <Content Include="Content\ProfilePics\3cad5400-6a85-4b49-b682-4e6c8ee002ef.png" />
     <Content Include="Content\ProfilePics\dfb48ede-6a9c-432c-93e2-8a9ecff986c5.png" />
     <Content Include="Content\ProfilePics\f6e2bce8-7b5c-4cd7-a2ac-104f2fc75f83.png" />
@@ -564,7 +572,6 @@
     <Content Include="Views\Group\Index.cshtml" />
     <Content Include="Views\Group\InviteUser.cshtml" />
     <Content Include="Views\Group\JoinedUsers.cshtml" />
-    <Content Include="Views\Group\ListOfGroups.cshtml" />
     <Content Include="Views\Group\Members.cshtml" />
     <Content Include="Views\Group\MyGroups.cshtml" />
     <Content Include="Views\Group\ReportPage.cshtml" />
@@ -574,7 +581,7 @@
     <Content Include="Views\Group\_DeleteUpdate.cshtml" />
     <Content Include="Views\Group\_EditGroup.cshtml" />
     <Content Include="Views\Group\_EditUpdate.cshtml" />
-    <Content Include="Views\Group\_Groupslist.cshtml" />
+    <Content Include="Views\Group\_GroupsTableRows.cshtml" />
     <Content Include="Views\Group\_GroupView.cshtml" />
     <Content Include="Views\Group\_InviteUsers.cshtml" />
     <Content Include="Views\Group\_MembersToSearch.cshtml" />
@@ -607,6 +614,9 @@
     <Content Include="Views\Account\_FollowersView.cshtml" />
     <Content Include="Views\Account\_FollowingsView.cshtml" />
     <Content Include="Views\Account\AccessDenied.cshtml" />
+    <Content Include="Views\Group\_GroupsTable.cshtml" />
+    <Content Include="Views\Group\ListOfGroups.cshtml" />
+    <Content Include="Views\Shared\_AlertInfo.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
