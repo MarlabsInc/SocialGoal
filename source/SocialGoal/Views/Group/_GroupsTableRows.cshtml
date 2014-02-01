@@ -1,0 +1,25 @@
+﻿@model IPagedList<GroupsItemViewModel>
+
+@foreach (var item in Model)
+{
+    <tr>
+        <td class="span1">
+            <i class="icon-th" />
+        </td>
+        <td class="span6">
+            <div style="position: relative">
+                @Html.ActionLink(item.GroupName, "Index", "Group", new { id = item.GroupId }, null)
+            </div>
+            <div>
+                <small>
+                    Created By  @Html.ActionLink(item.UserName, "UserProfile", "Account", new { id = item.UserId }, null)
+                </small>
+            </div>
+        </td>
+    </tr>
+}
+
+
+
+
+

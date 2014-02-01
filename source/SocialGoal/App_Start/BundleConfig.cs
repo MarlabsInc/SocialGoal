@@ -58,7 +58,8 @@ namespace SocialGoal
                 "~/Content/HomePage.css",
                 "~/Content/jquery-ui-1.8.21.custom.css",
                 "~/Content/jqModal.css",
-                "~/Content/jquery.jqplot.min.css"
+                "~/Content/jquery.jqplot.min.css",
+                "~/Content/PagedList.css"
                 ));
 
 

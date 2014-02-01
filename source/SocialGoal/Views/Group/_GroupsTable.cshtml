@@ -1,0 +1,24 @@
+﻿@model GroupsPageViewModel
+@*
+    Render out a table with its own paging.
+    The pager will use ajax to request this partial again and will replace itself by inserting the html returned into the GroupPagingContainer
+    The urls built by the pager control contain both the page and the filter variables
+*@
+
+@if (Model.GroupList.Any())
+{
+    <table class="table">
+        @Html.Partial("_GroupsTableRows", Model.GroupList)
+    </table>    
+
+    @Html.PagedListPager(
+        Model.GroupList,
+        page => Url.Action("GroupList", 
+                new { page, filterBy = Model.SelectedFilter }),
+                PagedListRenderOptions.EnableUnobtrusiveAjaxReplacing(new AjaxOptions { UpdateTargetId = "GroupPagingContainer" })
+        )
+}
+else
+{
+    @Html.Partial("_AlertInfo", "No groups found");
+}
