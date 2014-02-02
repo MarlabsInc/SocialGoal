@@ -12,6 +12,7 @@ namespace SocialGoal.Data.Infrastructure
             PageNumber = 1;
             PageSize = 10;
         }
+     
         public Page(int pageNumber, int pageSize)
         {
             PageNumber = pageNumber;
@@ -26,7 +27,13 @@ namespace SocialGoal.Data.Infrastructure
 
     public static class PagingExtensions
     {
-        // Extend IQueryable to and simplify access to skip and take methods
+        /// <summary>
+        /// Extend IQueryable to simplify access to skip and take methods 
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="queryable"></param>
+        /// <param name="page"></param>
+        /// <returns>IQueryable with Skip and Take having been performed</returns>
         public static IQueryable<T> GetPage<T>(this IQueryable<T> queryable, Page page)
         {
             return queryable.Skip(page.Skip).Take(page.PageSize);

@@ -65,7 +65,14 @@ namespace SocialGoal.Data.Infrastructure
             return dbset.Where(where).ToList();
         }
 
-        // Return a paged list of entities, passing in a where clause and a sort order along with which page to get.
+        /// <summary>
+        /// Return a paged list of entities
+        /// </summary>
+        /// <typeparam name="TOrder"></typeparam>
+        /// <param name="page">Which page to retrieve</param>
+        /// <param name="where">Where clause to apply</param>
+        /// <param name="order">Order by to apply</param>
+        /// <returns></returns>
         public virtual IPagedList<T> GetPage<TOrder>(Page page, Expression<Func<T, bool>> where, Expression<Func<T, TOrder>> order)
         {
             var results = dbset.OrderBy(order).Where(where).GetPage(page).ToList();

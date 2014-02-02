@@ -24,7 +24,7 @@ namespace SocialGoal.Service
         void DeleteGroup(int id);
         void SaveGroup();
         IEnumerable<ValidationResult> CanAddGroup(Group group);
-        IPagedList<Group> GetGroups(string userId, string filterBy, Page page);
+        IPagedList<Group> GetGroups(string userId, GroupFilter filter, Page page);
     }
 
     public class GroupService : IGroupService
@@ -153,26 +153,26 @@ namespace SocialGoal.Service
             }
         }
 
-        public IPagedList<Group> GetGroups(string userId, string filterBy, Page page)
+        public IPagedList<Group> GetGroups(string userId, GroupFilter filter, Page page)
         {
-            switch (filterBy)
+            switch (filter)
             {
-                case "All":
+                case GroupFilter.All:
                 {
                     return groupRepository.GetPage(page,x=>true,order=>order.GroupName);
                 }
-                case "My Groups":
+                case GroupFilter.MyGroups:
                 {
                     var groupsIds = groupUserrepository.GetMany(gru => gru.UserId == userId && gru.Admin).Select(gru => gru.GroupId);
                     return groupRepository.GetPage(page, where => groupsIds.Contains(where.GroupId), order => order.CreatedDate);
                 }
-                case "My Followings Groups":
+                case GroupFilter.MyFollowingsGroups:
                 {
                     var userIds = followUserrepository.GetMany(g => g.FromUserId == userId).Select(x => x.ToUserId);
                     var groupIds = from item in userIds from gruser in groupUserrepository.GetMany(g => g.UserId == item) select gruser.GroupId;
                     return groupRepository.GetPage(page, where => groupIds.Contains(where.GroupId), order => order.CreatedDate);
                 }
-                case "My Followed Groups":
+                case GroupFilter.MyFollowedGroups:
                 {
                     var groupIds = groupUserrepository.GetMany(g => (g.UserId == userId) && (g.Admin == false)).Select(item => item.GroupId);
                     return groupRepository.GetPage(page, where => groupIds.Contains(where.GroupId), order => order.CreatedDate);

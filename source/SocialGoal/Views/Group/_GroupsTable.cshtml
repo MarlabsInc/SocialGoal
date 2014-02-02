@@ -13,8 +13,8 @@
 
     @Html.PagedListPager(
         Model.GroupList,
-        page => Url.Action("GroupList", 
-                new { page, filterBy = Model.SelectedFilter }),
+        page => Url.Action("GroupList",
+                new { page, filter = Model.Filter }),
                 PagedListRenderOptions.EnableUnobtrusiveAjaxReplacing(new AjaxOptions { UpdateTargetId = "GroupPagingContainer" })
         )
 }
