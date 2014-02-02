@@ -66,6 +66,7 @@
     <Compile Include="Authentication\IFormsAuthentication.cs" />
     <Compile Include="Authentication\UserAuthenticationTicketBuilder.cs" />
     <Compile Include="AutoMapperConverters\PagedListConverter.cs" />
+    <Compile Include="Extensions\SelectListEnumExtensions.cs" />
     <Compile Include="Helpers\BaseHtmlHelper.cs" />
     <Compile Include="Extensions\ControllerExtensions.cs" />
     <Compile Include="Extensions\HtmlExtensions.cs" />

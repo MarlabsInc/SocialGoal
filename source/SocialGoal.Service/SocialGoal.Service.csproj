@@ -55,6 +55,7 @@
   <ItemGroup>
     <Compile Include="CommentService.cs" />
     <Compile Include="CommentUserService.cs" />
+    <Compile Include="Enums.cs" />
     <Compile Include="FocusService.cs" />
     <Compile Include="FollowRequestService.cs" />
     <Compile Include="FollowUserService.cs" />

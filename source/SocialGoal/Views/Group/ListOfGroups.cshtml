@@ -8,7 +8,8 @@
     <div class="span7" style="padding-left:30px;"><h4>Groups</h4></div>
 
     <div class="span5" style="padding-left:38px;">
-        <strong>Filter By</strong> @Html.DropDownList("filteredby", Model.FilterBy, new { @onchange = "LoadGroups();" })
+        <strong>Filter By</strong>         
+        @Html.EnumDropDownListFor(model => model.Filter, new { @onchange = "LoadGroups();" })
     </div>
     
     @*This is the container that will be replaced by all ajax requests from either paging or changing the filter*@
@@ -20,7 +21,7 @@
 
 <script type="text/javascript">
     function LoadGroups() {
-        var url = "/Group/GroupList?filterBy=" + $('#filteredby').val();
+        var url = "@Url.Action("GroupList","Group")" + "?filter=" + $('#Filter').val();
         $.get(url).done(function(html) {
              $("#GroupPagingContainer").html(html);
         });

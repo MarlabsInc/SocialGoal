@@ -777,14 +777,13 @@ namespace SocialGoal.Web.Controllers
         /// <summary>
         /// Action to load groups list 
         /// </summary>
-        /// <param name="sortBy"></param>
-        /// <param name="filterBy"></param>
+        /// <param name="filter"></param>
         /// <param name="page"></param>
         /// <returns></returns>
-        public ActionResult GroupList(string filterBy = "All", int page = 1)
+        public ActionResult GroupList(GroupFilter filter = GroupFilter.All, int page = 1)
         {
             // Get a paged list of groups
-            var groups = groupService.GetGroups(User.Identity.GetUserId(), filterBy, new Page(page,8));
+            var groups = groupService.GetGroups(User.Identity.GetUserId(), filter, new Page(page,8));
             
             // map it to a paged list of models.
             var groupsViewModel = Mapper.Map<IPagedList<Group>, IPagedList<GroupsItemViewModel>>(groups);
@@ -796,7 +795,7 @@ namespace SocialGoal.Web.Controllers
                 item.UserId = groupUserAdmin.Id;
                 item.UserName = groupUserAdmin.UserName;
             }
-            var groupsList = new GroupsPageViewModel(filterBy) {GroupList = groupsViewModel};
+            var groupsList = new GroupsPageViewModel {GroupList = groupsViewModel, Filter = filter};
 
             // If its an ajax request, just return the table
             if (Request.IsAjaxRequest())
