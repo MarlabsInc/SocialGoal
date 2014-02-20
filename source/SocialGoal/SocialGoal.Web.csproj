@@ -537,7 +537,6 @@
     <Content Include="Views\Account\Manage.cshtml" />
     <Content Include="Views\Account\Register.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
-    <Content Include="Views\Admin\Index.cshtml" />
     <Content Include="Views\Goal\Create.cshtml" />
     <Content Include="Views\Goal\Delete.cshtml" />
     <Content Include="Views\Goal\Edit.cshtml" />
@@ -591,7 +590,6 @@
     <Content Include="Views\Notification\Index.cshtml" />
     <Content Include="Views\Notification\_NotificationList.cshtml" />
     <Content Include="Views\Search\SearchResult.cshtml" />
-    <Content Include="Views\Shared\_AdminLayout.cshtml" />
     <Content Include="Views\Shared\_GoalLayout.cshtml" />
     <Content Include="Views\Shared\_Header.cshtml" />
     <Content Include="Views\Shared\_HomeLayout.cshtml" />

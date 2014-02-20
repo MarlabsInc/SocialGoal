@@ -54,10 +54,6 @@
                         Group</a> </li>
                 </ul>
             </li>
-            @if (User.IsInRole("Admin"))
-            { 
-                <li><a href="/Admin/Index">Admin Dashboard</a></li>
-            }
             <li>
                 <form action="/Search/SearchAll" class="navbar-search" id="searchform" method="post">
                 <input class="search-query span2" id="searchText" name="searchText" placeholder="Search"  type="text" value="@ViewBag.searchtext" />
