@@ -23,6 +23,13 @@ Patterns & Practices
 * Unit of Work 
 * Dependency Injection
 
+Running the Application
+-----------------------
+
+1. Open the solution in Visual Studio 2013. Build the solution to install Nuget packages.(This will automatically restore Nuget packages. Please ensure you have Nuget version 2.7 or higher)
+2. Open the web.config and change the connecting string "SocialGoalEntities" for working with your system.
+3. Run the application and  register a new User. (Please note that currently the applictaion does not provided any pre-defined user. Earlier there was a pre-defined user named "Admin")
+
 
 Goals and Roadmap
 -----------------
