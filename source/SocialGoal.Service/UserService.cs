@@ -20,7 +20,7 @@ namespace SocialGoal.Service
         IEnumerable<ApplicationUser> GetInvitedUsers(string username, int groupId, IGroupInvitationService groupInvitationService);
         IEnumerable<ApplicationUser> GetUserByUserId(IEnumerable<string> userid);
         IEnumerable<ApplicationUser> SearchUser(string searchString);        
-        void CreateUserProfile(string userId, string userName);
+      
         IEnumerable<ValidationResult> CanAddUser(string email);      
         void UpdateUser(ApplicationUser user);
        void SaveUser();
@@ -90,17 +90,7 @@ namespace SocialGoal.Service
             }
         }
 
-        public void CreateUserProfile(string userId,string userName)
-        {
-
-            //userRepository.Add(newUser);
-            //SaveUser();
-            UserProfile newUserProfile = new UserProfile();
-            newUserProfile.UserId = userId;
-            newUserProfile.UserName = userName;
-            userProfileRepository.Add(newUserProfile);
-            SaveUser();
-        }
+        
 
 
 

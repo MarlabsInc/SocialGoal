@@ -74,20 +74,5 @@
         }
     }
 
-    function InviteEmail() {
-        if ($("#inviteEmail").val() != "") {
-
-            $("#sendBtn").attr("disabled", "true");
-            var email = $("#inviteEmail").val();
-            var url = "/Admin/Invite";
-            var postData = { 'Email': email }
-            $.post(url, postData, function (result) {
-                $("#msgInvited").css({ 'display': 'block' });
-                $("#msgInvited").text(result);
-                $("#msgInvited").fadeOut(5000);
-                $("#inviteEmail").val('');
-                $("#sendBtn").removeAttr("disabled");
-            });
-        }
-    }
+  
 </script>

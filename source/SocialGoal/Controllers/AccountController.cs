@@ -110,7 +110,7 @@ namespace SocialGoal.Web.Controllers
                 {
                     var userId = user.Id;
                     var userName = user.UserName;
-                    userService.CreateUserProfile(userId, userName);
+                    userProfileService.CreateUserProfile(userId);
                     await SignInAsync(user, isPersistent: false);
                     if (SocialGoalSessionFacade.JoinGroupOrGoal != null)
                     {

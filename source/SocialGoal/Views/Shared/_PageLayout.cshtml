@@ -845,37 +845,7 @@ function saveGroupUpdate(target,metric) {
 //        }
 //    }
 
-    function InviteEmail() {
-        if ($("#inviteEmail").val() != "") {
-
-            $("#sendBtn").attr("disabled", "true");
-            var role=$("#Roles").val();
-            var email = $("#inviteEmail").val();
-            var url = "/Admin/Invite";
-            var postData = { 'Email': email,'Role':role }
-            $.post(url, postData, function (result) {
-                $("#msgInvited").css({ 'display': 'block' });
-                $("#msgInvited").text(result);
-                $("#msgInvited").fadeOut(5000);
-                $("#inviteEmail").val('');
-                $("#sendBtn").removeAttr("disabled");
-            });
-        }
-    }
-
-    function GetLink() {
-        
-
-          
-            var role=$("#Roles").val();
-           
-            var url = "/Admin/GetLink";
-            var postData = {'Role':role }
-            $.post(url, postData, function (result) {
-               $("#link").val(result);
-            });
-        
-    }
+    
 
 
     

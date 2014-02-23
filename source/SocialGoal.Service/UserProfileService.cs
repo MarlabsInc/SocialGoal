@@ -10,7 +10,8 @@ namespace SocialGoal.Service
         UserProfile GetProfile(int id);
         UserProfile GetUser(string userid);
         UserProfile GetUserByEmail(string email);
-        UserProfile Register(string email, string firstname, string lastname, string id);
+        
+        void CreateUserProfile(string userId);
         void UpdateUserProfile(UserProfile user);
         void SaveUserProfile();
     }
@@ -42,19 +43,14 @@ namespace SocialGoal.Service
             return userProfile;
         }
 
-        public UserProfile Register(string email, string firstname, string lastname, string id)
+        public void CreateUserProfile(string userId)
         {
-                UserProfile newUser = new UserProfile();
-                newUser.UserId = id;
-                newUser.Email = email;
-                newUser.FirstName = firstname;
-                newUser.LastName = lastname;
-                userProfileRepository.Add(newUser);
-                SaveUserProfile();
-                return userProfileRepository.Get(u => u.Email == newUser.Email);
-            
-        }
 
+            UserProfile newUserProfile = new UserProfile();
+            newUserProfile.UserId = userId;
+            userProfileRepository.Add(newUserProfile);
+            SaveUserProfile();
+        }
         public void UpdateUserProfile(UserProfile user)
         {
             userProfileRepository.Update(user);

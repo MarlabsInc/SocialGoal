@@ -245,7 +245,6 @@ namespace SocialGoal.Web.Controllers.Test
             {
                 FirstName="Adarsh",
                 LastName="Vikraman",
-                UserName="adarsh",
                 DateOfBirth = DateTime.Now,
                 Gender = true,
                 Address = "a",
