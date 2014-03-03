@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Xml.Serialization;
+﻿using System.Xml.Serialization;
 using System.IO;
 
 namespace SocialGoal.Web.Core.Models
@@ -16,7 +12,7 @@ namespace SocialGoal.Web.Core.Models
         public override string ToString()
         {
             XmlSerializer serializer = new XmlSerializer(typeof(UserInfo));
-            using (var stream = new System.IO.StringWriter())
+            using (var stream = new StringWriter())
             {
                 serializer.Serialize(stream, this);
                 return stream.ToString();

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace SocialGoal.Web.Core.Models
+﻿namespace SocialGoal.Web.Core.Models
 {
     public class Roles
     {

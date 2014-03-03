@@ -11,22 +11,25 @@ namespace SocialGoal.Web.Core.Models
         public SocialGoalUser(){}
         public SocialGoalUser(string name, string displayName, string userId)
         {
-            this.Name = name;
-            this.DisplayName = displayName;
-            this.UserId = userId;
+            Name = name;
+            DisplayName = displayName;
+            UserId = userId;
         }
         public SocialGoalUser(string name, string displayName, string userId,string roleName)
         {
-            this.Name = name;
-            this.DisplayName = displayName;
-            this.UserId = userId;
-            this.RoleName = roleName;
+            Name = name;
+            DisplayName = displayName;
+            UserId = userId;
+            RoleName = roleName;
         }
         public SocialGoalUser(string name, UserInfo userInfo)
             : this(name, userInfo.DisplayName, userInfo.UserId,userInfo.RoleName)
         {
-            if (userInfo == null) throw new ArgumentNullException("userInfo");
-            this.UserId = userInfo.UserId;
+            if (userInfo == null)
+            {
+                throw new ArgumentNullException("userInfo");
+            }
+            UserId = userInfo.UserId;
         }
 
         public SocialGoalUser(FormsAuthenticationTicket ticket)
