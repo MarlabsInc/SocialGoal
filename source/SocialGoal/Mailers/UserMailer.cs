@@ -1,16 +1,11 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using Mvc.Mailer;
-using System.Net.Mail;
 
 namespace SocialGoal.Web.Mailers
 { 
     public class UserMailer : MailerBase, IUserMailer     
     {
-        public UserMailer() :
-            base()
+        public UserMailer() : base()
         {
             MasterName = "_Layout";
         }

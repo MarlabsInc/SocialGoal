@@ -1,10 +1,6 @@
 ﻿using AutoMapper;
 using SocialGoal.Model.Models;
 using SocialGoal.Web.ViewModels;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 
 namespace SocialGoal.Mappings
 {

@@ -3,10 +3,6 @@ using PagedList;
 using SocialGoal.Model.Models;
 using SocialGoal.Web.Core.AutoMapperConverters;
 using SocialGoal.Web.ViewModels;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 
 namespace SocialGoal.Mappings
 {

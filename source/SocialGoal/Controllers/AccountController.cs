@@ -1,16 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.Owin.Security;
-using SocialGoal.Web.Models;
 using SocialGoal.Models;
-using SocialGoal.Data.Models;
 using SocialGoal.Model.Models;
 using SocialGoal.Service;
 using SocialGoal.Web.Mailers;
@@ -385,8 +381,10 @@ namespace SocialGoal.Web.Controllers
 
         public ActionResult ImageUpload()
         {
-            UploadImageViewModel imageVM = new UploadImageViewModel();
-            imageVM.LocalPath = userService.GetUser(User.Identity.GetUserId()).ProfilePicUrl;
+            var imageVM = new UploadImageViewModel
+            {
+                LocalPath = userService.GetUser(User.Identity.GetUserId()).ProfilePicUrl
+            };
             return PartialView(imageVM);
         }
 
