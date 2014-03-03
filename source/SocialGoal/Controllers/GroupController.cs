@@ -85,7 +85,7 @@ namespace SocialGoal.Web.Controllers
                 group.GoalsAssignedToOthers = Mapper.Map<IEnumerable<GroupGoal>, IEnumerable<GroupGoalViewModel>>(groupGoalService.GetAssignedGoalsToOthers(assignedgroupuser.GroupUserId));
                 group.GoalsAssignedToMe = Mapper.Map<IEnumerable<GroupGoal>, IEnumerable<GroupGoalViewModel>>(groupGoalService.GetAssignedGoalsToMe(assignedgroupuser.GroupUserId));
             }
-            group.Focus = focusService.GetFocussOFGroup(id);
+            group.Focus = focusService.GetFocussOfGroup(id);
 
             //group.GroupUserId = groupUserService.GetGroupUserByuserId(((SocialGoalUser)(User.Identity)).UserId).GroupUserId;
             group.Users = groupUserService.GetMembersOfGroup(id);
@@ -335,7 +335,7 @@ namespace SocialGoal.Web.Controllers
         public ViewResult CreateGoal(int id)
         {
             var metrics = metricService.GetMetrics();
-            var focuss = focusService.GetFocussOFGroup(id);
+            var focuss = focusService.GetFocussOfGroup(id);
             var groupGoal = new GroupGoalFormModel() { GroupId = id };
             groupGoal.Metrics = metrics.ToSelectListItems(-1);
             groupGoal.Foci = focuss.ToSelectListItems(-1);
@@ -363,7 +363,7 @@ namespace SocialGoal.Web.Controllers
             }
             //goal.Group = groupService.GetGroup(goal.GroupUser.GroupId);
             var metrics = metricService.GetMetrics();
-            var focuss = focusService.GetFocussOFGroup(goal.GroupId);
+            var focuss = focusService.GetFocussOfGroup(goal.GroupId);
             goal.Metrics = metrics.ToSelectListItems(-1);
             goal.Foci = focuss.ToSelectListItems(-1);
             return View(goal);
@@ -374,7 +374,7 @@ namespace SocialGoal.Web.Controllers
             var goal = groupGoalService.GetGroupGoal(id);
             GroupGoalFormModel editGoal = Mapper.Map<GroupGoal, GroupGoalFormModel>(goal);
             var metrics = metricService.GetMetrics();
-            var focuss = focusService.GetFocussOFGroup(goal.GroupUser.GroupId);
+            var focuss = focusService.GetFocussOfGroup(goal.GroupUser.GroupId);
             if (goal.Metric != null)
                 editGoal.Metrics = metrics.ToSelectListItems(goal.Metric.MetricId);
             else
@@ -401,7 +401,7 @@ namespace SocialGoal.Web.Controllers
             else
             {
                 var metrics = metricService.GetMetrics();
-                var focuss = focusService.GetFocuss();
+                var focuss = focusService.GetFocus();
                 var groupGoalToEdit = groupGoalService.GetGroupGoal(editGoal.GroupGoalId);
                 editGoal.Group = groupService.GetGroup(editGoal.GroupId);
                 if (groupGoalToEdit.Metric != null)

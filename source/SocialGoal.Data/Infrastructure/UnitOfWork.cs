@@ -4,17 +4,17 @@ namespace SocialGoal.Data.Infrastructure
 {
     public class UnitOfWork : IUnitOfWork
     {
-        private readonly IDatabaseFactory databaseFactory;
-        private SocialGoalEntities dataContext;
+        private readonly IDatabaseFactory _databaseFactory;
+        private SocialGoalEntities _dataContext;
 
         public UnitOfWork(IDatabaseFactory databaseFactory)
         {
-            this.databaseFactory = databaseFactory;
+            _databaseFactory = databaseFactory;
         }
 
         protected SocialGoalEntities DataContext
         {
-            get { return dataContext ?? (dataContext = databaseFactory.Get()); }
+            get { return _dataContext ?? (_dataContext = _databaseFactory.Get()); }
         }
 
         public void Commit()

@@ -127,7 +127,7 @@ namespace SocialGoal.Tests.Controllers
             groupgoalService = new GroupGoalService(groupGoalRepository.Object, unitOfWork.Object);
             groupUserService = new GroupUserService(groupUserRepository.Object, userRepository.Object, unitOfWork.Object);
             groupUpdateService = new GroupUpdateService(groupUdateRepository.Object, updateUserRepository.Object, groupGoalRepository.Object, unitOfWork.Object);
-            groupCommentService = new GroupCommentService(groupCommentRepository.Object, groupCommentUserRepository.Object, groupUdateRepository.Object, unitOfWork.Object);
+            groupCommentService = new GroupCommentService(groupCommentRepository.Object, groupCommentUserRepository.Object, unitOfWork.Object);
             userService = new UserService(userRepository.Object, unitOfWork.Object, userProfileRepository.Object);
             groupInvitationService = new GroupInvitationService(groupInvitationRepository.Object, unitOfWork.Object);
             groupRequestService = new GroupRequestService(groupRequestRepository.Object, unitOfWork.Object);

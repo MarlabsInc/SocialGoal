@@ -1,8 +1,6 @@
-
 using System.Web;
 using System.Web.Security;
 using System;
-//using SocialGoal.Web.Authentication;
 
 namespace SocialGoal.Web.Core.Authentication
 {
@@ -32,8 +30,6 @@ namespace SocialGoal.Web.Core.Authentication
         private static DateTime CalculateCookieExpirationDate()
         {
             return DateTime.Now.AddHours(1);
-         
-
         }
 
         public FormsAuthenticationTicket Decrypt(string encryptedTicket)

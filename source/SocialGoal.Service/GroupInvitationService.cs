@@ -3,7 +3,6 @@ using System.Linq;
 using SocialGoal.Model.Models;
 using SocialGoal.Data.Repository;
 using SocialGoal.Data.Infrastructure;
-using System;
 
 namespace SocialGoal.Service
 {
@@ -11,7 +10,7 @@ namespace SocialGoal.Service
     {
         IEnumerable<GroupInvitation> GetGroupInvitations();
         GroupInvitation GetGroupInvitation(int id);
-        void CreateGroupInvitation(GroupInvitation GroupInvitation);
+        void CreateGroupInvitation(GroupInvitation groupInvitation);
         void DeleteGroupInvitation(int id);
         void AcceptInvitation(int id, string userid);
         void SaveGroupInvitation();
@@ -22,41 +21,41 @@ namespace SocialGoal.Service
 
     public class GroupInvitationService : IGroupInvitationService
     {
-        private readonly IGroupInvitationRepository GroupInvitationRepository;
-        private readonly IUnitOfWork unitOfWork;
-        public GroupInvitationService(IGroupInvitationRepository GroupInvitationRepository, IUnitOfWork unitOfWork)
+        private readonly IGroupInvitationRepository _groupInvitationRepository;
+        private readonly IUnitOfWork _unitOfWork;
+        public GroupInvitationService(IGroupInvitationRepository groupInvitationRepository, IUnitOfWork unitOfWork)
         {
-            this.GroupInvitationRepository = GroupInvitationRepository;
-            this.unitOfWork = unitOfWork;
+            _groupInvitationRepository = groupInvitationRepository;
+            _unitOfWork = unitOfWork;
         }
         #region IGroupInvitationService Members
 
         public IEnumerable<GroupInvitation> GetGroupInvitations()
         {
-            var GroupInvitation = GroupInvitationRepository.GetAll();
-            return GroupInvitation;
+            var groupInvitation = _groupInvitationRepository.GetAll();
+            return groupInvitation;
         }
 
         public GroupInvitation GetGroupInvitation(int id)
         {
-            var GroupInvitation = GroupInvitationRepository.GetById(id);
-            return GroupInvitation;
+            var groupInvitation = _groupInvitationRepository.GetById(id);
+            return groupInvitation;
         }
 
-        public void CreateGroupInvitation(GroupInvitation GroupInvitation)
+        public void CreateGroupInvitation(GroupInvitation groupInvitation)
         {
-            var oldgroup = GetGroupInvitations().Where(g => g.ToUserId == GroupInvitation.ToUserId && g.GroupId == GroupInvitation.GroupId);
+            var oldgroup = GetGroupInvitations().Where(g => g.ToUserId == groupInvitation.ToUserId && g.GroupId == groupInvitation.GroupId);
             if (oldgroup.Count() == 0)
             {
-                GroupInvitationRepository.Add(GroupInvitation);
+                _groupInvitationRepository.Add(groupInvitation);
                 SaveGroupInvitation();
             }
         }
 
         public void DeleteGroupInvitation(int id)
         {
-            var GroupInvitation = GroupInvitationRepository.GetById(id);
-            GroupInvitationRepository.Delete(GroupInvitation);
+            var groupInvitation = _groupInvitationRepository.GetById(id);
+            _groupInvitationRepository.Delete(groupInvitation);
             SaveGroupInvitation();
         }
 
@@ -64,10 +63,10 @@ namespace SocialGoal.Service
 
         public void AcceptInvitation(int id, string userid)
         {
-            var groupInvitation = GroupInvitationRepository.Get(g => (g.GroupId == id && g.ToUserId == userid));
+            var groupInvitation = _groupInvitationRepository.Get(g => (g.GroupId == id && g.ToUserId == userid));
             if (groupInvitation != null)
             {
-                GroupInvitationRepository.Delete(groupInvitation);
+                _groupInvitationRepository.Delete(groupInvitation);
                 //groupInvitation.Accepted = true;
                 //GroupInvitationRepository.Update(groupInvitation);
                 SaveGroupInvitation();
@@ -85,12 +84,12 @@ namespace SocialGoal.Service
 
         public bool IsUserInvited(int groupId, string userId)
         {
-            return GroupInvitationRepository.Get(g => g.ToUserId == userId && g.GroupId == groupId) != null;
+            return _groupInvitationRepository.Get(g => g.ToUserId == userId && g.GroupId == groupId) != null;
         }
 
         public void SaveGroupInvitation()
         {
-            unitOfWork.Commit();
+            _unitOfWork.Commit();
         }
 
         #endregion

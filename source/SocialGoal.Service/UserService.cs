@@ -5,7 +5,6 @@ using SocialGoal.Data.Infrastructure;
 using SocialGoal.Model.Models;
 using SocialGoal.Core.Common;
 using SocialGoal.Service.Properties;
-using System;
 
 namespace SocialGoal.Service
 {
@@ -32,19 +31,19 @@ namespace SocialGoal.Service
 
     public class UserService : IUserService
     {
-        private readonly IUserRepository userRepository;
-        private readonly IUserProfileRepository userProfileRepository;
-        private readonly IUnitOfWork unitOfWork;
+        private readonly IUserRepository _userRepository;
+        private readonly IUserProfileRepository _userProfileRepository;
+        private readonly IUnitOfWork _unitOfWork;
 
         public UserService(IUserRepository userRepository, IUnitOfWork unitOfWork,IUserProfileRepository userProfileRepository)
         {
-            this.userRepository = userRepository;
-            this.unitOfWork = unitOfWork;
-            this.userProfileRepository = userProfileRepository;
+            _userRepository = userRepository;
+            _unitOfWork = unitOfWork;
+            _userProfileRepository = userProfileRepository;
         }
         public ApplicationUser GetUserProfile(string userid)
         {
-            var userprofile = userRepository.Get(u=>u.Id==userid);
+            var userprofile = _userRepository.Get(u=>u.Id==userid);
             return userprofile;
         }
 
@@ -53,23 +52,23 @@ namespace SocialGoal.Service
 
         public ApplicationUser GetUser(string userId)
         {
-            return userRepository.Get(u => u.Id == userId);
+            return _userRepository.Get(u => u.Id == userId);
         }
 
         public IEnumerable<ApplicationUser> GetUsers()
         {
-            var users = userRepository.GetAll();
+            var users = _userRepository.GetAll();
             return users;
         }
         public ApplicationUser GetUsersByEmail(string email)
         {
-            var users = userRepository.Get(u => u.Email.Contains(email));
+            var users = _userRepository.Get(u => u.Email.Contains(email));
             return users;
 
         }
         public IEnumerable<ApplicationUser> GetUsers(string username)
         {
-            var users = userRepository.GetMany(u => (u.FirstName + " " + u.LastName).Contains(username) || u.Email.Contains(username)).OrderBy(u => u.FirstName).ToList();
+            var users = _userRepository.GetMany(u => (u.FirstName + " " + u.LastName).Contains(username) || u.Email.Contains(username)).OrderBy(u => u.FirstName).ToList();
 
             return users;
         }
@@ -81,7 +80,7 @@ namespace SocialGoal.Service
         public IEnumerable<ValidationResult> CanAddUser(string email)
         {
 
-            var user = userRepository.Get(u => u.Email == email);
+            var user = _userRepository.Get(u => u.Email == email);
             if (user != null)
             {
                 yield return new ValidationResult("Email", Resources.EmailExixts);
@@ -110,27 +109,27 @@ namespace SocialGoal.Service
         }
         public void UpdateUser(ApplicationUser user)
         {
-            userRepository.Update(user);
+            _userRepository.Update(user);
             SaveUser();
         }
 
         public IEnumerable<ApplicationUser> SearchUser(string searchString)
         {
-            var users = userRepository.GetMany(u=>u.UserName.Contains(searchString)|| u.FirstName.Contains(searchString) || u.LastName.Contains(searchString) || u.Email.Contains(searchString)).OrderBy(u=>u.DisplayName);
+            var users = _userRepository.GetMany(u=>u.UserName.Contains(searchString)|| u.FirstName.Contains(searchString) || u.LastName.Contains(searchString) || u.Email.Contains(searchString)).OrderBy(u=>u.DisplayName);
             return users;
         }
 
        public void SaveUser()
         {
-            unitOfWork.Commit();
+            _unitOfWork.Commit();
         }
       
         public IEnumerable<ApplicationUser> GetUserByUserId(IEnumerable<string> userid)
         {
-            List<ApplicationUser> users = new List<ApplicationUser> { };
+            var users = new List<ApplicationUser>();
             foreach (string item in userid)
             {
-                var Users = userRepository.GetById(item);
+                var Users = _userRepository.GetById(item);
                 users.Add(Users);
 
             }

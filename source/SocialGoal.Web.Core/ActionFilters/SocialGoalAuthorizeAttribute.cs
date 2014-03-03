@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Web;
-using System.Web.Mvc;
-using System.IO.Compression;
+﻿using System.Web.Mvc;
 
 namespace SocialGoal.Web.Core.ActionFilters
 {

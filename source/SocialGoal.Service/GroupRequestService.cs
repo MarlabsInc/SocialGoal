@@ -3,7 +3,6 @@ using System.Linq;
 using SocialGoal.Model.Models;
 using SocialGoal.Data.Repository;
 using SocialGoal.Data.Infrastructure;
-using System;
 
 namespace SocialGoal.Service
 {
@@ -23,24 +22,24 @@ namespace SocialGoal.Service
 
     public class GroupRequestService : IGroupRequestService
     {
-        private readonly IGroupRequestRepository groupRequestRepository;
-        private readonly IUnitOfWork unitOfWork;
+        private readonly IGroupRequestRepository _groupRequestRepository;
+        private readonly IUnitOfWork _unitOfWork;
         public GroupRequestService(IGroupRequestRepository groupRequestRepository, IUnitOfWork unitOfWork)
         {
-            this.groupRequestRepository = groupRequestRepository;
-            this.unitOfWork = unitOfWork;
+            _groupRequestRepository = groupRequestRepository;
+            _unitOfWork = unitOfWork;
         }
         #region IGroupRequestService Members
 
         public IEnumerable<GroupRequest> GetGroupRequests()
         {
-            var groupRequest = groupRequestRepository.GetAll();
+            var groupRequest = _groupRequestRepository.GetAll();
             return groupRequest;
         }
 
         public GroupRequest GetGroupRequest(int id)
         {
-            var groupRequest = groupRequestRepository.GetById(id);
+            var groupRequest = _groupRequestRepository.GetById(id);
             return groupRequest;
         }
 
@@ -49,40 +48,39 @@ namespace SocialGoal.Service
             var oldgroup = GetGroupRequests().Where(g => g.UserId == groupRequest.UserId && g.GroupId == groupRequest.GroupId);
             if (oldgroup.Count() == 0)
             {
-                groupRequestRepository.Add(groupRequest);
+                _groupRequestRepository.Add(groupRequest);
                 SaveGroupRequest();
             }
         }
 
         public void DeleteGroupRequest(int id)
         {
-            var groupRequest = groupRequestRepository.GetById(id);
-            groupRequestRepository.Delete(groupRequest);
+            var groupRequest = _groupRequestRepository.GetById(id);
+            _groupRequestRepository.Delete(groupRequest);
             SaveGroupRequest();
         }
 
         public bool RequestSent(string userId, int groupId)
         {
-            var groupRequests = groupRequestRepository.GetMany(g => g.UserId == userId && g.GroupId == groupId && g.Accepted==false);
+            var groupRequests = _groupRequestRepository.GetMany(g => g.UserId == userId && g.GroupId == groupId && g.Accepted==false);
             if (groupRequests.Count() == 1)
             {
                 return true;
             }
-            else return false;
-
+            return false;
         }
         public IEnumerable<GroupRequest>GetGroupRequests(int groupId)
         {
-            var groupRequests = groupRequestRepository.GetMany(g => g.GroupId == groupId && g.Accepted == false);
+            var groupRequests = _groupRequestRepository.GetMany(g => g.GroupId == groupId && g.Accepted == false);
             return groupRequests;
         }
 
         public void ApproveRequest(int id, string userid)
         {
-            var groupRequest = groupRequestRepository.Get(g => (g.GroupId == id && g.UserId == userid));
+            var groupRequest = _groupRequestRepository.Get(g => (g.GroupId == id && g.UserId == userid));
             if (groupRequest != null)
             {
-                groupRequestRepository.Delete(groupRequest);
+                _groupRequestRepository.Delete(groupRequest);
                 //groupInvitation.Accepted = true;
                 //GroupInvitationRepository.Update(groupInvitation);
                 SaveGroupRequest();
@@ -91,7 +89,7 @@ namespace SocialGoal.Service
 
         public void DeleteGroupRequest(string userId, int groupId)
         {
-            var groupRequest=groupRequestRepository.Get(g => g.UserId == userId && g.GroupId == groupId);
+            var groupRequest=_groupRequestRepository.Get(g => g.UserId == userId && g.GroupId == groupId);
             DeleteGroupRequest(groupRequest.GroupRequestId);
 
         }
@@ -123,7 +121,7 @@ namespace SocialGoal.Service
 
         public void SaveGroupRequest()
         {
-            unitOfWork.Commit();
+            _unitOfWork.Commit();
         }
 
         #endregion

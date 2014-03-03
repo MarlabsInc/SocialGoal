@@ -3,9 +3,6 @@ using System.Linq;
 using SocialGoal.Data.Infrastructure;
 using SocialGoal.Model.Models;
 using SocialGoal.Data.Repository;
-using SocialGoal.Core.Common;
-using SocialGoal.Service.Properties;
-using System;
 
 namespace SocialGoal.Service
 {
@@ -42,35 +39,35 @@ namespace SocialGoal.Service
 
     public class GroupUserService : IGroupUserService
     {
-        private readonly IGroupUserRepository groupUserRepository;
-        private readonly IUserRepository userRepository;
-        private readonly IUnitOfWork unitOfWork;
+        private readonly IGroupUserRepository _groupUserRepository;
+        private readonly IUserRepository _userRepository;
+        private readonly IUnitOfWork _unitOfWork;
 
         public GroupUserService(IGroupUserRepository groupUserRepository,IUserRepository userRepository, IUnitOfWork unitOfWork)
         {
-            this.groupUserRepository = groupUserRepository;
-            this.userRepository = userRepository;
-            this.unitOfWork = unitOfWork;
+            _groupUserRepository = groupUserRepository;
+            _userRepository = userRepository;
+            _unitOfWork = unitOfWork;
         }
 
         #region IGroupUserService Members
 
         public IEnumerable<GroupUser> GetGroupUsers()
         {
-            var groupUser = groupUserRepository.GetAll();
+            var groupUser = _groupUserRepository.GetAll();
             return groupUser;
         }
 
         public GroupUser GetGroupUser(string userId, int groupId)
         {
-            return groupUserRepository.Get(gu => gu.UserId == userId && gu.GroupId == groupId);
+            return _groupUserRepository.Get(gu => gu.UserId == userId && gu.GroupId == groupId);
 
         }
 
         public IEnumerable<int> GetGroupUsers(string userid)
         {
-            List<int> groupids = new List<int> { };
-            var groupUsers = groupUserRepository.GetMany(g => g.UserId == userid).OrderByDescending(g => g.GroupId).ToList();
+            var groupids = new List<int>();
+            var groupUsers = _groupUserRepository.GetMany(g => g.UserId == userid).OrderByDescending(g => g.GroupId).ToList();
             foreach (var item in groupUsers)
             {
                 var ids = item.GroupId;
@@ -82,8 +79,8 @@ namespace SocialGoal.Service
 
         public IEnumerable<int> GetGroupAdminUsers(string userid)
         {
-            List<int> groupIds = new List<int> { };
-            var groupUsers = groupUserRepository.GetMany(g => (g.UserId == userid) && (g.Admin == true)).OrderByDescending(g => g.GroupUserId).ToList();
+            var groupIds = new List<int>();
+            var groupUsers = _groupUserRepository.GetMany(g => (g.UserId == userid) && g.Admin).OrderByDescending(g => g.GroupUserId).ToList();
             foreach (GroupUser item in groupUsers)
             {
                 var groupId = item.GroupId;
@@ -103,25 +100,25 @@ namespace SocialGoal.Service
         public IEnumerable<GroupUser> GetTop20GroupsUsersForProfile(string userid)
         {
 
-            var users = groupUserRepository.GetMany(g => g.UserId == userid).OrderByDescending(g => g.GroupUserId).Take(20).ToList();
+            var users = _groupUserRepository.GetMany(g => g.UserId == userid).OrderByDescending(g => g.GroupUserId).Take(20).ToList();
 
             return users;
         }
 
         public int GetGroupUsersCount(int groupId)
         {
-            return groupUserRepository.GetMany(g => g.GroupId == groupId).Count();
+            return _groupUserRepository.GetMany(g => g.GroupId == groupId).Count();
         }
 
         public IEnumerable<GroupUser> GetGroupUsersList(int groupId)
         {
-            var groupUsers = groupUserRepository.GetMany(g => g.GroupId == groupId).OrderByDescending(g => g.GroupUserId).ToList();
+            var groupUsers = _groupUserRepository.GetMany(g => g.GroupId == groupId).OrderByDescending(g => g.GroupUserId).ToList();
             return groupUsers;
         }
 
         public IEnumerable<GroupUser> GetGroupUsersListToAssign(int groupId, string currentUserId)
         {
-            var groupUsers = groupUserRepository.GetMany(g => g.GroupId == groupId && g.UserId!=currentUserId).OrderByDescending(g => g.GroupUserId).ToList();
+            var groupUsers = _groupUserRepository.GetMany(g => g.GroupId == groupId && g.UserId!=currentUserId).OrderByDescending(g => g.GroupUserId).ToList();
             return groupUsers;
         }
 
@@ -136,26 +133,26 @@ namespace SocialGoal.Service
 
         public IEnumerable<GroupUser> GetGroupUsersByGroup(int groupId)
         {
-            var groupUsers = groupUserRepository.GetMany(g => g.GroupId == groupId).OrderBy(g => g.UserId).ToList();
+            var groupUsers = _groupUserRepository.GetMany(g => g.GroupId == groupId).OrderBy(g => g.UserId).ToList();
             return groupUsers;
         }
 
         
         public GroupUser GetGroupUser(int id)
         {
-            var groupUser = groupUserRepository.GetById(id);
+            var groupUser = _groupUserRepository.GetById(id);
             return groupUser;
         }
 
         public GroupUser GetGroupUserByuserId(string id)
         {
-            var user = groupUserRepository.Get(g => g.UserId == id);
+            var user = _groupUserRepository.Get(g => g.UserId == id);
             return user;
         }
         public IEnumerable<int> GetFollowedGroups(string userid)
         {
-            List<int> groupIds = new List<int> { };
-            var groupUsers = groupUserRepository.GetMany(g => (g.UserId == userid) && (g.Admin == false)).OrderByDescending(g => g.GroupUserId).ToList();
+            var groupIds = new List<int>();
+            var groupUsers = _groupUserRepository.GetMany(g => (g.UserId == userid) && (g.Admin == false)).OrderByDescending(g => g.GroupUserId).ToList();
             foreach (GroupUser item in groupUsers)
             {
                 var groupId = item.GroupId;
@@ -166,23 +163,19 @@ namespace SocialGoal.Service
 
         public IEnumerable<ApplicationUser> GetMembersOfGroup(int groupId)
         {
-            //return userService.GetUsers().Join(groupUserRepository.GetMany(g => g.GroupId == groupId),
-            //     u => u.UserId,
-            //     gu => gu.UserId,
-            //     (u, gu) => u);
-            var users = from u in userRepository.GetAll()
+            var users = from u in _userRepository.GetAll()
                         join gu in
-                            (from g in groupUserRepository.GetMany(gr=>gr.GroupId==groupId) select g) on u.Id equals gu.UserId
+                            (from g in _groupUserRepository.GetMany(gr=>gr.GroupId==groupId) select g) on u.Id equals gu.UserId
                         select u;
             return users;
         }
 
         public void CreateGroupUser(GroupUser groupUser, IGroupInvitationService groupInvitationService)
         {
-            var oldUser = groupUserRepository.GetMany(g => g.UserId == groupUser.UserId && g.GroupId == groupUser.GroupId);
+            var oldUser = _groupUserRepository.GetMany(g => g.UserId == groupUser.UserId && g.GroupId == groupUser.GroupId);
             if (oldUser.Count() == 0)
             {
-                groupUserRepository.Add(groupUser);
+                _groupUserRepository.Add(groupUser);
                 SaveGroupUser();
             }
             groupInvitationService.AcceptInvitation(groupUser.GroupId, groupUser.UserId);
@@ -190,10 +183,10 @@ namespace SocialGoal.Service
 
         public void CreateGroupUserFromRequest(GroupUser groupUser, IGroupRequestService groupRequestService)
         {
-            var oldUser = groupUserRepository.GetMany(g => g.UserId == groupUser.UserId && g.GroupId == groupUser.GroupId);
+            var oldUser = _groupUserRepository.GetMany(g => g.UserId == groupUser.UserId && g.GroupId == groupUser.GroupId);
             if (oldUser.Count() == 0)
             {
-                groupUserRepository.Add(groupUser);
+                _groupUserRepository.Add(groupUser);
                 SaveGroupUser();
             }
             groupRequestService.ApproveRequest(groupUser.GroupId, groupUser.UserId);
@@ -201,10 +194,10 @@ namespace SocialGoal.Service
 
         public IEnumerable<int> GetGroupUsers(IEnumerable<string> userid)
         {
-            List<int> groupsIds = new List<int> { };
+            var groupsIds = new List<int>();
             foreach (var item in userid)
             {
-                var groupUsers = groupUserRepository.GetMany(g => g.UserId == item);
+                var groupUsers = _groupUserRepository.GetMany(g => g.UserId == item);
                 foreach (GroupUser gruser in groupUsers)
                 {
                     groupsIds.Add(gruser.GroupId);
@@ -217,11 +210,10 @@ namespace SocialGoal.Service
 
         public IEnumerable<GroupUser> GetGroupMembers(IEnumerable<int> groupid)
         {
-           
-            List<GroupUser> users = new List<GroupUser> { };
+            var users = new List<GroupUser>();
             foreach (int item in groupid)
             {
-                var groupUsers = groupUserRepository.Get(g => g.GroupId == item);
+                var groupUsers = _groupUserRepository.Get(g => g.GroupId == item);
                 users.Add(groupUsers);
 
             }
@@ -231,26 +223,25 @@ namespace SocialGoal.Service
 
         public string GetAdminId(int groupId)
         {
-            return groupUserRepository.Get(g => g.GroupId == groupId && g.Admin == true).UserId;
+            return _groupUserRepository.Get(g => g.GroupId == groupId && g.Admin).UserId;
         }
 
 
         public bool CanInviteUser(string userId, int groupId)
         {
-            var groupUser = groupUserRepository.Get(g => g.GroupId == groupId && g.UserId == userId);
+            var groupUser = _groupUserRepository.Get(g => g.GroupId == groupId && g.UserId == userId);
             if (groupUser != null)
                 return false;
-            else
-                return true;
+            return true;
         }
 
 
         public IEnumerable<string>GetUserIdByGroupUserId(IEnumerable<int> groupuserid)
         {
-            List<string> users = new List<string> { };
+            var users = new List<string>();
             foreach (int item in groupuserid)
             {
-                var groupUsers = groupUserRepository.Get(g => g.GroupUserId == item).UserId;
+                var groupUsers = _groupUserRepository.Get(g => g.GroupUserId == item).UserId;
                 users.Add(groupUsers);
 
             }
@@ -258,8 +249,8 @@ namespace SocialGoal.Service
         }
         public void DeleteGroupUser(int id)
         {
-            var groupUser = groupUserRepository.GetById(id);
-            groupUserRepository.Delete(groupUser);
+            var groupUser = _groupUserRepository.GetById(id);
+            _groupUserRepository.Delete(groupUser);
             SaveGroupUser();
         }
 
@@ -273,7 +264,7 @@ namespace SocialGoal.Service
         }
         public void SaveGroupUser()
         {
-            unitOfWork.Commit();
+            _unitOfWork.Commit();
         }
 
         #endregion

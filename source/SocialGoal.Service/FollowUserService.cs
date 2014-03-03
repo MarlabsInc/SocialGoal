@@ -3,8 +3,6 @@ using System.Linq;
 using SocialGoal.Data.Infrastructure;
 using SocialGoal.Model.Models;
 using SocialGoal.Data.Repository;
-using SocialGoal.Core.Common;
-using SocialGoal.Service.Properties;
 
 
 namespace SocialGoal.Service
@@ -43,42 +41,40 @@ namespace SocialGoal.Service
     public class FollowUserService : IFollowUserService
     {
 
-        private readonly IFollowUserRepository followUserRepository;
-        private readonly IUnitOfWork unitOfWork;
+        private readonly IFollowUserRepository _followUserRepository;
+        private readonly IUnitOfWork _unitOfWork;
 
         public FollowUserService(IFollowUserRepository followUserRepository, IUnitOfWork unitOfWork)
         {
-            this.followUserRepository = followUserRepository;
-            this.unitOfWork = unitOfWork;
+            _followUserRepository = followUserRepository;
+            _unitOfWork = unitOfWork;
         }
 
         #region IGroupUserService Members
 
         public void CreateFollowUserFromRequest(FollowUser followUser, IFollowRequestService groupRequestService)
         {
-            var oldUser = followUserRepository.GetMany(g => g.FromUserId == followUser.FromUserId && g.ToUserId == followUser.ToUserId);
+            var oldUser = _followUserRepository.GetMany(g => g.FromUserId == followUser.FromUserId && g.ToUserId == followUser.ToUserId);
             if (oldUser.Count() == 0)
             {
-                followUserRepository.Add(followUser);
+                _followUserRepository.Add(followUser);
                 SaveFollowUser();
             }
             groupRequestService.ApproveRequest(followUser.ToUserId, followUser.FromUserId);
         }
         public bool IsFollowing(string fromuserid, string touserid)
         {
-            var user = followUserRepository.GetMany(f => (f.FromUserId == fromuserid && f.ToUserId == touserid));
+            var user = _followUserRepository.GetMany(f => (f.FromUserId == fromuserid && f.ToUserId == touserid));
             if (user.Count() == 1)
             {
                 return true;
             }
-            else return false;
-
-
+            return false;
         }
         public IEnumerable<string> GetFollowingUsers(string userid)
         {
-            List<string> followingsids = new List<string> { };
-            var followings = followUserRepository.GetMany(g => g.FromUserId == userid).ToList();
+            var followingsids = new List<string>();
+            var followings = _followUserRepository.GetMany(g => g.FromUserId == userid).ToList();
             foreach (var item in followings)
             {
                 var ids = item.ToUserId;
@@ -89,19 +85,19 @@ namespace SocialGoal.Service
         }
         public IEnumerable<FollowUser> GetTop20Followers(string userid)
         {
-            var user = from f in followUserRepository.GetAll() where (from g in followUserRepository.GetMany(fol => fol.FromUserId == userid) select g.ToUserId).ToList().Contains(f.FromUserId) select f;
+            var user = from f in _followUserRepository.GetAll() where (from g in _followUserRepository.GetMany(fol => fol.FromUserId == userid) select g.ToUserId).ToList().Contains(f.FromUserId) select f;
             return user;
         }
         public IEnumerable<FollowUser> Following(string userid)
         {
-            var user = followUserRepository.GetMany(f => f.FromUserId == userid);
+            var user = _followUserRepository.GetMany(f => f.FromUserId == userid);
             return user;
         }
 
 
         public IEnumerable<ApplicationUser> GetFollowers(string userId)
         {
-            var followers = from u in followUserRepository.GetMany(f => f.ToUserId == userId) select u.FromUser;
+            var followers = from u in _followUserRepository.GetMany(f => f.ToUserId == userId) select u.FromUser;
             return followers;
         }
 
@@ -115,7 +111,7 @@ namespace SocialGoal.Service
         public IEnumerable<ApplicationUser> GetFollowers(string userId, int currentPage, int noofRecords)
         {
             var skipFollowers = noofRecords * currentPage;
-            var followers = from u in followUserRepository.GetMany(f => f.ToUserId == userId) select u.FromUser;
+            var followers = from u in _followUserRepository.GetMany(f => f.ToUserId == userId) select u.FromUser;
 
             followers = followers.Skip(skipFollowers).Take(noofRecords);
             return followers;
@@ -127,7 +123,7 @@ namespace SocialGoal.Service
 
         public IEnumerable<ApplicationUser> GetFollowings(string userId)
         {
-            var followings = from u in followUserRepository.GetMany(f => f.FromUserId == userId) select u.ToUser;
+            var followings = from u in _followUserRepository.GetMany(f => f.FromUserId == userId) select u.ToUser;
             return followings;
         }
 
@@ -141,7 +137,7 @@ namespace SocialGoal.Service
         public IEnumerable<ApplicationUser> GetFollowings(string userId, int currentPage, int noofRecords)
         {
             var skipFollowings = noofRecords * currentPage;
-            var followings = from u in followUserRepository.GetMany(f => f.FromUserId == userId) select u.ToUser;
+            var followings = from u in _followUserRepository.GetMany(f => f.FromUserId == userId) select u.ToUser;
 
             followings = followings.Skip(skipFollowings).Take(noofRecords);
             return followings;
@@ -150,13 +146,13 @@ namespace SocialGoal.Service
 
         public void DeleteFollowUser(string toid, string fromid)
         {
-            var followUser = followUserRepository.Get(f => (f.FromUserId == fromid && f.ToUserId == toid));
-            followUserRepository.Delete(followUser);
+            var followUser = _followUserRepository.Get(f => (f.FromUserId == fromid && f.ToUserId == toid));
+            _followUserRepository.Delete(followUser);
             SaveFollowUser();
         }
         public void SaveFollowUser()
         {
-            unitOfWork.Commit();
+            _unitOfWork.Commit();
         }
         #endregion
     }

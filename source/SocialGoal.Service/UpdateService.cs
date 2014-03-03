@@ -1,11 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using SocialGoal.Data;
 using SocialGoal.Data.Infrastructure;
 using SocialGoal.Model.Models;
 using SocialGoal.Data.Repository;
-using SocialGoal.Core.Common;
-using System;
 
 namespace SocialGoal.Service
 {
@@ -25,72 +22,71 @@ namespace SocialGoal.Service
         void EditUpdate(Update update);
         void DeleteUpdate(int id);
         void SaveUpdate();
-        //IEnumerable<ValidationResult> CanAddUpdate(Update newUpdate);
 
     }
     public class UpdateService : IUpdateService
     {
-        private readonly IGoalRepository goalRepository;
-        private readonly IUpdateRepository updateRepository;
-        private readonly IFollowUserRepository followUserRepository;
-        private readonly IUnitOfWork unitOfWork;
+        private readonly IGoalRepository _goalRepository;
+        private readonly IUpdateRepository _updateRepository;
+        private readonly IFollowUserRepository _followUserRepository;
+        private readonly IUnitOfWork _unitOfWork;
         public UpdateService(IUpdateRepository updateRepository, IGoalRepository goalRepository, IUnitOfWork unitOfWork, IFollowUserRepository followUserRepository)
         {
-            this.updateRepository = updateRepository;
-            this.goalRepository = goalRepository;
-            this.followUserRepository = followUserRepository;
-            this.unitOfWork = unitOfWork;
+            _updateRepository = updateRepository;
+            _goalRepository = goalRepository;
+            _followUserRepository = followUserRepository;
+            _unitOfWork = unitOfWork;
         }
         #region IUpdateService Members
 
         public IEnumerable<Update> GetUpdates()
         {
-            var update = updateRepository.GetAll();
+            var update = _updateRepository.GetAll();
             return update;
         }
         public Update GetLastUpdate(string userid)
         {
-            var updates = updateRepository.GetMany(g => g.Goal.UserId == userid).Last();
+            var updates = _updateRepository.GetMany(g => g.Goal.UserId == userid).Last();
             return updates;
         }
         public IEnumerable<Update> GetUpdatesForaUser(string userid)
         {
 
-            var updates = updateRepository.GetMany(u => (u.Goal.UserId == userid && u.Goal.GoalType == false)).OrderByDescending(u => u.UpdateDate).ToList(); ;
+            var updates = _updateRepository.GetMany(u => (u.Goal.UserId == userid && u.Goal.GoalType == false)).OrderByDescending(u => u.UpdateDate).ToList(); ;
             return updates;
         }
 
         public IEnumerable<Update> GetTop20UpdatesOfFollowing(string userid)
         {
-            var updates = from u in updateRepository.GetMany(u => (u.Goal.GoalType == false)) where (from f in followUserRepository.GetMany(fol => fol.FromUserId == userid) select f.ToUserId).ToList().Contains(u.Goal.UserId) select u;
+            var updates = from u in _updateRepository.GetMany(u => (u.Goal.GoalType == false)) where (from f in _followUserRepository.GetMany(fol => fol.FromUserId == userid) select f.ToUserId).ToList().Contains(u.Goal.UserId) select u;
             return updates;
         }
         public IEnumerable<Update> GetTop20Updates(string userid)
         {
 
-            var updates = updateRepository.GetMany(u => (u.Goal.GoalType == false) && (u.Goal.UserId == userid)).OrderByDescending(u => u.UpdateDate).Take(20).ToList(); ;
+            var updates = _updateRepository.GetMany(u => (u.Goal.GoalType == false) && (u.Goal.UserId == userid)).OrderByDescending(u => u.UpdateDate).Take(20).ToList();
             return updates;
         }
 
         public IEnumerable<Update> GetUpdatesByGoal(int goalid)
         {
-            var updates = updateRepository.GetMany(u => u.GoalId == goalid).OrderByDescending(u => u.UpdateId).ToList();
+            var updates = _updateRepository.GetMany(u => u.GoalId == goalid).OrderByDescending(u => u.UpdateId).ToList();
             return updates;
         }
         public IEnumerable<Update> GetUpdatesWithStatus(int goalid)
         {
-            var updates = updateRepository.GetMany(u => (u.GoalId == goalid) && (u.status != null)).OrderByDescending(u => u.UpdateId).ToList();
+            var updates = _updateRepository.GetMany(u => (u.GoalId == goalid) && (u.status != null)).OrderByDescending(u => u.UpdateId).ToList();
             return updates;
         }
         public IEnumerable<Update> GetUpdatesOfPublicGoals()
         {
-            var updates = updateRepository.GetMany(u => u.Goal.GoalType == false).ToList();
+            var updates = _updateRepository.GetMany(u => u.Goal.GoalType == false).ToList();
             return updates;
         }
         
         public Update GetUpdate(int id)
         {
-            var update = updateRepository.GetById(id);
+            var update = _updateRepository.GetById(id);
             return update;
         }
 
@@ -104,27 +100,27 @@ namespace SocialGoal.Service
 
         public void CreateUpdate(Update update)
         {
-            updateRepository.Add(update);
+            _updateRepository.Add(update);
             SaveUpdate();
         }
 
         public void EditUpdate(Update update)
         {
-            updateRepository.Update(update);
+            _updateRepository.Update(update);
             SaveUpdate();
         }
 
         public void DeleteUpdate(int id)
         {
-            var update = updateRepository.GetById(id);
-            updateRepository.Delete(update);
+            var update = _updateRepository.GetById(id);
+            _updateRepository.Delete(update);
             SaveUpdate();
         }
 
         public double Progress(int id)
         {
-            var status = updateRepository.GetById(id).status;
-            var target = goalRepository.GetById(updateRepository.GetById(id).GoalId).Target;
+            var status = _updateRepository.GetById(id).status;
+            var target = _goalRepository.GetById(_updateRepository.GetById(id).GoalId).Target;
             var progress = (status / target) * 100;
             return (double)progress;
 
@@ -132,7 +128,7 @@ namespace SocialGoal.Service
 
         public void SaveUpdate()
         {
-            unitOfWork.Commit();
+            _unitOfWork.Commit();
         }
 
         #endregion

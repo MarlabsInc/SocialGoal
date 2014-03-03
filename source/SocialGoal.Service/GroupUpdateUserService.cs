@@ -1,19 +1,12 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using SocialGoal.Data.Infrastructure;
+﻿using SocialGoal.Data.Infrastructure;
 using SocialGoal.Model.Models;
 using SocialGoal.Data.Repository;
-using SocialGoal.Core.Common;
-using SocialGoal.Service.Properties;
-using System;
 
 namespace SocialGoal.Service
 {
 
     public interface IGroupUpdateUserService
     {
-
-        
         void CreateGroupUpdateUser(string userId, int groupUpdateId);
         void DeleteGroupUpdateUser(string userId, int groupUpdateId);
 
@@ -26,15 +19,15 @@ namespace SocialGoal.Service
 
     public class GroupUpdateUserService : IGroupUpdateUserService
     {
-        private readonly IGroupUpdateUserRepository groupUpdateUserRepository;
-        private readonly IUserRepository userRepository;
-        private readonly IUnitOfWork unitOfWork;
+        private readonly IGroupUpdateUserRepository _groupUpdateUserRepository;
+        private readonly IUserRepository _userRepository;
+        private readonly IUnitOfWork _unitOfWork;
 
         public GroupUpdateUserService(IGroupUpdateUserRepository groupUpdateUserRepository, IUnitOfWork unitOfWork, IUserRepository userRepository)
         {
-            this.groupUpdateUserRepository = groupUpdateUserRepository;
-            this.userRepository = userRepository;
-            this.unitOfWork = unitOfWork;
+            _groupUpdateUserRepository = groupUpdateUserRepository;
+            _userRepository = userRepository;
+            _unitOfWork = unitOfWork;
 
         }
 
@@ -42,29 +35,29 @@ namespace SocialGoal.Service
 
         public void DeleteGroupUpdateUser(string userId, int groupUpdateId)
         {
-            var groupUpdateUser = groupUpdateUserRepository.Get(cu => cu.UserId == userId && cu.GroupUpdateId == groupUpdateId);
-            groupUpdateUserRepository.Delete(groupUpdateUser);
+            var groupUpdateUser = _groupUpdateUserRepository.Get(cu => cu.UserId == userId && cu.GroupUpdateId == groupUpdateId);
+            _groupUpdateUserRepository.Delete(groupUpdateUser);
             SaveGroupUpdateUser();
         }
 
         public void DeleteGroupUpdateUser(int id)
         {
-            var groupUpdateUser = groupUpdateUserRepository.GetById(id);
-            groupUpdateUserRepository.Delete(groupUpdateUser);
+            var groupUpdateUser = _groupUpdateUserRepository.GetById(id);
+            _groupUpdateUserRepository.Delete(groupUpdateUser);
             SaveGroupUpdateUser();
         }
 
 
         public void SaveGroupUpdateUser()
         {
-            unitOfWork.Commit();
+            _unitOfWork.Commit();
         }
 
        
         public ApplicationUser GetGroupUpdateUser(int groupUpdateId)
         {
-            var groupUpdateUserId = groupUpdateUserRepository.Get(g => g.GroupUpdateId == groupUpdateId).UserId;
-            var user = userRepository.Get(u => u.Id == groupUpdateUserId);
+            var groupUpdateUserId = _groupUpdateUserRepository.Get(g => g.GroupUpdateId == groupUpdateId).UserId;
+            var user = _userRepository.Get(u => u.Id == groupUpdateUserId);
             return user;
 
         }
@@ -73,7 +66,7 @@ namespace SocialGoal.Service
         public void CreateGroupUpdateUser(string userId, int groupUpdateId)
         {
             var groupUpdateUser = new GroupUpdateUser { UserId = userId, GroupUpdateId = groupUpdateId };
-            groupUpdateUserRepository.Add(groupUpdateUser);
+            _groupUpdateUserRepository.Add(groupUpdateUser);
             SaveGroupUpdateUser();
         }
         #endregion

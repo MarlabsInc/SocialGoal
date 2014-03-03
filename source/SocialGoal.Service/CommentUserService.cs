@@ -1,11 +1,7 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using SocialGoal.Data.Infrastructure;
 using SocialGoal.Model.Models;
 using SocialGoal.Data.Repository;
-using SocialGoal.Core.Common;
-using SocialGoal.Service.Properties;
-using System;
 
 namespace SocialGoal.Service
 {
@@ -25,15 +21,15 @@ namespace SocialGoal.Service
 
     public class CommentUserService : ICommentUserService
     {
-        private readonly ICommentUserRepository commentUserRepository;
-        private readonly IUserRepository userRepository;
-        private readonly IUnitOfWork unitOfWork;
+        private readonly ICommentUserRepository _commentUserRepository;
+        private readonly IUserRepository _userRepository;
+        private readonly IUnitOfWork _unitOfWork;
 
         public CommentUserService(ICommentUserRepository commentUserRepository,IUserRepository userRepository,IUnitOfWork unitOfWork)
         {
-            this.commentUserRepository = commentUserRepository;
-            this.userRepository = userRepository;
-            this.unitOfWork = unitOfWork;
+            _commentUserRepository = commentUserRepository;
+            _userRepository = userRepository;
+            _unitOfWork = unitOfWork;
 
         }
        
@@ -41,14 +37,14 @@ namespace SocialGoal.Service
 
         public ApplicationUser GetUser(int commentId)
         {
-            var userId = commentUserRepository.Get(cu => cu.CommentId == commentId).UserId;
-            return userRepository.GetById(userId);
+            var userId = _commentUserRepository.Get(cu => cu.CommentId == commentId).UserId;
+            return _userRepository.GetById(userId);
         }
 
         public IEnumerable<int> GetCommentIdsByUser(string userId)
         {
-            List<int> commentIds = new List<int> { };
-            var commentUsers = commentUserRepository.GetMany(c => c.UserId == userId);
+            List<int> commentIds = new List<int>();
+            var commentUsers = _commentUserRepository.GetMany(c => c.UserId == userId);
             foreach (var item in commentUsers)
             {
                 commentIds.Add(item.CommentId);
@@ -59,22 +55,22 @@ namespace SocialGoal.Service
 
         public void DeleteCommentUser(string userId, int commentId)
         {
-            var commentUser = commentUserRepository.Get(cu => cu.UserId == userId && cu.CommentId == commentId);
-            commentUserRepository.Delete(commentUser);
+            var commentUser = _commentUserRepository.Get(cu => cu.UserId == userId && cu.CommentId == commentId);
+            _commentUserRepository.Delete(commentUser);
             SaveCommentUser();
         }
 
         public void DeleteCommentUser(int id)
         {
-            var commentUser = commentUserRepository.GetById(id);
-            commentUserRepository.Delete(commentUser);
+            var commentUser = _commentUserRepository.GetById(id);
+            _commentUserRepository.Delete(commentUser);
             SaveCommentUser();
         }
 
        
         public void SaveCommentUser()
         {
-            unitOfWork.Commit();
+            _unitOfWork.Commit();
         }
 
         #endregion
@@ -83,7 +79,7 @@ namespace SocialGoal.Service
         public void CreateCommentUser(string userId, int commentId)
         {
             var commentUser = new CommentUser { UserId = userId, CommentId = commentId };
-            commentUserRepository.Add(commentUser);
+            _commentUserRepository.Add(commentUser);
             SaveCommentUser();
         }
     }

@@ -34,12 +34,5 @@ namespace SocialGoal.Web.Core.ActionFilters
                 }
             }
         }
-        //public override void OnResultExecuted(ResultExecutedContext filterContext)
-        //{
-        //    if (filterContext.Exception != null)
-        //    {
-        //        filterContext.HttpContext.Response.Filter = null;
-        //    }
-        //}
     }
 }

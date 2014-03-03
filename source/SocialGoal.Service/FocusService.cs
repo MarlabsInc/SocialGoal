@@ -9,8 +9,8 @@ namespace SocialGoal.Service
 {
     public interface IFocusService
     {
-        IEnumerable<Focus> GetFocuss();
-        IEnumerable<Focus> GetFocussOFGroup(int id);
+        IEnumerable<Focus> GetFocus();
+        IEnumerable<Focus> GetFocussOfGroup(int id);
         Focus GetFocus(int id);
         Focus GetFocus(string focusname);
         void CreateFocus(Focus focus);
@@ -23,47 +23,47 @@ namespace SocialGoal.Service
    
     public class FocusService : IFocusService
     {
-        private readonly IFocusRepository focusRepository;
-        private readonly IUnitOfWork unitOfWork;
+        private readonly IFocusRepository _focusRepository;
+        private readonly IUnitOfWork _unitOfWork;
         public FocusService(IFocusRepository focusRepository, IUnitOfWork unitOfWork)
         {
-            this.focusRepository = focusRepository;
-            this.unitOfWork = unitOfWork;
+            _focusRepository = focusRepository;
+            _unitOfWork = unitOfWork;
         }
         #region IFocusService Members
 
-        public IEnumerable<Focus> GetFocuss()
+        public IEnumerable<Focus> GetFocus()
         {
-            var focus = focusRepository.GetAll();
+            var focus = _focusRepository.GetAll();
             return focus;
         }
 
         public Focus GetFocus(int id)
         {
-            var focus = focusRepository.GetById(id);
+            var focus = _focusRepository.GetById(id);
             return focus;
         }
 
         public Focus GetFocus(string focusname)
         {
-            var focus = focusRepository.Get(f => f.FocusName == focusname);
+            var focus = _focusRepository.Get(f => f.FocusName == focusname);
 
             return focus;
         }
 
         public Focus GetGroup(int focusid)
         {
-            var group = focusRepository.Get(f => f.FocusId == focusid);
+            var group = _focusRepository.Get(f => f.FocusId == focusid);
             return group;
         }
-        public IEnumerable<Focus> GetFocussOFGroup(int id)
+        public IEnumerable<Focus> GetFocussOfGroup(int id)
         {
-            var focus = focusRepository.GetMany(f =>f.GroupId == id);
+            var focus = _focusRepository.GetMany(f =>f.GroupId == id);
             return focus;
         }
         public void CreateFocus(Focus focus)
         {
-            focusRepository.Add(focus);
+            _focusRepository.Add(focus);
             SaveFocus();
         }
 
@@ -72,11 +72,11 @@ namespace SocialGoal.Service
             Focus focus;
             if (newFocus.FocusId == 0)
             {
-                focus = focusRepository.Get(f => f.FocusName == newFocus.FocusName && f.GroupId == newFocus.GroupId);
+                focus = _focusRepository.Get(f => f.FocusName == newFocus.FocusName && f.GroupId == newFocus.GroupId);
             }
             else
             {
-                focus = focusRepository.Get(f => f.FocusName == newFocus.FocusName && f.GroupId == newFocus.GroupId && f.FocusId != newFocus.FocusId);
+                focus = _focusRepository.Get(f => f.FocusName == newFocus.FocusName && f.GroupId == newFocus.GroupId && f.FocusId != newFocus.FocusId);
             }
             if (focus != null)
             {
@@ -86,19 +86,18 @@ namespace SocialGoal.Service
 
         public void DeleteFocus(int id)
         {
-            var focus = focusRepository.GetById(id);
-            focusRepository.Delete(focus);
+            var focus = _focusRepository.GetById(id);
+            _focusRepository.Delete(focus);
             SaveFocus();
         }
         public void UpdateFocus(Focus focus)
         {
-            focusRepository.Update(focus);
-            //SaveFocus();
+            _focusRepository.Update(focus);
         }
 
         public void SaveFocus()
         {
-            unitOfWork.Commit();
+            _unitOfWork.Commit();
         }
 
         #endregion

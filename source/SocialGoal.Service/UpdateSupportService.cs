@@ -3,116 +3,77 @@ using System.Linq;
 using SocialGoal.Model.Models;
 using SocialGoal.Data.Repository;
 using SocialGoal.Data.Infrastructure;
-using SocialGoal.Core.Common;
-using SocialGoal.Service.Properties;
-using System;
 
 namespace SocialGoal.Service
 {
     public interface IUpdateSupportService
     {
         IEnumerable<UpdateSupport> GetSupports();
-        //IEnumerable<Support> GetSupports(IEnumerable<int> id);
         UpdateSupport GetSupport(int id);
         IEnumerable<UpdateSupport> GetSupportForUpdate(int updateId);
-        //IEnumerable<Goal> GetUserSupportedGoals(int userid, IGoalService goalService);
-        //IEnumerable<Goal> GetUserSupportedGoalsBYPopularity(int userid, IGoalService goalService);
-        //IEnumerable<ValidationResult> CanInviteUser(int userId, int goalId);
-        //IEnumerable<Support> GetTop20SupportsOfFollowings(int userId);
-       // IEnumerable<Support> GetTop20Support(int userid);
+
         int GetSupportcount(int id);
-        void CreateSupport(UpdateSupport Support);
+        void CreateSupport(UpdateSupport support);
         void DeleteSupport(int id);
         bool IsUpdateSupported(int updateid, string userid);
         void DeleteSupport(int updateid, string userid);
         void SaveSupport();
-        //IEnumerable<User> SearchUserToSupport(string searchString, int goalId, IUserService userService, ISupportInvitationService supportInvitationService, int userid);
 
-        void CreateUserSupport(UpdateSupport support);//, ISupportInvitationService supportInvitationService);
+        void CreateUserSupport(UpdateSupport support);
 
         IEnumerable<ApplicationUser> GetSupportersOfUpdate(int id, IUserService userService);
     }
 
     public class UpdateSupportService : IUpdateSupportService
     {
-        private readonly IUpdateSupportRepository UpdateSupportRepository;
-      //  private readonly IFollowUserRepository followUserRepository;
-        private readonly IUnitOfWork unitOfWork;
+        private readonly IUpdateSupportRepository _updateSupportRepository;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public UpdateSupportService(IUpdateSupportRepository UpdateSupportRepository, IUnitOfWork unitOfWork)
+        public UpdateSupportService(IUpdateSupportRepository updateSupportRepository, IUnitOfWork unitOfWork)
         {
-            this.UpdateSupportRepository = UpdateSupportRepository;
-            //this.followUserRepository = followUserRepository;
-            this.unitOfWork = unitOfWork;
+            _updateSupportRepository = updateSupportRepository;
+            _unitOfWork = unitOfWork;
         }
 
         #region IUpdateSupportService Members
 
         public IEnumerable<UpdateSupport> GetSupports()
         {
-            var UpdateSupports = UpdateSupportRepository.GetAll();
-            return UpdateSupports;
+            var updateSupports = _updateSupportRepository.GetAll();
+            return updateSupports;
         }
 
         public IEnumerable<UpdateSupport> GetSupportForUpdate(int updateId)
         {
-            return UpdateSupportRepository.GetMany(s => s.UpdateId == updateId).OrderByDescending(s => s.UpdateSupportedDate);
+            return _updateSupportRepository.GetMany(s => s.UpdateId == updateId).OrderByDescending(s => s.UpdateSupportedDate);
         }
 
-        //public IEnumerable<Support> GetSupports(IEnumerable<int> id)
-        //{
-        //    List<Support> Supports = new List<Support> { };
-        //    Support Support;
-        //    foreach (int item in id)
-        //    {
-        //        Support = GetSupport(item);
-        //        yield return Support;
-        //        //Supports.Add(Support);
-        //    }
-        //    // return Supports;
-
-        //}
-
-        //public IEnumerable<Support> GetTop20SupportsOfFollowings(int userId)
-        //{
-
-        //    //var supports = SupportRepository.GetMany(s => s.Goal.GoalType == false).OrderByDescending(s => s.SupportedDate).Take(20).ToList();
-        //    var supports = (from s in SupportRepository.GetMany(s => s.Goal.GoalType == false) where (from f in followUserRepository.GetMany(fol => fol.FromUserId == userId) select f.ToUserId).ToList().Contains(s.UserId) select s).OrderByDescending(s => s.SupportedDate).Take(20);
-        //    return supports;
-        //}
-        //public IEnumerable<Support> GetTop20Support(int userid)
-        //{
-
-        //    var supports = SupportRepository.GetMany(s => (s.Goal.GoalType == false) && (s.UserId == userid)).OrderByDescending(s => s.SupportedDate).Take(20).ToList();
-        //    return supports;
-        //}
-        public void CreateUserSupport(UpdateSupport support)//, ISupportInvitationService supportInvitationService)
+        public void CreateUserSupport(UpdateSupport support)
         {
-            var oldUser = UpdateSupportRepository.GetMany(g => g.UserId == support.UserId && g.UpdateSupportId == support.UpdateSupportId);
-            if (oldUser.Count() == 0)
+            var oldUser = _updateSupportRepository.GetMany(g => g.UserId == support.UserId && g.UpdateSupportId == support.UpdateSupportId);
+            if (!oldUser.Any())
             {
-                UpdateSupportRepository.Add(support);
+                _updateSupportRepository.Add(support);
                 SaveSupport();
             }
-           // supportInvitationService.AcceptInvitation(support.GoalId, support.UserId);
         }
 
         public UpdateSupport GetSupport(int id)
         {
-            var Support = UpdateSupportRepository.GetById(id);
-            return Support;
+            var support = _updateSupportRepository.GetById(id);
+            return support;
         }
 
-        public void CreateSupport(UpdateSupport Support)
+        public void CreateSupport(UpdateSupport support)
         {
-            UpdateSupportRepository.Add(Support);
+            _updateSupportRepository.Add(support);
             SaveSupport();
         }
 
         public void DeleteSupport(int id)
         {
-            var Support = UpdateSupportRepository.GetById(id);
-            UpdateSupportRepository.Delete(Support);
+            var support = _updateSupportRepository.GetById(id);
+            _updateSupportRepository.Delete(support);
             SaveSupport();
         }
 
@@ -129,8 +90,8 @@ namespace SocialGoal.Service
         //}
         public void DeleteSupport(int updateid, string userid)
         {
-            var support = UpdateSupportRepository.Get(f => (f.UpdateId == updateid && f.UserId == userid));
-            UpdateSupportRepository.Delete(support);
+            var support = _updateSupportRepository.Get(f => (f.UpdateId == updateid && f.UserId == userid));
+            _updateSupportRepository.Delete(support);
             SaveSupport();
             //int id = (from s in GetSupports() where s.UpdateId == updateid && s.UserId == userid select s.UpdateSupportId).FirstOrDefault();
             //if (id != 0) DeleteSupport(id);
@@ -138,12 +99,12 @@ namespace SocialGoal.Service
 
         public bool IsUpdateSupported(int updateid, string userid)
         {
-            return UpdateSupportRepository.Get(g => g.UpdateId == updateid && g.UserId == userid) != null;
+            return _updateSupportRepository.Get(g => g.UpdateId == updateid && g.UserId == userid) != null;
         }
 
         public IEnumerable<ApplicationUser> GetSupportersOfUpdate(int id, IUserService userService)
         {
-            return userService.GetUsers().Join(UpdateSupportRepository.GetMany(g => g.UpdateId == id),
+            return userService.GetUsers().Join(_updateSupportRepository.GetMany(g => g.UpdateId == id),
                  u => u.Id,
                  s => s.UserId,
                  (u, s) => u);
@@ -168,12 +129,12 @@ namespace SocialGoal.Service
         //}
         public int GetSupportcount(int id)
         {
-            return UpdateSupportRepository.GetMany(c => c.UpdateId == id).Count();
+            return _updateSupportRepository.GetMany(c => c.UpdateId == id).Count();
         }
 
         public void SaveSupport()
         {
-            unitOfWork.Commit();
+            _unitOfWork.Commit();
         }
 
 

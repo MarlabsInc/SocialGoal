@@ -29,30 +29,30 @@ namespace SocialGoal.Service
 
     public class GroupService : IGroupService
     {
-        private readonly IGroupRepository groupRepository;
-        private readonly IFollowUserRepository followUserrepository;
-        private readonly IGroupUserRepository groupUserrepository;
-        private readonly IUnitOfWork unitOfWork;
+        private readonly IGroupRepository _groupRepository;
+        private readonly IFollowUserRepository _followUserrepository;
+        private readonly IGroupUserRepository _groupUserrepository;
+        private readonly IUnitOfWork _unitOfWork;
 
         public GroupService(IGroupRepository groupRepository, IFollowUserRepository followUserrepository, IGroupUserRepository groupUserrepository, IUnitOfWork unitOfWork)
         {
-            this.groupRepository = groupRepository;
-            this.groupUserrepository = groupUserrepository;
-            this.followUserrepository = followUserrepository;
-            this.unitOfWork = unitOfWork;
+            _groupRepository = groupRepository;
+            _groupUserrepository = groupUserrepository;
+            _followUserrepository = followUserrepository;
+            _unitOfWork = unitOfWork;
         }
 
         #region IGroupService Members
 
         public IEnumerable<Group> GetGroups()
         {
-            var groups = groupRepository.GetAll().OrderByDescending(g => g.CreatedDate);
+            var groups = _groupRepository.GetAll().OrderByDescending(g => g.CreatedDate);
             return groups;
         }
 
         public IEnumerable<Group> GetGroups(IEnumerable<int> id)
         {
-            List<Group> groups = new List<Group> { };
+            var groups = new List<Group>();
             foreach (int item in id)
             {
                 var group = GetGroup(item);
@@ -68,10 +68,10 @@ namespace SocialGoal.Service
 
         public IEnumerable<Group> GetGroupsForUser(IEnumerable<int> groupIds)
         {
-            List<Group> groups=new List<Group>{};
+            var groups=new List<Group>();
             foreach(var item in groupIds)
             {
-                var group=groupRepository.GetById(item);
+                var group=_groupRepository.GetById(item);
                 groups.Add(group);
             }
             return groups;
@@ -79,20 +79,20 @@ namespace SocialGoal.Service
 
         public Group GetGroup(string groupname)
         {
-            var group = groupRepository.Get(g => g.GroupName == groupname);
+            var group = _groupRepository.Get(g => g.GroupName == groupname);
             return group;
         }
 
 
         public Group GetGroup(int id)
         {
-            var group = groupRepository.GetById(id);
+            var group = _groupRepository.GetById(id);
             return group;
         }
 
         public IEnumerable<Group> GetTop20Groups(IEnumerable<int> id)
         {
-            List<Group> groups = new List<Group> { };
+            var groups = new List<Group>();
             foreach (int item in id)
             {
                 var group = GetGroup(item);
@@ -104,23 +104,23 @@ namespace SocialGoal.Service
 
         public IEnumerable<Group> SearchGroup(string group)
         {
-            return groupRepository.GetMany(g => g.GroupName.ToLower().Contains(group.ToLower())).OrderBy(g => g.GroupName);
+            return _groupRepository.GetMany(g => g.GroupName.ToLower().Contains(group.ToLower())).OrderBy(g => g.GroupName);
         }
 
         public Group CreateGroup(Group group, string userId)
         {
-            groupRepository.Add(group);
+            _groupRepository.Add(group);
             SaveGroup();
 
             var groupUser = new GroupUser { GroupId = group.GroupId, UserId = userId,Admin=true };
             try
             {
-                groupUserrepository.Add(groupUser);
+                _groupUserrepository.Add(groupUser);
                 SaveGroup();
             }
             catch
             {
-                groupRepository.Delete(group);
+                _groupRepository.Delete(group);
                 SaveGroup();
             }            
             return group;
@@ -128,15 +128,15 @@ namespace SocialGoal.Service
 
         public void UpdateGroup(Group group)
         {
-            groupRepository.Update(group);
+            _groupRepository.Update(group);
             SaveGroup();
         }
 
         public void DeleteGroup(int id)
         {
-            var group = groupRepository.GetById(id);
-            groupRepository.Delete(group);
-            groupUserrepository.Delete(gu => gu.GroupId == id);
+            var group = _groupRepository.GetById(id);
+            _groupRepository.Delete(group);
+            _groupUserrepository.Delete(gu => gu.GroupId == id);
             SaveGroup();
         }
 
@@ -144,9 +144,9 @@ namespace SocialGoal.Service
         {
             Group group;
             if (newGroup.GroupId == 0)
-                group = groupRepository.Get(g => g.GroupName == newGroup.GroupName);
+                group = _groupRepository.Get(g => g.GroupName == newGroup.GroupName);
             else
-                group = groupRepository.Get(g => g.GroupName == newGroup.GroupName && g.GroupId != newGroup.GroupId);
+                group = _groupRepository.Get(g => g.GroupName == newGroup.GroupName && g.GroupId != newGroup.GroupId);
             if (group != null)
             {
                 yield return new ValidationResult("GroupName", Resources.GroupExists);
@@ -159,23 +159,23 @@ namespace SocialGoal.Service
             {
                 case GroupFilter.All:
                 {
-                    return groupRepository.GetPage(page,x=>true,order=>order.GroupName);
+                    return _groupRepository.GetPage(page,x=>true,order=>order.GroupName);
                 }
                 case GroupFilter.MyGroups:
                 {
-                    var groupsIds = groupUserrepository.GetMany(gru => gru.UserId == userId && gru.Admin).Select(gru => gru.GroupId);
-                    return groupRepository.GetPage(page, where => groupsIds.Contains(where.GroupId), order => order.CreatedDate);
+                    var groupsIds = _groupUserrepository.GetMany(gru => gru.UserId == userId && gru.Admin).Select(gru => gru.GroupId);
+                    return _groupRepository.GetPage(page, where => groupsIds.Contains(where.GroupId), order => order.CreatedDate);
                 }
                 case GroupFilter.MyFollowingsGroups:
                 {
-                    var userIds = followUserrepository.GetMany(g => g.FromUserId == userId).Select(x => x.ToUserId);
-                    var groupIds = from item in userIds from gruser in groupUserrepository.GetMany(g => g.UserId == item) select gruser.GroupId;
-                    return groupRepository.GetPage(page, where => groupIds.Contains(where.GroupId), order => order.CreatedDate);
+                    var userIds = _followUserrepository.GetMany(g => g.FromUserId == userId).Select(x => x.ToUserId);
+                    var groupIds = from item in userIds from gruser in _groupUserrepository.GetMany(g => g.UserId == item) select gruser.GroupId;
+                    return _groupRepository.GetPage(page, where => groupIds.Contains(where.GroupId), order => order.CreatedDate);
                 }
                 case GroupFilter.MyFollowedGroups:
                 {
-                    var groupIds = groupUserrepository.GetMany(g => (g.UserId == userId) && (g.Admin == false)).Select(item => item.GroupId);
-                    return groupRepository.GetPage(page, where => groupIds.Contains(where.GroupId), order => order.CreatedDate);
+                    var groupIds = _groupUserrepository.GetMany(g => (g.UserId == userId) && (g.Admin == false)).Select(item => item.GroupId);
+                    return _groupRepository.GetPage(page, where => groupIds.Contains(where.GroupId), order => order.CreatedDate);
                 }
                 default:
                 {
@@ -186,7 +186,7 @@ namespace SocialGoal.Service
 
         public void SaveGroup()
         {
-            unitOfWork.Commit();
+            _unitOfWork.Commit();
         }
 
         #endregion

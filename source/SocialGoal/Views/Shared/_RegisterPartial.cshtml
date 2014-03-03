@@ -1,6 +1,6 @@
-﻿@model SocialGoal.Web.ViewModels.RegisterFormModel
+﻿@model RegisterFormModel
 @{ Html.BeginForm("Register", "Account", FormMethod.Post);}
-<div class="span12" @*style="padding-top: 20px;"*@>
+<div class="span12">
     <h4>
         New User? Register</h4>
     <hr />
@@ -20,53 +20,4 @@
         </li>
     </ul>
 </div>
-@*<table >
-    <tr>
-        <td>
-            @Html.LabelFor(m => m.Email)
-        </td>
-        <td>
-            @Html.TextBoxFor(m => m.Email, new { @class = "form-input" })
-            @Html.ValidationMessageFor(m => m.Email)
-        </td>
-    </tr>
-    <tr>
-        <td>
-            @Html.LabelFor(m => m.FirstName)
-        </td>
-        <td>
-            @Html.TextBoxFor(m => m.FirstName, new { @class = "form-input" })
-            @Html.ValidationMessageFor(m => m.FirstName)
-        </td>
-    </tr>
-    <tr>
-        <td >@Html.LabelFor(m => m.LastName)
-        </td>
-        <td>
-            @Html.TextBoxFor(m => m.LastName, new { @class = "form-input" })
-            @Html.ValidationMessageFor(m => m.LastName)
-        </td>
-    </tr>
-    <tr>
-        <td>
-            @Html.LabelFor(m => m.Password)
-        </td>
-        <td>
-            @Html.PasswordFor(m => m.Password, new { @class = "form-input", @type = "password" })
-        @Html.ValidationMessageFor(m => m.Password)</tr>
-    <tr>
-        <td>
-            @Html.LabelFor(m => m.ConfirmPassword)
-        </td>
-        <td>
-            @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-input", @type = "password" })
-            @Html.ValidationMessageFor(m => m.ConfirmPassword)
-        </td>
-    </tr>
-    <tr>
-        <td colspan="2">
-            <input id="register" type="submit" value="Register" class="btn btn-primary pull-right" />
-        </td>
-    </tr>
-</table>*@
 @{ Html.EndForm();}

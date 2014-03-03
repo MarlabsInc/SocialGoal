@@ -25,12 +25,6 @@ namespace SocialGoal
                 "~/Scripts/jquery.validate.min.js",
                 "~/Scripts/jquery.unobtrusive-ajax.js",
                 "~/Scripts/jquery.pjax.js",
-                //"~/Scripts/bootstrap-transition.js",
-                //"~/Scripts/bootstrap-alert.js",
-                //"~/Scripts/bootstrap-modal.js",
-                //"~/Scripts/bootstrap-dropdown.js",
-                //"~/Scripts/bootstrap-scrollspy.js",
-                //"~/Scripts/bootstrap-collapse.js",
                 "~/Scripts/bootstrap.js",
                 "~/Scripts/respond.js",
                 "~/Scripts/jquery.autocomplete.js",
@@ -51,17 +45,14 @@ namespace SocialGoal
                 "~/Scripts/jquery.nicescroll.min.js"
                 ));
 
-
             bundles.Add(new StyleBundle("~/Content/css").Include(
                 "~/Content/bootstrap.css",
-                //"~/Content/bootstrap-responsive.css",
                 "~/Content/HomePage.css",
                 "~/Content/jquery-ui-1.8.21.custom.css",
                 "~/Content/jqModal.css",
                 "~/Content/jquery.jqplot.min.css",
                 "~/Content/PagedList.css"
                 ));
-
 
             bundles.Add(new StyleBundle("~/Content/themes/base/css").Include(
                         "~/Content/themes/base/jquery.ui.core.css",
@@ -76,18 +67,7 @@ namespace SocialGoal
                         "~/Content/themes/base/jquery.ui.datepicker.css",
                         "~/Content/themes/base/jquery.ui.progressbar.css",
                         "~/Content/CustomStyles.css",
-
-                        
                         "~/Content/themes/base/jquery.ui.theme.css"));
-
-
-            //bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
-            //          "~/Scripts/bootstrap.js",
-            //          "~/Scripts/respond.js"));
-
-            //bundles.Add(new StyleBundle("~/Content/css").Include(
-            //          "~/Content/bootstrap.css",
-            //          "~/Content/site.css"));
         }
     }
 }

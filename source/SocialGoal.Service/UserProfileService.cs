@@ -1,7 +1,6 @@
 ﻿using SocialGoal.Data.Repository;
 using SocialGoal.Data.Infrastructure;
 using SocialGoal.Model.Models;
-using System;
 
 namespace SocialGoal.Service
 {
@@ -17,29 +16,29 @@ namespace SocialGoal.Service
     }
     public class UserProfileService : IUserProfileService
     {
-        private readonly IUserProfileRepository userProfileRepository;
-        private readonly IUnitOfWork unitOfWork;
+        private readonly IUserProfileRepository _userProfileRepository;
+        private readonly IUnitOfWork _unitOfWork;
 
         public UserProfileService(IUserProfileRepository userProfileRepository, IUnitOfWork unitOfWork)
         {
-            this.userProfileRepository = userProfileRepository;
-            this.unitOfWork = unitOfWork;
+            _userProfileRepository = userProfileRepository;
+            _unitOfWork = unitOfWork;
         }
 
         public UserProfile GetProfile(int id)
         {
-            var userprofile = userProfileRepository.Get(u => u.UserProfileId == id);
+            var userprofile = _userProfileRepository.Get(u => u.UserProfileId == id);
             return userprofile;
         }
         public UserProfile GetUser(string userid)
         {
-            var userprofile = userProfileRepository.Get(u => u.UserId == userid);
+            var userprofile = _userProfileRepository.Get(u => u.UserId == userid);
             return userprofile;
         }
 
         public UserProfile GetUserByEmail(string email)
         {
-            var userProfile = userProfileRepository.Get(u => u.Email == email);
+            var userProfile = _userProfileRepository.Get(u => u.Email == email);
             return userProfile;
         }
 
@@ -48,17 +47,17 @@ namespace SocialGoal.Service
 
             UserProfile newUserProfile = new UserProfile();
             newUserProfile.UserId = userId;
-            userProfileRepository.Add(newUserProfile);
+            _userProfileRepository.Add(newUserProfile);
             SaveUserProfile();
         }
         public void UpdateUserProfile(UserProfile user)
         {
-            userProfileRepository.Update(user);
+            _userProfileRepository.Update(user);
             SaveUserProfile();
         }
         public void SaveUserProfile()
         {
-            unitOfWork.Commit();
+            _unitOfWork.Commit();
         }
     }
 }

@@ -16,45 +16,45 @@ namespace SocialGoal.Service
   
     public class MetricService : IMetricService
     {
-        private readonly IMetricRepository metricRepository;
-        private readonly IUnitOfWork unitOfWork;
+        private readonly IMetricRepository _metricRepository;
+        private readonly IUnitOfWork _unitOfWork;
       
         public MetricService(IMetricRepository metricRepository, IUnitOfWork unitOfWork)
         {
-            this.metricRepository = metricRepository;
-            this.unitOfWork = unitOfWork;
+            _metricRepository = metricRepository;
+            _unitOfWork = unitOfWork;
         }
      
         #region IMetricService Members
 
         public IEnumerable<Metric> GetMetrics()
         {
-            var metric = metricRepository.GetAll();
+            var metric = _metricRepository.GetAll();
             return metric;
         }
 
         public Metric GetMetric(int id)
         {
-            var metric = metricRepository.GetById(id);
+            var metric = _metricRepository.GetById(id);
             return metric;
         }
 
         public void CreateMetric(Metric metric)
         {
-            metricRepository.Add(metric);
+            _metricRepository.Add(metric);
             SaveMetric();
         }
 
         public void DeleteMetric(int id)
         {
-            var metric = metricRepository.GetById(id);
-            metricRepository.Delete(metric);
+            var metric = _metricRepository.GetById(id);
+            _metricRepository.Delete(metric);
             SaveMetric();
         }
 
         public void SaveMetric()
         {
-            unitOfWork.Commit();
+            _unitOfWork.Commit();
         }
 
         #endregion

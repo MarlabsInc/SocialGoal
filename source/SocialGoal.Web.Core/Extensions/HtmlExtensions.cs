@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 using System.Linq.Expressions;
 
@@ -24,10 +22,7 @@ namespace SocialGoal.Web.Core
             {
                 return str.Substring(0, length) + ".. ";
             }
-            else
-            {
-                return str;
-            }
+            return str;
         }
 
 

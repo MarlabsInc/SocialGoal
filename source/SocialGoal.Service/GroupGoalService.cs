@@ -5,7 +5,6 @@ using SocialGoal.Data.Repository;
 using SocialGoal.Data.Infrastructure;
 using SocialGoal.Core.Common;
 using SocialGoal.Service.Properties;
-using System;
 
 namespace SocialGoal.Service
 {
@@ -14,8 +13,8 @@ namespace SocialGoal.Service
         IEnumerable<GroupGoal> GetGroupGoals();
         IEnumerable<GroupGoal> GetGroupGoalsByFocus(int focusid);
         GroupGoal GetGroupGoal(int id);
-        void CreateGroupGoal(GroupGoal GroupGoal);
-        IEnumerable<GroupGoal> GetGroupGoals(int GroupId);
+        void CreateGroupGoal(GroupGoal groupGoal);
+        IEnumerable<GroupGoal> GetGroupGoals(int groupId);
         void DeleteGroupGoal(int id);
         void SaveGroupGoal();
         IEnumerable<ValidationResult> CanAddGoal(GroupGoal goal, IGroupUpdateService groupUpdateService);
@@ -28,53 +27,53 @@ namespace SocialGoal.Service
 
     public class GroupGoalService : IGroupGoalService
     {
-        private readonly IGroupGoalRepository GroupGoalRepository;
-        private readonly IUnitOfWork unitOfWork;
-        public GroupGoalService(IGroupGoalRepository GroupGoalRepository, IUnitOfWork unitOfWork)
+        private readonly IGroupGoalRepository _groupGoalRepository;
+        private readonly IUnitOfWork _unitOfWork;
+        public GroupGoalService(IGroupGoalRepository groupGoalRepository, IUnitOfWork unitOfWork)
         {
-            this.GroupGoalRepository = GroupGoalRepository;
-            this.unitOfWork = unitOfWork;
+            _groupGoalRepository = groupGoalRepository;
+            _unitOfWork = unitOfWork;
         }
         #region IGroupGoalService Members
 
         public IEnumerable<GroupGoal> GetGroupGoals()
         {
-            var GroupGoal = GroupGoalRepository.GetAll();
-            return GroupGoal;
+            var groupGoal = _groupGoalRepository.GetAll();
+            return groupGoal;
         }
         public IEnumerable<GroupGoal> GetGroupGoalsByFocus(int focusid)
         {
-            var goals = GroupGoalRepository.GetMany(g => g.FocusId == focusid);
+            var goals = _groupGoalRepository.GetMany(g => g.FocusId == focusid);
             return goals;
         }
 
-        public IEnumerable<GroupGoal> GetGroupGoals(int GroupId)
+        public IEnumerable<GroupGoal> GetGroupGoals(int groupId)
         {
-            return GroupGoalRepository.GetMany(g => g.GroupUser.GroupId == GroupId);
+            return _groupGoalRepository.GetMany(g => g.GroupUser.GroupId == groupId);
         }
 
        
         public GroupGoal GetGroupGoal(int id)
         {
-            var GroupGoal = GroupGoalRepository.GetById(id);
-            return GroupGoal;
+            var groupGoal = _groupGoalRepository.GetById(id);
+            return groupGoal;
         }
 
         public IEnumerable<GroupGoal> GetTop20GroupsGoals(string userid, IGroupUserService groupUserService)
         {
-            var goals = from g in GroupGoalRepository.GetAll() where (from gu in groupUserService.GetGroupUsers() where gu.UserId == userid select gu.GroupId).ToList().Contains(g.GroupUser.GroupId) select g;
+            var goals = from g in _groupGoalRepository.GetAll() where (from gu in groupUserService.GetGroupUsers() where gu.UserId == userid select gu.GroupId).ToList().Contains(g.GroupUser.GroupId) select g;
             return goals;
         }
-        public void CreateGroupGoal(GroupGoal GroupGoal)
+        public void CreateGroupGoal(GroupGoal groupGoal)
         {
-            GroupGoalRepository.Add(GroupGoal);
+            _groupGoalRepository.Add(groupGoal);
             SaveGroupGoal();
         }
 
         public void DeleteGroupGoal(int id)
         {
-            var GroupGoal = GroupGoalRepository.GetById(id);
-            GroupGoalRepository.Delete(GroupGoal);
+            var groupGoal = _groupGoalRepository.GetById(id);
+            _groupGoalRepository.Delete(groupGoal);
             SaveGroupGoal();
         }
 
@@ -82,9 +81,9 @@ namespace SocialGoal.Service
         {
             GroupGoal goal;
             if (newGoal.GroupGoalId == 0)
-                goal = GroupGoalRepository.Get(g => (g.GroupId == newGoal.GroupId) && (g.GoalName == newGoal.GoalName));
+                goal = _groupGoalRepository.Get(g => (g.GroupId == newGoal.GroupId) && (g.GoalName == newGoal.GoalName));
             else
-                goal = GroupGoalRepository.Get(g => (g.GroupId == newGoal.GroupId) && (g.GoalName == newGoal.GoalName) && g.GroupGoalId != newGoal.GroupGoalId);
+                goal = _groupGoalRepository.Get(g => (g.GroupId == newGoal.GroupId) && (g.GoalName == newGoal.GoalName) && g.GroupGoalId != newGoal.GroupGoalId);
             if (goal != null)
             {
                 yield return new ValidationResult("GoalName", Resources.GoalExists);
@@ -97,26 +96,26 @@ namespace SocialGoal.Service
             int status = 0;
             if (newGoal.GroupGoalId != 0)
             {
-                var Updates = groupUpdateService.GetUpdatesByGoal(newGoal.GroupGoalId).OrderByDescending(g => g.UpdateDate).ToList();
+                var updates = groupUpdateService.GetUpdatesByGoal(newGoal.GroupGoalId).OrderByDescending(g => g.UpdateDate).ToList();
 
-                if (Updates.Count() > 0)
+                if (updates.Count() > 0)
                 {
-                    if (Updates[0].UpdateDate.Subtract(newGoal.EndDate).TotalSeconds > 0)
+                    if (updates[0].UpdateDate.Subtract(newGoal.EndDate).TotalSeconds > 0)
                     {
                         flag = 1;
                     }
-                    if (newGoal.StartDate.Subtract(Updates[0].UpdateDate).TotalSeconds > 0)
+                    if (newGoal.StartDate.Subtract(updates[0].UpdateDate).TotalSeconds > 0)
                     {
                         status = 1;
                     }
                     if (flag == 1)
                     {
                         
-                        yield return new ValidationResult("EndDate", Resources.EndDateNotValid + " " + Updates[0].UpdateDate.ToString("dd-MMM-yyyy"));
+                        yield return new ValidationResult("EndDate", Resources.EndDateNotValid + " " + updates[0].UpdateDate.ToString("dd-MMM-yyyy"));
                     }
                     else if (status == 1)
                     {                        
-                        yield return new ValidationResult("StartDate", Resources.StartDate + " " + Updates[0].UpdateDate.ToString("dd-MMM-yyyy"));
+                        yield return new ValidationResult("StartDate", Resources.StartDate + " " + updates[0].UpdateDate.ToString("dd-MMM-yyyy"));
                     }
 
                 }
@@ -125,35 +124,35 @@ namespace SocialGoal.Service
 
         public void EditGroupGoal(GroupGoal groupGoalToEdit)
         {
-            GroupGoalRepository.Update(groupGoalToEdit);
+            _groupGoalRepository.Update(groupGoalToEdit);
             SaveGroupGoal();
         }
 
 
         public int GroupGoals(int groupId)
         {
-            return GroupGoalRepository.GetMany(g => g.GroupUser.GroupId == groupId).Count();
+            return _groupGoalRepository.GetMany(g => g.GroupUser.GroupId == groupId).Count();
         }
 
 
         public IEnumerable<GroupGoal> GetAssignedGoalsToOthers(int userid)
         {
 
-            var goals =  GroupGoalRepository.GetMany(f =>((f.GroupUserId == userid) && (f.AssignedGroupUserId != null))).ToList();
+            var goals =  _groupGoalRepository.GetMany(f =>((f.GroupUserId == userid) && (f.AssignedGroupUserId != null))).ToList();
             return goals;
         }
 
         public IEnumerable<GroupGoal> GetAssignedGoalsToMe(int userid)
         {
 
-            var goals = GroupGoalRepository.GetMany(f =>f.AssignedGroupUserId == userid).ToList();
+            var goals = _groupGoalRepository.GetMany(f =>f.AssignedGroupUserId == userid).ToList();
             return goals;
         }
 
 
         public void SaveGroupGoal()
         {
-            unitOfWork.Commit();
+            _unitOfWork.Commit();
         }
 
         #endregion

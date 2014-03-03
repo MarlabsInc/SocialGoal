@@ -439,7 +439,7 @@ namespace SocialGoal.Web.Controllers
             }
             else if (sortby == 1 && filter == 3)
             {
-                var goals = supportService.GetUserSupportedGoalsBYPopularity(User.Identity.GetUserId(), goalService);
+                var goals = supportService.GetUserSupportedGoalsByPopularity(User.Identity.GetUserId(), goalService);
                 return PartialView("_Goalslist", goals);
             }
             return PartialView();

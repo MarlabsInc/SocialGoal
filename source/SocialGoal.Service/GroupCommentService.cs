@@ -1,10 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using SocialGoal.Data;
 using SocialGoal.Data.Infrastructure;
 using SocialGoal.Model.Models;
 using SocialGoal.Data.Repository;
-using System;
 
 namespace SocialGoal.Service
 {
@@ -13,8 +11,6 @@ namespace SocialGoal.Service
     {
         IEnumerable<GroupComment> GetComments();
         IEnumerable<GroupComment> GetCommentsByUpdate(int updateid);
-       // IEnumerable<GroupComment> GetCommentsOfPublicGoals();
-       // IEnumerable<GroupComment> GetCommentsByUser(int userid);
         IEnumerable<GroupComment> GetTop20CommentsOfPublicGoals(string userid, IGroupUserService groupUserService);
         GroupComment GetLastComment(string userid);
         GroupComment GetComment(int id);
@@ -28,25 +24,23 @@ namespace SocialGoal.Service
 
     public class GroupCommentService : IGroupCommentService
     {
-        private readonly IGroupCommentRepository groupCommentRepository;
-        private readonly IGroupCommentUserRepository groupCommentUserRepository;
-        private readonly IGroupUpdateRepository groupUdateRepository;
-        private readonly IUnitOfWork unitOfWork;
+        private readonly IGroupCommentRepository _groupCommentRepository;
+        private readonly IGroupCommentUserRepository _groupCommentUserRepository;
+        private readonly IUnitOfWork _unitOfWork;
 
 
-        public GroupCommentService(IGroupCommentRepository groupCommentRepository,IGroupCommentUserRepository groupCommentUserRepository, IGroupUpdateRepository groupUdateRepository, IUnitOfWork unitOfWork)
+        public GroupCommentService(IGroupCommentRepository groupCommentRepository,IGroupCommentUserRepository groupCommentUserRepository, IUnitOfWork unitOfWork)
         {
-            this.groupCommentRepository = groupCommentRepository;
-            this.groupCommentUserRepository = groupCommentUserRepository;
-            this.groupUdateRepository = groupUdateRepository;
-            this.unitOfWork = unitOfWork;
+            _groupCommentRepository = groupCommentRepository;
+            _groupCommentUserRepository = groupCommentUserRepository;
+            _unitOfWork = unitOfWork;
         }
 
         #region IGroupCommentService Members
 
         public IEnumerable<GroupComment> GetComments()
         {
-            var comment = groupCommentRepository.GetAll();
+            var comment = _groupCommentRepository.GetAll();
             return comment;
         }
         //public IEnumerable<GroupComment> GetCommentsOfPublicGoals()
@@ -61,7 +55,7 @@ namespace SocialGoal.Service
         //}
         public IEnumerable<GroupComment> GetTop20CommentsOfPublicGoals(string userid, IGroupUserService groupUserService)
         {
-             var comment = from u in groupCommentRepository.GetAll() where (from g in groupUserService.GetGroupUsers() where g.UserId == userid select g.GroupId).ToList().Contains(u.GroupUpdate.GroupGoal.GroupUser.GroupId) select u;
+             var comment = from u in _groupCommentRepository.GetAll() where (from g in groupUserService.GetGroupUsers() where g.UserId == userid select g.GroupId).ToList().Contains(u.GroupUpdate.GroupGoal.GroupUser.GroupId) select u;
           
             return comment;
         }
@@ -74,48 +68,48 @@ namespace SocialGoal.Service
 
         public IEnumerable<GroupComment> GetCommentsByUpdate(int updateid)
         {
-            var comments = groupCommentRepository.GetMany(c => c.GroupUpdateId == updateid).ToList();
+            var comments = _groupCommentRepository.GetMany(c => c.GroupUpdateId == updateid).ToList();
             return comments;
         }
 
 
         public GroupComment GetComment(int id)
         {
-            var comment = groupCommentRepository.GetById(id);
+            var comment = _groupCommentRepository.GetById(id);
             return comment;
         }
 
         public GroupComment GEtUpdateByCommentId(int id)
         {
-            var comment = groupCommentRepository.Get(u => u.GroupCommentId == id);
+            var comment = _groupCommentRepository.Get(u => u.GroupCommentId == id);
             return comment;
         }
 
         public void CreateComment(GroupComment comment, string userId)
         {
-            groupCommentRepository.Add(comment);
+            _groupCommentRepository.Add(comment);
             SaveComment();
             var groupCommentUser = new GroupCommentUser { UserId = userId, GroupCommentId = comment.GroupCommentId };
-            groupCommentUserRepository.Add(groupCommentUser);
+            _groupCommentUserRepository.Add(groupCommentUser);
             SaveComment();
         }
 
         public int GetCommentcount(int id)
         {
-            return groupCommentRepository.GetMany(c => c.GroupUpdateId == id).Count();
+            return _groupCommentRepository.GetMany(c => c.GroupUpdateId == id).Count();
         }
 
         public void DeleteComment(int id)
         {
-            var comment = groupCommentRepository.GetById(id);
-            groupCommentRepository.Delete(comment);
-            groupCommentUserRepository.Delete(gc => gc.GroupCommentId == id);
+            var comment = _groupCommentRepository.GetById(id);
+            _groupCommentRepository.Delete(comment);
+            _groupCommentUserRepository.Delete(gc => gc.GroupCommentId == id);
             SaveComment();
         }
 
         public void SaveComment()
         {
-            unitOfWork.Commit();
+            _unitOfWork.Commit();
         }
 
         #endregion

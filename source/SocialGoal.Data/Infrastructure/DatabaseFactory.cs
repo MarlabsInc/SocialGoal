@@ -4,15 +4,15 @@ namespace SocialGoal.Data.Infrastructure
 {
 public class DatabaseFactory : Disposable, IDatabaseFactory
 {
-    private SocialGoalEntities dataContext;
+    private SocialGoalEntities _dataContext;
     public SocialGoalEntities Get()
     {
-        return dataContext ?? (dataContext = new SocialGoalEntities());
+        return _dataContext ?? (_dataContext = new SocialGoalEntities());
     }
     protected override void DisposeCore()
     {
-        if (dataContext != null)
-            dataContext.Dispose();
+        if (_dataContext != null)
+            _dataContext.Dispose();
     }
 }
 }

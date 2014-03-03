@@ -75,7 +75,6 @@
     <Compile Include="Models\SupportInvitation.cs" />
     <Compile Include="Models\Update.cs" />
     <Compile Include="Models\UpdateSupport.cs" />
-    <Compile Include="Models\User.cs" />
     <Compile Include="Models\UserProfile.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -1,6 +1,4 @@
-﻿
-using System;
-namespace SocialGoal.Model.Models
+﻿namespace SocialGoal.Model.Models
 {
     public class GroupUpdateUser
     {

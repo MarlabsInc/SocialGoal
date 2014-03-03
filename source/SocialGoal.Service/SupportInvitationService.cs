@@ -3,7 +3,6 @@ using System.Linq;
 using SocialGoal.Model.Models;
 using SocialGoal.Data.Repository;
 using SocialGoal.Data.Infrastructure;
-using System;
 
 namespace SocialGoal.Service
 {
@@ -11,7 +10,7 @@ namespace SocialGoal.Service
     {
         IEnumerable<SupportInvitation> GetSupportInvitations();
         SupportInvitation GetSupportInvitation(int id);
-        void CreateSupportInvitation(SupportInvitation SupportInvitation);
+        void CreateSupportInvitation(SupportInvitation supportInvitation);
         void DeleteSupportInvitation(int id);
         void SaveSupportInvitation();
         bool IsUserInvited(int goalId, string userId);
@@ -21,51 +20,49 @@ namespace SocialGoal.Service
     }
     public class SupportInvitationService : ISupportInvitationService
     {
-        private readonly ISupportInvitationRepository SupportInvitationRepository;
-        private readonly IUnitOfWork unitOfWork;
+        private readonly ISupportInvitationRepository _supportInvitationRepository;
+        private readonly IUnitOfWork _unitOfWork;
         
-        public SupportInvitationService(ISupportInvitationRepository SupportInvitationRepository, IUnitOfWork unitOfWork)
+        public SupportInvitationService(ISupportInvitationRepository supportInvitationRepository, IUnitOfWork unitOfWork)
         {
-            this.SupportInvitationRepository = SupportInvitationRepository;
-            this.unitOfWork = unitOfWork;
+            _supportInvitationRepository = supportInvitationRepository;
+            _unitOfWork = unitOfWork;
         }
 
         #region ISupportInvitationService Members
 
         public IEnumerable<SupportInvitation> GetSupportInvitations()
         {
-            var SupportInvitation = SupportInvitationRepository.GetAll();
-            return SupportInvitation;
+            var supportInvitation = _supportInvitationRepository.GetAll();
+            return supportInvitation;
         }
 
         public void AcceptInvitation(int id, string userid)
         {
-            var SupportInvitation = SupportInvitationRepository.Get(g => (g.GoalId == id && g.ToUserId == userid));
-            if (SupportInvitation != null)
+            var supportInvitation = _supportInvitationRepository.Get(g => (g.GoalId == id && g.ToUserId == userid));
+            if (supportInvitation != null)
             {
-                SupportInvitationRepository.Delete(SupportInvitation);
-                //SupportInvitation.Accepted = true;
-                //SupportInvitationRepository.Update(SupportInvitation);
+                _supportInvitationRepository.Delete(supportInvitation);
                 SaveSupportInvitation();
             }
         }
 
         public SupportInvitation GetSupportInvitation(int id)
         {
-            var SupportInvitation = SupportInvitationRepository.GetById(id);
-            return SupportInvitation;
+            var supportInvitation = _supportInvitationRepository.GetById(id);
+            return supportInvitation;
         }
 
-        public void CreateSupportInvitation(SupportInvitation SupportInvitation)
+        public void CreateSupportInvitation(SupportInvitation supportInvitation)
         {
-            SupportInvitationRepository.Add(SupportInvitation);
+            _supportInvitationRepository.Add(supportInvitation);
             SaveSupportInvitation();
         }
 
         public void DeleteSupportInvitation(int id)
         {
-            var SupportInvitation = SupportInvitationRepository.GetById(id);
-            SupportInvitationRepository.Delete(SupportInvitation);
+            var supportInvitation = _supportInvitationRepository.GetById(id);
+            _supportInvitationRepository.Delete(supportInvitation);
             SaveSupportInvitation();
         }
 
@@ -76,12 +73,12 @@ namespace SocialGoal.Service
 
         public bool IsUserInvited(int goalId, string userId)
         {
-            return SupportInvitationRepository.Get(s => s.ToUserId == userId && s.GoalId == goalId) != null;
+            return _supportInvitationRepository.Get(s => s.ToUserId == userId && s.GoalId == goalId) != null;
         }
 
         public void SaveSupportInvitation()
         {
-            unitOfWork.Commit();
+            _unitOfWork.Commit();
         }
 
         #endregion

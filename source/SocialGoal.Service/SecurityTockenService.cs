@@ -18,26 +18,26 @@ namespace SocialGoal.Service
 
     public class SecurityTokenService : ISecurityTokenService
     {
-        private readonly ISecurityTokenRepository securityTokenRepository;
-        private readonly IUnitOfWork unitOfWork;
+        private readonly ISecurityTokenRepository _securityTokenRepository;
+        private readonly IUnitOfWork _unitOfWork;
 
         public SecurityTokenService(ISecurityTokenRepository securityTokenRepository, IUnitOfWork unitOfWork)
         {
-            this.securityTokenRepository = securityTokenRepository;
-            this.unitOfWork = unitOfWork;
+            _securityTokenRepository = securityTokenRepository;
+            _unitOfWork = unitOfWork;
         }
 
         #region ISecurityTokenService Members
 
         public IEnumerable<SecurityToken> GetSecurityTokens()
         {
-            var securityToken = securityTokenRepository.GetAll();
+            var securityToken = _securityTokenRepository.GetAll();
             return securityToken;
         }
 
         public Guid GetSecurityToken(Guid id)
         {
-            var securityToken = securityTokenRepository.Get(s => s.Token == id).Token;
+            var securityToken = _securityTokenRepository.Get(s => s.Token == id).Token;
             if (securityToken != null)
             {
                 return securityToken;
@@ -50,25 +50,25 @@ namespace SocialGoal.Service
         }
         public int GetActualId(Guid id)
         {
-            var actualId = securityTokenRepository.Get(s => s.Token == id).ActualID;
+            var actualId = _securityTokenRepository.Get(s => s.Token == id).ActualID;
             return actualId;
         }
         public void CreateSecurityToken(SecurityToken securityToken)
         {
-            securityTokenRepository.Add(securityToken);
+            _securityTokenRepository.Add(securityToken);
             SaveSecurityToken();
         }
 
         public void DeleteSecurityToken(Guid id)
         {
-            var securityToken = securityTokenRepository.Get(s => s.Token == id);
-            securityTokenRepository.Delete(securityToken);
+            var securityToken = _securityTokenRepository.Get(s => s.Token == id);
+            _securityTokenRepository.Delete(securityToken);
             SaveSecurityToken();
         }
 
         public void SaveSecurityToken()
         {
-            unitOfWork.Commit();
+            _unitOfWork.Commit();
         }
 
         #endregion
