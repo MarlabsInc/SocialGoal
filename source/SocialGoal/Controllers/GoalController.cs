@@ -185,8 +185,8 @@ namespace SocialGoal.Web.Controllers
         public PartialViewResult MyGoals()
         {
             string userid = User.Identity.GetUserId();
-            var Goals = goalService.GetMyGoals(userid);
-            return PartialView("_MyGoalsView", Goals);
+            var goals = goalService.GetMyGoals(userid);
+            return PartialView("_MyGoalsView", goals);
         }
 
         public PartialViewResult GoalsFollowing()
@@ -354,7 +354,7 @@ namespace SocialGoal.Web.Controllers
             if (ModelState.IsValid)
             {
                 Guid goalIdToken = Guid.NewGuid();
-                SecurityToken goalIdSecurity = new SecurityToken()
+                var goalIdSecurity = new SecurityToken()
                 {
                     Token = goalIdToken,
                     ActualID = inviteEmail.GrouporGoalId

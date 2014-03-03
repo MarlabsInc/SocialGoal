@@ -1,4 +1,5 @@
-﻿@model SocialGoal.Web.ViewModels.FocusViewModel
+﻿@using System.Linq
+@model FocusViewModel
 @{
     ViewBag.Title = "Focus Page";
     Layout = "~/Views/Shared/_PageLayout.cshtml";
@@ -20,7 +21,7 @@
         <div class="well span7" id="goalistinfocus" style="height: 320px">
         <h5>
             GOALS</h5>
-            @if (Model.GroupGoal.Count() == 0)
+            @if (!Model.GroupGoal.Any())
             {
                 <h6>
                     No Goals</h6>
@@ -31,7 +32,7 @@
                 <div style="position: relative">@Html.ActionLink(item.GoalName, "GroupGoal", "Group", new { id = item.GroupGoalId }, null)
                 </div>
                 <div>@item.StartDate.ToString("dd MMM yyyy")- @item.EndDate.ToString("dd MMM yyyy")</div>
-                <div>Created By @Html.ActionLink(item.User.UserName, "UserProfile", "Account", new { id = item.User.UserId }, null)</div>
+                <div>Created By @Html.ActionLink(item.User.UserName, "UserProfile", "Account", new { id = item.User.Id}, null)</div>
                 @if (Model.IsAMember == true)
                 { 
                     <div align="right" id="div@(item.GroupGoalId)">

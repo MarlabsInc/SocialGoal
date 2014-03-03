@@ -1,5 +1,6 @@
-﻿@using Microsoft.AspNet.Identity
-@model SocialGoal.Web.ViewModels.GroupGoalViewModel
+﻿@using System.Linq
+@using Microsoft.AspNet.Identity
+@model GroupGoalViewModel
 @{
     ViewBag.Title = Model.GoalName;
     ViewContext.Controller.ViewBag.IncludeJqplot = true;
@@ -9,7 +10,6 @@
 @Html.Hidden("Targt", Model.Target)
 @Html.Hidden("Met", Model.MetricId)
 @Html.Hidden("GoalId", @Model.GroupGoalId)
-@*@Html.HiddenFor(m => m.GroupGoalId)*@
 @Html.Hidden("GroupId", @Model.GroupId)
 @Html.Hidden("GroupUpdates", Model.Updates.Count())
 <div class="well" style="height: 170px;">
@@ -32,7 +32,9 @@
         {
                
             <div>
-                <small>Assigned to @Html.ActionLink(Model.AssignedTo, "UserProfile", "Account", new { id = Model.AssignedUserId })</small>
+                <small>
+                    Assigned to @Html.ActionLink(Model.AssignedTo, "UserProfile", "Account", new { id = Model.AssignedUserId }, null)
+                </small>
             </div>
         }
      </div>
@@ -93,8 +95,7 @@
             <thead>
                 <tr>
                     <th>
-                        <h5>
-                            Post Your Update</h5>
+                            Post Your Update
                     </th>
                 </tr>
             </thead>

@@ -1,7 +1,8 @@
-﻿@model SocialGoal.Web.ViewModels.UpdateSupportersViewModel
+﻿@using System.Linq
+@model UpdateSupportersViewModel
 
 <div class="well">
-@if (Model.Users.Count() == 0)
+@if (!Model.Users.Any())
 {
     <p class="span5 alert alert-info supporters-message">No Supporters</p>  
 }
@@ -10,7 +11,7 @@
         <div style="margin:0px;padding:10px;">
          <div style="margin-left:1px;">
           
-                <a href="@Url.Action("UserProfile", "Account", new { id = item.UserId }, null)" >
+                <a href="@Url.Action("UserProfile", "Account", new { id = item.Id }, null)" >
                     @Html.User().Avatar(item.ProfilePicUrl, new { @class = "span3", style = "margin-right:10px;" })
                 </a>    
          </div>
