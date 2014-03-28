@@ -8,10 +8,8 @@ namespace SocialGoal.Model.Models
     {
         public int FocusId { get; set; }
 
-        [StringLength(50)]
         public string FocusName { get; set; }
 
-        [StringLength(100)]
         public string Description { get; set; }
 
         public int GroupId { get; set; }

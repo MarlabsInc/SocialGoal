@@ -9,16 +9,12 @@ namespace SocialGoal.Model.Models
     {
         public int GoalId { get; set; }
 
-        [StringLength(50)]
         public string GoalName { set; get; }
 
-        [StringLength(100)]
         public string Desc { get; set; }
 
-        [DisplayFormat(DataFormatString = "{0:dd MMM yyyy}")]
         public DateTime StartDate { get; set; }
 
-        [DisplayFormat(DataFormatString = "{0:dd MMM yyyy}")]
         public DateTime EndDate { get; set; }
 
         public double? Target { get; set; }
