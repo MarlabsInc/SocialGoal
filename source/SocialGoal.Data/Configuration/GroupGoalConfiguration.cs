@@ -19,7 +19,6 @@ namespace SocialGoal.Data.Configuration
             Property(g => g.EndDate).IsRequired();
             Property(g => g.GoalStatusId).IsRequired();
             Property(g => g.GroupUserId).IsRequired();
-            Property(g => g.AssignedTo).IsRequired();
         }
     }
 }

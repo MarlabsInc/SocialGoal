@@ -812,21 +812,20 @@ namespace SocialGoal.Tests.Controllers
 
 
             IEnumerable<Update> updt = new List<Update> {            
-            new Update { UpdateId =1, Updatemsg = "t1",GoalId =1},
-             new Update { UpdateId =2, Updatemsg = "t2",GoalId =1},
-              new Update { UpdateId =3, Updatemsg = "t3",GoalId =2},
+            new Update { UpdateId =1, Updatemsg = "t1",GoalId =1,status=5},
+             new Update { UpdateId =2, Updatemsg = "t2",GoalId =1,status=6},
+              new Update { UpdateId =3, Updatemsg = "t3",GoalId =2,status=2},
             
           }.AsEnumerable();
+
             updateRepository.Setup(x => x.GetMany(It.IsAny<Expression<Func<Update, bool>>>())).Returns(updt);
             UpdateFormModel mock = new UpdateFormModel();
             mock.Updatemsg = "mock";
             mock.GoalId = 1;
+            mock.status=9;
             PartialViewResult result = controller.SaveUpdate(mock) as PartialViewResult;
             Assert.IsNotNull(result);
-            Assert.IsInstanceOf(typeof(UpdateListViewModel),
-            result.ViewData.Model, "Wrong View Model");
-
-
+            Assert.IsInstanceOf(typeof(UpdateListViewModel), result.ViewData.Model, "Wrong View Model");
         }
         [Test]
         public void Save_Update_Update_Mandatory_Test()

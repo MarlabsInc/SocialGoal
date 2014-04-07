@@ -4,9 +4,10 @@
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Social Goal</title>
-
-       @Scripts.Render("~/Scripts/homelayout")
-       @Styles.Render("~/Content/CSS")
+    
+     @Styles.Render("~/Content/CSS")
+	 @Scripts.Render("~/Scripts/HomeLayout")
+    
 </head>
 <body>
     <div class="navbar navbar navbar-fixed-top">
@@ -200,19 +201,14 @@ $('#notification').getNiceScroll().remove();
 
 function CreateGoal()
 {
-    debugger;
 $('#divFollowedGroup').getNiceScroll().remove();
 $('#divSGoals').getNiceScroll().remove();
 $('#divGoals').getNiceScroll().remove();
 $('#notification').getNiceScroll().remove();
- var url ="/Goal/Create/";
- $.get(url, function (result) {
-     debugger;
-     alert(result);
+ var url ="/Goal/Create";
+ $.get(url,function(result){
 	$("#createGoal").html(result);
 
- }, function (err) {
-     console.log(err);
  });
 }
 
@@ -227,8 +223,7 @@ function DeleteUser(userId,groupId) {
 
 
 	function CreateGroup()
-{
-	    debugger;
+	{
 	$('#divFollowedGroup').getNiceScroll().remove();
 	$('#divSGoals').getNiceScroll().remove();
 	$('#divGoals').getNiceScroll().remove();

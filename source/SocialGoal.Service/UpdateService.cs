@@ -26,6 +26,7 @@ namespace SocialGoal.Service
         void DeleteUpdate(int id);
         void SaveUpdate();
         //IEnumerable<ValidationResult> CanAddUpdate(Update newUpdate);
+        Update GetHighestUpdateValue(int goalid);
 
     }
     public class UpdateService : IUpdateService
@@ -77,6 +78,18 @@ namespace SocialGoal.Service
             var updates = updateRepository.GetMany(u => u.GoalId == goalid).OrderByDescending(u => u.UpdateId).ToList();
             return updates;
         }
+        public Update GetHighestUpdateValue(int goalid)
+        {
+            try
+            {
+                Update updates = updateRepository.GetMany(u => u.GoalId == goalid).OrderByDescending(u => u.status).First();
+                return updates;
+            }
+            catch
+            { return null; }
+          
+        }
+
         public IEnumerable<Update> GetUpdatesWithStatus(int goalid)
         {
             var updates = updateRepository.GetMany(u => (u.GoalId == goalid) && (u.status != null)).OrderByDescending(u => u.UpdateId).ToList();
