@@ -87,15 +87,7 @@ namespace SocialGoal.Tests.Controllers
         public void Index_If_AjaxRequest_IsNull()
         {
             MemoryUser user = new MemoryUser("adarsh");
-            ApplicationUser applicationUser = new ApplicationUser()
-            {
-                Activated = true,
-                Email = "adarsh@foo.com",
-                FirstName = "Adarsh",
-                LastName = "Vikraman",
-                RoleId = 0,
-                Id = "402bd590-fdc7-49ad-9728-40efbfe512ec"
-            };
+            ApplicationUser applicationUser = getApplicationUser();
             var userContext = new UserInfo
             {
                 UserId = user.Id,
@@ -180,15 +172,7 @@ namespace SocialGoal.Tests.Controllers
         public void Index_If_AjaxRequest_Is_NotNull()
         {
             MemoryUser user = new MemoryUser("adarsh");
-            ApplicationUser applicationUser = new ApplicationUser()
-            {
-                Activated = true,
-                Email = "adarsh@foo.com",
-                FirstName = "Adarsh",
-                LastName = "Vikraman",
-                RoleId = 0,
-                Id = "402bd590-fdc7-49ad-9728-40efbfe512ec"
-            };
+            ApplicationUser applicationUser = getApplicationUser();
             var userContext = new UserInfo
             {
                 UserId = user.Id,
@@ -276,15 +260,7 @@ namespace SocialGoal.Tests.Controllers
         public void Get_All_Notifications()
         {
             MemoryUser user = new MemoryUser("adarsh");
-            ApplicationUser applicationUser = new ApplicationUser()
-            {
-                Activated = true,
-                Email = "adarsh@foo.com",
-                FirstName = "Adarsh",
-                LastName = "Vikraman",
-                RoleId = 0,
-                Id = "402bd590-fdc7-49ad-9728-40efbfe512ec"
-            };
+            ApplicationUser applicationUser = getApplicationUser();
             var userContext = new UserInfo
             {
                 UserId = user.Id,
@@ -363,6 +339,24 @@ namespace SocialGoal.Tests.Controllers
             Mapper.CreateMap<FollowRequest, NotificationViewModel>();
             IEnumerable<NotificationViewModel> result = controller.GetNotifications(5, 5) as IEnumerable<NotificationViewModel>;
             Assert.IsNotNull(result);
+        }
+
+        public ApplicationUser getApplicationUser()
+        {
+            ApplicationUser applicationUser = new ApplicationUser()
+            {
+                Activated = true,
+                Email = "adarsh@foo.com",
+                FirstName = "Adarsh",
+                LastName = "Vikraman",
+                UserName = "adarsh",
+                RoleId = 0,
+                Id = "402bd590-fdc7-49ad-9728-40efbfe512ec",
+                DateCreated = DateTime.Now,
+                LastLoginTime = DateTime.Now,
+                ProfilePicUrl = null,
+            };
+            return applicationUser;
         }
 
 
