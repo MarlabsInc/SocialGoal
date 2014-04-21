@@ -50,6 +50,15 @@ Goals and Roadmap
  * Provide an API for Mobility, by using ASP.NET Web API 2.  
  * Build cross platform, minimalist mobile apps by using HTML5/JavaScript platform.
  * Build Mobile Backend as a Service (MBaaS) solution on the Windows Azure for the mobile apps. 
+ 
+## Team
+
+* [Shiju Varghese](http://weblogs.asp.net/shijuvarghese/) - Architect, Core Committer
+* [Adarsh V.S.](https://github.com/adarsh-vs) - Lead Developer
+* [Sharon Sudhan](https://github.com/Sharonsudhan) - Developer, Core Committer 
+* [Peter Kneale](https://github.com/PeterKneale) - Contributor
+* [offi] (https://github.com/offi) - Contributor
+ 
 
 
 
