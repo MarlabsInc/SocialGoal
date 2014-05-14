@@ -54,8 +54,8 @@ Goals and Roadmap
 ## Team
 
 * [Shiju Varghese](http://weblogs.asp.net/shijuvarghese/) - Architect, Core Committer
+* [Sharon Sudhan](https://github.com/Sharonsudhan) - Lead Developer 
 * [Adarsh V.S.](https://github.com/adarsh-vs) - Lead Developer
-* [Sharon Sudhan](https://github.com/Sharonsudhan) - Developer, Core Committer 
 * [Peter Kneale](https://github.com/PeterKneale) - Contributor
 * [offi] (https://github.com/offi) - Contributor
  
