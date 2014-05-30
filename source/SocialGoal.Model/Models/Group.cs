@@ -8,10 +8,8 @@ namespace SocialGoal.Model.Models
     {
         public int GroupId { get; set; }
 
-        [StringLength(50)]
         public string GroupName { get; set; }
 
-        [StringLength(100)]
         public string Description { get; set; }
 
         public DateTime CreatedDate { get; set; }

@@ -228,21 +228,41 @@ namespace SocialGoal.Web.Controllers
             {
                 Update update = Mapper.Map<UpdateFormModel, Update>(newupdate);
                 update.Goal = goalService.GetGoal(newupdate.GoalId);
-                updateService.CreateUpdate(update);
-                var Updates = Mapper.Map<IEnumerable<Update>, IEnumerable<UpdateViewModel>>(updateService.GetUpdatesByGoal(newupdate.GoalId));
-                foreach (var item in Updates)
-                {
-                    item.IsSupported = updateSupportService.IsUpdateSupported(item.UpdateId, User.Identity.GetUserId());
+                var updateVal = updateService.GetHighestUpdateValue(newupdate.GoalId);
+               
+                if(updateVal!=null)
+                {  
+                    if (updateVal.status <= newupdate.status)
+                    {
+                        updateService.CreateUpdate(update);
+                       
+                    }
+                    else
+                    {
+                        update.status = -1;
+                        ModelState.AddModelError(update.Updatemsg, "cannot enter");
+                    }
                 }
-                UpdateListViewModel updates = new UpdateListViewModel()
+                else
                 {
-                    Updates = Updates,
-                    Metric = goalService.GetGoal(newupdate.GoalId).Metric,
-                    Target = goalService.GetGoal(newupdate.GoalId).Target,
-                    //IsSupported = updateSupportService.IsUpdateSupported(newupdate.UpdateId,((SocialGoalUser)(User.Identity)).UserId)
+                    updateService.CreateUpdate(update);
+                }
 
-                };
-                return PartialView("_UpdateView", updates);
+
+                     var Updates = Mapper.Map<IEnumerable<Update>, IEnumerable<UpdateViewModel>>(updateService.GetUpdatesByGoal(newupdate.GoalId));
+                     foreach (var item in Updates)
+                     {
+                         item.IsSupported = updateSupportService.IsUpdateSupported(item.UpdateId, User.Identity.GetUserId());
+                     }
+                     UpdateListViewModel updates = new UpdateListViewModel()
+                     {
+                         Updates = Updates,
+                         Metric = goalService.GetGoal(newupdate.GoalId).Metric,
+                         Target = goalService.GetGoal(newupdate.GoalId).Target,
+                         //IsSupported = updateSupportService.IsUpdateSupported(newupdate.UpdateId,((SocialGoalUser)(User.Identity)).UserId)
+                     };
+                     return PartialView("_UpdateView", updates);
+
             }
             return null;
         }

@@ -145,14 +145,7 @@ namespace SocialGoal.Tests.Controllers
         {
 
             MemoryUser user = new MemoryUser("adarsh");
-            ApplicationUser applicationUser = new ApplicationUser()
-            {
-                Activated = true,
-                Email = "adarsh@foo.com",
-                FirstName = "Adarsh",
-                LastName = "Vikraman",
-                RoleId = 0
-            };
+            ApplicationUser applicationUser = getApplicationUser();
             var userContext = new UserInfo
             {
                 UserId = user.Id,
@@ -227,14 +220,7 @@ namespace SocialGoal.Tests.Controllers
         public void MyGoal_Test()
         {
             MemoryUser user = new MemoryUser("adarsh");
-            ApplicationUser applicationUser = new ApplicationUser()
-            {
-                Activated = true,
-                Email = "adarsh@foo.com",
-                FirstName = "Adarsh",
-                LastName = "Vikraman",
-                RoleId = 0
-            };
+            ApplicationUser applicationUser = getApplicationUser();
             var userContext = new UserInfo
             {
                 UserId = user.Id,
@@ -260,15 +246,9 @@ namespace SocialGoal.Tests.Controllers
             contextBase.SetupGet(x => x.Request).Returns(httpRequest.Object);
             contextBase.SetupGet(x => x.Response).Returns(httpResponse.Object);
             genericPrincipal.Setup(x => x.Identity).Returns(identity.Object);
-
             contextBase.SetupGet(a => a.Response.Cookies).Returns(new HttpCookieCollection());
-
             var formsAuthentication = new DefaultFormsAuthentication();
-
-
-
             formsAuthentication.SetAuthCookie(contextBase.Object, testTicket);
-
             HttpCookie authCookie = contextBase.Object.Response.Cookies[FormsAuthentication.FormsCookieName];
 
             var ticket = formsAuthentication.Decrypt(authCookie.Value);
@@ -276,9 +256,6 @@ namespace SocialGoal.Tests.Controllers
             string[] userRoles = { goalsetterUser.RoleName };
 
             principal.Setup(x => x.Identity).Returns(goalsetterUser);
-
-
-
             IEnumerable<Goal> fake = new List<Goal> 
             {
             new Goal { GoalId=1,GoalName="Test1"},
@@ -291,17 +268,12 @@ namespace SocialGoal.Tests.Controllers
 
 
             contextBase.Setup(x => x.User.Identity).Returns(identity.Object);
-
             Mapper.CreateMap<Goal, GoalViewModel>();
-
             ViewResult result = controller.MyGoal() as ViewResult;
             Assert.IsNotNull(result);
             Assert.IsInstanceOfType(typeof(IEnumerable<GoalViewModel>), result.ViewData.Model, "Wrong model");
-
             var data = result.ViewData.Model as IEnumerable<GoalViewModel>;
-
             Assert.AreEqual(4, data.Count(), "not matching");
-
         }
 
 
@@ -499,14 +471,8 @@ namespace SocialGoal.Tests.Controllers
         public void MyGoals_test()
         {
             MemoryUser user = new MemoryUser("adarsh");
-            ApplicationUser applicationUser = new ApplicationUser()
-            {
-                Activated = true,
-                Email = "adarsh@foo.com",
-                FirstName = "Adarsh",
-                LastName = "Vikraman",
-                RoleId = 0
-            };
+            ApplicationUser applicationUser = getApplicationUser();
+
             var userContext = new UserInfo
             {
                 UserId = user.Id,
@@ -571,14 +537,7 @@ namespace SocialGoal.Tests.Controllers
         public void Goals_Following_Test()
         {
             MemoryUser user = new MemoryUser("adarsh");
-            ApplicationUser applicationUser = new ApplicationUser()
-            {
-                Activated = true,
-                Email = "adarsh@foo.com",
-                FirstName = "Adarsh",
-                LastName = "Vikraman",
-                RoleId = 0
-            };
+            ApplicationUser applicationUser = getApplicationUser();
             var userContext = new UserInfo
             {
                 UserId = user.Id,
@@ -634,14 +593,8 @@ namespace SocialGoal.Tests.Controllers
         public void Display_Updates_Test()
         {
             MemoryUser user = new MemoryUser("adarsh");
-            ApplicationUser applicationUser = new ApplicationUser()
-            {
-                Activated = true,
-                Email = "adarsh@foo.com",
-                FirstName = "Adarsh",
-                LastName = "Vikraman",
-                RoleId = 0
-            };
+            ApplicationUser applicationUser = getApplicationUser();
+
             var userContext = new UserInfo
             {
                 UserId = user.Id,
@@ -742,14 +695,7 @@ namespace SocialGoal.Tests.Controllers
         public void Save_Update_Post()
         {
             MemoryUser user = new MemoryUser("adarsh");
-            ApplicationUser applicationUser = new ApplicationUser()
-            {
-                Activated = true,
-                Email = "adarsh@foo.com",
-                FirstName = "Adarsh",
-                LastName = "Vikraman",
-                RoleId = 0
-            };
+            ApplicationUser applicationUser = getApplicationUser();
             var userContext = new UserInfo
             {
                 UserId = user.Id,
@@ -812,21 +758,20 @@ namespace SocialGoal.Tests.Controllers
 
 
             IEnumerable<Update> updt = new List<Update> {            
-            new Update { UpdateId =1, Updatemsg = "t1",GoalId =1},
-             new Update { UpdateId =2, Updatemsg = "t2",GoalId =1},
-              new Update { UpdateId =3, Updatemsg = "t3",GoalId =2},
+            new Update { UpdateId =1, Updatemsg = "t1",GoalId =1,status=5},
+             new Update { UpdateId =2, Updatemsg = "t2",GoalId =1,status=6},
+              new Update { UpdateId =3, Updatemsg = "t3",GoalId =2,status=2},
             
           }.AsEnumerable();
+
             updateRepository.Setup(x => x.GetMany(It.IsAny<Expression<Func<Update, bool>>>())).Returns(updt);
             UpdateFormModel mock = new UpdateFormModel();
             mock.Updatemsg = "mock";
             mock.GoalId = 1;
+            mock.status=9;
             PartialViewResult result = controller.SaveUpdate(mock) as PartialViewResult;
             Assert.IsNotNull(result);
-            Assert.IsInstanceOf(typeof(UpdateListViewModel),
-            result.ViewData.Model, "Wrong View Model");
-
-
+            Assert.IsInstanceOf(typeof(UpdateListViewModel), result.ViewData.Model, "Wrong View Model");
         }
         [Test]
         public void Save_Update_Update_Mandatory_Test()
@@ -847,16 +792,8 @@ namespace SocialGoal.Tests.Controllers
         {
 
             MemoryUser user = new MemoryUser("adarsh");
-            ApplicationUser applicationUser = new ApplicationUser()
-            {
-                Activated = true,
-                Email = "adarsh@foo.com",
-                FirstName = "Adarsh",
-                LastName = "Vikraman",
-                RoleId = 0,
-                Id = "402bd590-fdc7-49ad-9728-40efbfe512ec",
-                
-            };
+            ApplicationUser applicationUser = getApplicationUser();
+
             var userContext = new UserInfo
             {
                 UserId = user.Id,
@@ -934,15 +871,7 @@ namespace SocialGoal.Tests.Controllers
                 CommentUserId = 1
             };
             commentUserRepository.Setup(x => x.Get(It.IsAny<Expression<Func<CommentUser, bool>>>())).Returns(cmtuser);
-
-            ApplicationUser applicationUser = new ApplicationUser()
-            {
-                Activated = true,
-                Email = "adarsh@foo.com",
-                FirstName = "Adarsh",
-                LastName = "Vikraman",
-                RoleId = 0
-            };
+            ApplicationUser applicationUser = getApplicationUser();
             userRepository.Setup(x => x.GetById("402bd590-fdc7-49ad-9728-40efbfe512ec")).Returns(applicationUser);
             GoalController controller = new GoalController(goalService, metricService, focusService, supportService, updateService, commentService, userService, securityTokenService, supportInvitationService, goalStatusService, commentUserService, updateSupportService);
 
@@ -958,14 +887,7 @@ namespace SocialGoal.Tests.Controllers
         public void SaveComment()
         {
             MemoryUser user = new MemoryUser("adarsh");
-            ApplicationUser applicationUser = new ApplicationUser()
-            {
-                Activated = true,
-                Email = "adarsh@foo.com",
-                FirstName = "Adarsh",
-                LastName = "Vikraman",
-                RoleId = 0
-            };
+            ApplicationUser applicationUser = getApplicationUser();
             var userContext = new UserInfo
             {
                 UserId = user.Id,
@@ -1044,14 +966,7 @@ namespace SocialGoal.Tests.Controllers
         public void SearchGoalSearch_User_Which_Support_The_Goal()
         {
             MemoryUser user = new MemoryUser("adarsh");
-            ApplicationUser applicationUser = new ApplicationUser()
-            {
-                Activated = true,
-                Email = "adarsh@foo.com",
-                FirstName = "Adarsh",
-                LastName = "Vikraman",
-                RoleId = 0
-            };
+            ApplicationUser applicationUser = getApplicationUser();
             var userContext = new UserInfo
             {
                 UserId = user.Id,
@@ -1115,14 +1030,7 @@ namespace SocialGoal.Tests.Controllers
         public void Create_Support_Test()
         {
             MemoryUser user = new MemoryUser("adarsh");
-            ApplicationUser applicationUser = new ApplicationUser()
-            {
-                Activated = true,
-                Email = "adarsh@foo.com",
-                FirstName = "Adarsh",
-                LastName = "Vikraman",
-                RoleId = 0
-            };
+            ApplicationUser applicationUser = getApplicationUser();
             var userContext = new UserInfo
             {
                 UserId = user.Id,
@@ -1194,14 +1102,7 @@ namespace SocialGoal.Tests.Controllers
         {
 
             MemoryUser user = new MemoryUser("adarsh");
-            ApplicationUser applicationUser = new ApplicationUser()
-            {
-                Activated = true,
-                Email = "adarsh@foo.com",
-                FirstName = "Adarsh",
-                LastName = "Vikraman",
-                RoleId = 0
-            };
+            ApplicationUser applicationUser = getApplicationUser();
             var userContext = new UserInfo
             {
                 UserId = user.Id,
@@ -1350,14 +1251,8 @@ namespace SocialGoal.Tests.Controllers
         public void Edit_Update_Post()
         {
             MemoryUser user = new MemoryUser("adarsh");
-            ApplicationUser applicationUser = new ApplicationUser()
-            {
-                Activated = true,
-                Email = "adarsh@foo.com",
-                FirstName = "Adarsh",
-                LastName = "Vikraman",
-                RoleId = 0
-            };
+            ApplicationUser applicationUser = getApplicationUser();
+
             var userContext = new UserInfo
             {
                 UserId = user.Id,
@@ -1541,6 +1436,24 @@ namespace SocialGoal.Tests.Controllers
             Assert.IsNotNull(result);
             Assert.IsInstanceOf(typeof(UpdateSupportersViewModel), result.ViewData.Model, "Wrong View Model");
 
+        }
+
+        public ApplicationUser getApplicationUser()
+        {
+            ApplicationUser applicationUser = new ApplicationUser()
+            {
+                Activated = true,
+                Email = "adarsh@foo.com",
+                FirstName = "Adarsh",
+                LastName = "Vikraman",
+                UserName = "adarsh",
+                RoleId = 0,
+                Id = "402bd590-fdc7-49ad-9728-40efbfe512ec",
+                DateCreated = DateTime.Now,
+                LastLoginTime = DateTime.Now,
+                ProfilePicUrl = null,
+            };
+            return applicationUser;
         }
     }
 }

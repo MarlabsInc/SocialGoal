@@ -61,7 +61,11 @@
             </tr>
             <tr>
                 <td>
-                    <strong>End Date</strong> : @Html.DisplayFor(m => m.EndDate)
+                    <strong>End Date</strong> : @Html.DisplayFor(m => m.EndDate) 
+                    @if (Model.EndDate < DateTime.Now)
+                    {
+                        <span class="label label-important">Date Exceeded</span>
+                    }
                 </td>
             </tr>
             <tr>
@@ -124,7 +128,6 @@
                             @if (Model.Metric != null)
                             { 
                                 <input type="text" id="Status" onfocus="clearStatusError()" class="span8" placeholder="Add new satus of this update" /> 
-                                
                             }
                             @if (Model.Metric != null && Model.Target != null)
                             { <span class="add-on">/@Model.Target @Model.Metric.Type</span>}

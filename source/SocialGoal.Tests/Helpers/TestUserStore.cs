@@ -12,15 +12,28 @@ namespace SocialGoal.Tests.Helpers
 {
     public class TestUserStore : IUserStore<ApplicationUser>, IUserLoginStore<ApplicationUser>, IUserRoleStore<ApplicationUser>, IUserClaimStore<ApplicationUser>, IUserPasswordStore<ApplicationUser>, IUserSecurityStampStore<ApplicationUser>
     {
-        private Dictionary<string, ApplicationUser> _users = new Dictionary<string, ApplicationUser>();
+        private Dictionary<string, ApplicationUser> _users;
         private Dictionary<IdentityUserLogin, ApplicationUser> _logins = new Dictionary<IdentityUserLogin, ApplicationUser>();
+
+
+        public TestUserStore()
+        {
+            _users = new Dictionary<string, ApplicationUser>()
+            {
+                { "TestUser1", new ApplicationUser {FirstName="Sharon", UserName="Sharon", Id="15e8cda1-3ea3-473d-902f-b62aa55816db"}},
+                { "TestUser2", new ApplicationUser {FirstName="adarsh", UserName="adarsh", Id="67e6yda1-3ea3-473d-902f-b62er55816db"}},
+                { "TestUser3", new ApplicationUser {FirstName="Shiju",  UserName="Shiju",  Id="78e5fda1-3ea3-473d-902f-b62aa86716db"}}
+            };
+
+        }
+
 
         public Task CreateAsync(ApplicationUser user,string password)
         {
           _users[user.Id] = user;
             return Task.FromResult(0);
         }
-
+       
         public Task CreateAsync(ApplicationUser user)
         { 
             _users[user.Id]=user;
@@ -59,8 +72,13 @@ namespace SocialGoal.Tests.Helpers
         }
         public Task<ApplicationUser> FindByNameAsync(string userName)
         {
-            var user = new ApplicationUser() { UserName = "adarsh", Id = "402bd590-fdc7-49ad-9728-40efbfe512ec", PasswordHash = "abcd",Activated=true };
-            return Task.FromResult(user);
+
+            foreach (ApplicationUser user in _users.Values)
+            {
+                if (user.UserName == userName)
+                    return Task.FromResult(user);
+            }
+            return Task.FromResult<ApplicationUser>(null);
         }
 
         public Task AddLoginAsync(ApplicationUser user, IdentityUserLogin login)

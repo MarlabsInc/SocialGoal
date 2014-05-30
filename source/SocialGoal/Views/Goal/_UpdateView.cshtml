@@ -77,9 +77,26 @@ else
             
              @if ((Model.Target != null) && (item.status != null) && (Model.Target != 0)&& Model.Metric.Type!="%")
                 {
-                    <div class="span11 alert alert-info goal-status-message">
-                        <strong>Status</strong> : <strong>@item.status @Model.Metric.Type</strong> achieved out of <strong>@Model.Target @Model.Metric.Type</strong>
-                    </div>
+                        if(item.status < Model.Target)
+                        { 
+                            <div class="span11 alert alert-info goal-status-message">
+                            <strong>Status</strong> : <strong>@item.status @Model.Metric.Type</strong> achieved out of <strong>@Model.Target @Model.Metric.Type</strong>
+                            </div>
+                        }
+                         else if(item.status== Model.Target)
+                        {
+                            <div class="span11 alert alert-success goal-status-message">
+                            <strong>Status</strong> : <strong>Target achieved  </strong>
+                            </div>
+                            
+                        }
+                        else
+                        {
+                             <div class="span11 alert alert-danger goal-status-message">
+                            <strong>Status</strong> : <strong>Target</strong> exceeded  <strong>@(item.status - Model.Target) @Model.Metric.Type</strong>
+                            </div>
+                            
+                        }
                 }
                 else
                 {

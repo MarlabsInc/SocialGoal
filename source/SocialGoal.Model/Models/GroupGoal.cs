@@ -8,16 +8,12 @@ namespace SocialGoal.Model.Models
     {
         public int GroupGoalId { get; set; }
 
-        [StringLength(50)]
         public string GoalName { set; get; }
 
-        [StringLength(100)]
         public string Description { get; set; }
 
-        [DisplayFormat(DataFormatString = "{0:dd MMM yyyy}")]
         public DateTime StartDate { get; set; }
 
-        [DisplayFormat(DataFormatString = "{0:dd MMM yyyy}")]
         public DateTime EndDate { get; set; }
 
         public double? Target { get; set; }
@@ -25,8 +21,6 @@ namespace SocialGoal.Model.Models
         public int? MetricId { get; set; }
 
         public int? FocusId { get; set; }
-
-        //public int UserId { get; set; }
 
         public DateTime CreatedDate { get; set; }
 
@@ -44,7 +38,6 @@ namespace SocialGoal.Model.Models
 
         public virtual Group Group { get; set; }
 
-        //public virtual User User { get; set; }
 
         public virtual Metric Metric { get; set; }
 

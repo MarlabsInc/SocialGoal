@@ -106,15 +106,7 @@ namespace SocialGoal.Tests.Controllers
             securityTokenRepository.Setup(x => x.Get(It.IsAny<Expression<Func<SecurityToken, bool>>>())).Returns(token);
 
             MemoryUser user = new MemoryUser("adarsh");
-            ApplicationUser applicationUser = new ApplicationUser()
-            {
-                Activated = true,
-                Email = "adarsh@foo.com",
-                FirstName = "Adarsh",
-                LastName = "Vikraman",
-                RoleId = 0,
-                Id = "402bd590-fdc7-49ad-9728-40efbfe512ec"
-            };
+            ApplicationUser applicationUser = getApplicationUser();
             var userContext = new UserInfo
             {
                 UserId = user.Id,
@@ -201,15 +193,7 @@ namespace SocialGoal.Tests.Controllers
             securityTokenRepository.Setup(x => x.Get(It.IsAny<Expression<Func<SecurityToken, bool>>>())).Returns(token);
 
             MemoryUser user = new MemoryUser("adarsh");
-            ApplicationUser applicationUser = new ApplicationUser()
-            {
-                Activated = true,
-                Email = "adarsh@foo.com",
-                FirstName = "Adarsh",
-                LastName = "Vikraman",
-                RoleId = 0,
-                Id = "402bd590-fdc7-49ad-9728-40efbfe512ec"
-            };
+            ApplicationUser applicationUser = getApplicationUser();
             var userContext = new UserInfo
             {
                 UserId = user.Id,
@@ -278,6 +262,24 @@ namespace SocialGoal.Tests.Controllers
             controller.TempData["goToken"] = guidToken;
             var result = controller.AddSupportToGoal() as RedirectToRouteResult;
             Assert.AreEqual("Index", result.RouteValues["action"]);
+        }
+
+        public ApplicationUser getApplicationUser()
+        {
+            ApplicationUser applicationUser = new ApplicationUser()
+            {
+                Activated = true,
+                Email = "adarsh@foo.com",
+                FirstName = "Adarsh",
+                LastName = "Vikraman",
+                UserName = "adarsh",
+                RoleId = 0,
+                Id = "402bd590-fdc7-49ad-9728-40efbfe512ec",
+                DateCreated = DateTime.Now,
+                LastLoginTime = DateTime.Now,
+                ProfilePicUrl = null,
+            };
+            return applicationUser;
         }
     }
 }

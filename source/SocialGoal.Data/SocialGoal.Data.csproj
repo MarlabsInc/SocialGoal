@@ -57,6 +57,31 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Configuration\ApplicationUserConfiguration.cs" />
+    <Compile Include="Configuration\CommentConfiguration.cs" />
+    <Compile Include="Configuration\CommentUserConfiguration.cs" />
+    <Compile Include="Configuration\FocusConfiguration.cs" />
+    <Compile Include="Configuration\FollowRequestConfiguration.cs" />
+    <Compile Include="Configuration\FollowUserConfiguration.cs" />
+    <Compile Include="Configuration\GoalConfiguration.cs" />
+    <Compile Include="Configuration\GoalStatusConfiguration.cs" />
+    <Compile Include="Configuration\GoalUpdateConfiguration.cs" />
+    <Compile Include="Configuration\GroupCommentConfiguration.cs" />
+    <Compile Include="Configuration\GroupCommentUserConfguration.cs" />
+    <Compile Include="Configuration\GroupConfiguration.cs" />
+    <Compile Include="Configuration\GroupGoalConfiguration.cs" />
+    <Compile Include="Configuration\GroupInvitationConfiguration.cs" />
+    <Compile Include="Configuration\GroupRequestConfiguration.cs" />
+    <Compile Include="Configuration\SupportInvitationConfiguration.cs" />
+    <Compile Include="Configuration\UpdateConfiguration.cs" />
+    <Compile Include="Configuration\UpdateSupportConfiguration.cs" />
+    <Compile Include="Configuration\GroupUpdateSupportConfiguration.cs" />
+    <Compile Include="Configuration\GroupUpdateUserConfiguration.cs" />
+    <Compile Include="Configuration\GroupUserConfiguration.cs" />
+    <Compile Include="Configuration\MetricConfiguration.cs" />
+    <Compile Include="Configuration\RegistrationTokenConfiguration.cs" />
+    <Compile Include="Configuration\SupportConfiguration.cs" />
+    <Compile Include="Configuration\UserProfileConfiguration.cs" />
     <Compile Include="GoalsSampleData.cs" />
     <Compile Include="Infrastructure\DatabaseFactory.cs" />
     <Compile Include="Infrastructure\Disposable.cs" />
