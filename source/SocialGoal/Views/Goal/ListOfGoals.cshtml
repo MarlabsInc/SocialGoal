@@ -30,7 +30,7 @@
         @Html.Partial("_Goalslist",Model.GoalList)
        </table>
         </div>
-        if (Model.GoalList.Count() > 4)
+        if (Model.GoalList.Count() == 5)
         {
          <div  id="morelink"> <a href="#" onclick="loadMore();">More Goals</a></div>
         }
@@ -59,8 +59,8 @@
     function loadMore() {
         var sortBy = $('#sortby').val();
         var filterBy = $('#filterby').val();
-       
-       
+
+
         if (currentGoalPage > -1) {
             currentGoalPage++;
 
@@ -70,22 +70,31 @@
                 data: { sortBy: sortBy, filterBy: filterBy, page: currentGoalPage },
                 dataType: "json",
                 beforeSend: function () {
+                    console.log("a");
+                    $("#goalListContainer").find(".alert-info").remove();
                     $("#goalListContainer").append('<div class="alert alert-info" id="loadimage">Loading...</div>');
                 },
                 success: function (data) {
-                   
                     $('#loadimage').remove();
-                    if (data != '') {
+                    if (data.length != 0) {
                         loadTemplate(data);
                         $('#morelink').show();
+                        if (data.length < 5) {
+                            addNoMoreGoals();
+                        }
                     } else {
-                        $('#morelink').hide();
-                        currentGoalPage = -1;
-                        $("#goalListContainer").append('<div class="alert alert-info"> No more goals found </div>');
+                        addNoMoreGoals();
                     }
                 }
             });
 
+        }
+
+        function addNoMoreGoals() {
+            $('#morelink').hide();
+            currentGoalPage = -1;
+            $("#goalListContainer").find(".alert-info").remove();
+            $("#goalListContainer").append('<div class="alert alert-info"> No more goals found </div>');
         }
     }
 

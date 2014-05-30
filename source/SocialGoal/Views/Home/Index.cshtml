@@ -10,7 +10,7 @@
             @Html.Partial("Notification",Model)
         </div>
 
-        @if (Model.Count > 10)
+        @if (Model.Count == 10)
         {
              <div  id="morelink"> <a href="#" onclick="loadMore();">More Notifications</a></div>
         }    
@@ -65,7 +65,7 @@
     });
     var current = 0;
     function loadMore() {
-      
+
         if (current > -1) {
             current++;
 
@@ -76,7 +76,8 @@
                 dataType: "html",
                 beforeSend: function () {
                     //<img src="/Images/ajax-loader-small.gif"/>
-                    $('.msg').remove(); 
+                    $('.msg').remove();
+                    $('#morelink').hide();
                     $("#notification").append('<div class="msg alert alert-info" id="loadimage">Loading...</div>');
                 },
                 success: function (data) {
@@ -84,13 +85,21 @@
                     if (data.length != 0) {
                         $("#notification").append(data);
                         $('#morelink').show();
-                    } else {
-                        $('#morelink').hide();
-                        current = -1;                        
-                        $("#notification").append('<div class="msg alert alert-info" id="alertmsg"> No more feeds </div>');
+                        var count = data.match(/class="table"/g);
+                        if (count.length < 10)
+                        { addNoMoreFeeds(); }
+                    }
+                    else {
+                        addNoMoreFeeds();
                     }
                 }
             });
+
+        }
+        function addNoMoreFeeds() {
+            $('#morelink').hide();
+            current = -1;
+            $("#notification").append('<div class="msg alert alert-info" id="alertmsg"> No more feeds </div>');
 
         }
     }

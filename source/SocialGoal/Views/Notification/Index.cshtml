@@ -18,7 +18,7 @@ else
     <div id="NotificationContainer" class="alert alert-info">
         @Html.Partial("_NotificationList", Model)
     </div>
-    if (Model.Count() > 10)
+    if (Model.Count() == 10)
     {
          <div  id="morelink"> <a href="#" onclick="loadMoreNotifications();">More Notifications</a></div>
     }
@@ -56,13 +56,21 @@ else
                     if (data.length != 0) {
                         $("#NotificationContainer").append(data);
                         $('#morelink').show();
-                    } else {
-                        $('#morelink').hide();
-                        currentPage = -1;
-                        $("#NotificationContainer").append('<div class="msg alert alert-info" id="alertmsg">  No more notifications found </div>');
+
+                        var count = data.match(/alert alert-info/g);
+                        if (count.length < 10)
+                            addNoMoreNotifications();
                     }
+                    else
+                        addNoMoreNotifications();
                 }
             });
+
+        }
+        function addNoMoreNotifications() {
+            $('#morelink').hide();
+            currentPage = -1;
+            $("#NotificationContainer").append('<div class="msg alert alert-info" id="alertmsg">  No more notifications found </div>');
 
         }
     }
