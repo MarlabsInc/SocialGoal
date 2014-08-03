@@ -13,13 +13,13 @@
          <div>
                     <div style="position: relative">
                         <div>
-                            <a href="@Url.Action("UserProfile", "Account", new { id = item.UserId }, null)" >
+                            <a href="@Url.Action("UserProfile", "Account", new { id = item.Id }, null)" >
                                 @Html.User().Avatar(item.ProfilePicUrl, new {@class="span2"})
                             </a>
                         </div>
                     </div>
                     <div>
-                        @Html.ActionLink(@item.UserName, "UserProfile", "Account", new { id = item.UserId }, null)
+                        @Html.ActionLink(@item.UserName, "UserProfile", "Account", new { id = item.Id }, null)
                     </div>
                      <div>@item.Email
                         </div>
