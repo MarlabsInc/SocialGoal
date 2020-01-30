@@ -4,6 +4,11 @@ SocialGoal v1.0.0
 
 SocialGoal is a social networking web app for socializing your goals and strategies with people. The primary objective of the SocialGoal app is to provide a learning app for building real-world web apps with ASP.NET MVC 5 and EF 6 Code First. The application architecture is inspired from [EFMVC](http://efmvc.codeplex.com/). SocialGoal is developed by [Marlabs](http://www.marlabs.com).
 
+Windows Container Migration
+------------
+[![Windows Container Migration](http://img.youtube.com/vi/nJhEcXxQlEk/0.jpg)](https://www.youtube.com/watch?v=nJhEcXxQlEk "Windows Container Migration")
+
+
 
 Technologies
 ------------
@@ -58,7 +63,7 @@ Goals and Roadmap
 * [Adarsh V.S.](https://github.com/adarsh-vs) - Lead Developer
 * [Peter Kneale](https://github.com/PeterKneale) - Contributor
 * [offi] (https://github.com/offi) - Contributor
- 
+ * [pamir] (https://github.com/pamir) - Contributor
 
 
 
